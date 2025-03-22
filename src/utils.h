@@ -40,7 +40,7 @@ namespace utils
     template <typename T>
     inline void prefetch_read_NTA(const T *data, size_t offset)
     {
-        const int8_t *p = reinterpret_cast<const int8_t *>(data + offset);
+        [[maybe_unused]] const int8_t *p = reinterpret_cast<const int8_t *>(data + offset);
 
 #if defined(PREFETCH_ENABLED) && (defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86))
 #if defined(__x86_64__) || defined(_M_X64)

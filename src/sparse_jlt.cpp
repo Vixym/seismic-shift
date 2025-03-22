@@ -121,7 +121,7 @@ public:
         int k = R.cols;
 
         // Resize Y if needed
-        if (Y.size() != n || Y[0].size() != k)
+        if (int(Y.size()) != n || int(Y[0].size()) != k)
         {
             Y.resize(n, std::vector<double>(k, 0.0));
         }
@@ -150,7 +150,7 @@ public:
     }
 };
 
-// Utility functions for testing
+// Utility functions for validating accuracy
 namespace utils
 {
     // Calculate Euclidean distance between two vectors
@@ -221,15 +221,44 @@ namespace utils
     }
 }
 
-// Example function to demonstrate usage
-void demo_sparse_jlt()
+// Function to demonstrate the theoretical guarantees
+void theoretical_guarantees()
 {
-    int n = 1000;    // number of data points
-    int d = 1000000; // original dimensionality
-    int k = 100;     // target dimensionality
+    std::cout << "\nTheoretical Guarantees of JL Transform:" << std::endl;
+    std::cout << "-------------------------------------" << std::endl;
 
+    int d = 10000;        // original dimension
+    double epsilon = 0.1; // desired accuracy (distortion factor)
+    double delta = 0.05;  // failure probability
+
+    // Calculate required dimension based on JL lemma
+    int k_jl = static_cast<int>(std::ceil(4 * std::log(100) / (epsilon * epsilon * 0.5)));
+
+    std::cout << "For preserving distances between 100 points with:" << std::endl;
+    std::cout << "- Original dimension d = " << d << std::endl;
+    std::cout << "- Distortion bound ε = " << epsilon << std::endl;
+    std::cout << "- Success probability = " << (1 - delta) << std::endl;
+    std::cout << "Required target dimension k ≥ " << k_jl << std::endl;
+}
+
+int main(int argc, char *argv[])
+{
+    if (argc != 4)
+    {
+        std::cerr << "Usage: " << argv[0] << " [num vectors] [original dimension] [target]" << std::endl;
+        return 1;
+    }
+
+    // Parse command line arguments for number of points (n), dimensions (d), and target dimension (k)
+    int n = std::stoi(argv[1]);
+    int d = std::stoi(argv[2]);
+    int k = std::stoi(argv[3]);
+
+    std::cout << "User provided n = " << n << ", d = " << d << ", k = " << k << std::endl;
     std::cout << "Generating " << n << " random points in " << d << " dimensions..." << std::endl;
     auto X = utils::generate_random_data(n, d);
+
+    std::cout << "Starting dense JLT, converting to target dimension k = " << k << "..." << std::endl;
 
     // Standard random projection (dense)
     auto start_time = std::chrono::high_resolution_clock::now();
@@ -271,6 +300,8 @@ void demo_sparse_jlt()
                               .count() /
                           1000.0;
 
+    std::cout << "Starting sparse JLT, converting to target dimension k = " << k << "..." << std::endl;
+
     // Sparse JLT
     start_time = std::chrono::high_resolution_clock::now();
 
@@ -283,30 +314,31 @@ void demo_sparse_jlt()
                                .count() /
                            1000.0;
 
-    // Calculate and report metrics
+    // Timing metrics
     std::cout << "\nPerformance comparison:" << std::endl;
     std::cout << "-------------------------" << std::endl;
     std::cout << "Standard JLT time: " << dense_duration << " seconds" << std::endl;
     std::cout << "Sparse JLT time: " << sparse_duration << " seconds" << std::endl;
     std::cout << "Speedup: " << dense_duration / sparse_duration << "x" << std::endl;
 
-    int num_samples = 1000; // Increase sample size for better accuracy
+    int num_samples = n; // Increase sample size for better accuracy
     double dense_error = utils::calculate_relative_error(X, Y_dense, num_samples);
     double sparse_error = utils::calculate_relative_error(X, Y_sparse, num_samples);
 
-    std::cout << "\nAccuracy comparison:" << std::endl;
+    std::cout << "\nAccuracy comparison (using " << num_samples << " samples):" << std::endl;
     std::cout << "-------------------" << std::endl;
     std::cout << "Standard JLT avg relative error: " << dense_error << std::endl;
     std::cout << "Sparse JLT avg relative error: " << sparse_error << std::endl;
     std::cout << "Error ratio (sparse/dense): " << sparse_error / (dense_error > 0 ? dense_error : 1.0) << std::endl;
 
-    // Error analysis
-    std::cout << "\nDetailed error analysis:" << std::endl;
-    std::cout << "----------------------" << std::endl;
+    // 2. Error analysis
+    int num_detail_samples = n;
+    int num_examples = 10;
     std::vector<double> error_ratios;
-    int num_detail_samples = 50;
     std::mt19937 gen(42); // Use fixed seed for reproducibility
     std::uniform_int_distribution<> dist(0, n - 1);
+    std::cout << "\nExamples  (" << num_examples << "):" << std::endl;
+    std::cout << "----------------------" << std::endl;
 
     for (int s = 0; s < num_detail_samples; ++s)
     {
@@ -322,10 +354,10 @@ void demo_sparse_jlt()
                 double ratio = projected_dist / original_dist;
                 error_ratios.push_back(ratio);
 
-                if (s < 10)
+                if (s < num_examples)
                 { // Print first 10 samples
                     std::cout << "Sample " << s << ": Original dist = " << original_dist
-                              << ", Projected dist = " << projected_dist
+                              << ", Sparse projected dist = " << projected_dist
                               << ", Ratio = " << ratio << std::endl;
                 }
             }
@@ -354,35 +386,4 @@ void demo_sparse_jlt()
         std::cout << "Mean ratio: " << mean << " (ideally close to 1.0)" << std::endl;
         std::cout << "Standard deviation: " << std_dev << std::endl;
     }
-}
-
-// Function to demonstrate the theoretical guarantees
-void theoretical_guarantees()
-{
-    std::cout << "\nTheoretical Guarantees of JL Transform:" << std::endl;
-    std::cout << "-------------------------------------" << std::endl;
-
-    int d = 10000;        // original dimension
-    double epsilon = 0.1; // desired accuracy (distortion factor)
-    double delta = 0.05;  // failure probability
-
-    // Calculate required dimension based on JL lemma
-    int k_jl = static_cast<int>(std::ceil(4 * std::log(100) / (epsilon * epsilon * 0.5)));
-
-    std::cout << "For preserving distances between 100 points with:" << std::endl;
-    std::cout << "- Original dimension d = " << d << std::endl;
-    std::cout << "- Distortion bound ε = " << epsilon << std::endl;
-    std::cout << "- Success probability = " << (1 - delta) << std::endl;
-    std::cout << "Required target dimension k ≥ " << k_jl << std::endl;
-}
-
-int main()
-{
-    // Run the demo
-    demo_sparse_jlt();
-
-    // Show theoretical guarantees
-    theoretical_guarantees();
-
-    return 0;
 }
