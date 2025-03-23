@@ -385,7 +385,7 @@ int main(int argc, char *argv[])
     }
 
     // Print first few examples
-    std::cout << "\nExamples  (" << num_examples << "):" << std::endl;
+    std::cout << "\nExamples (" << num_examples << "):" << std::endl;
     std::cout << "----------------------" << std::endl;
     for (int s = 0; s < num_examples; ++s)
     {

@@ -142,6 +142,424 @@ TEST(UtilsTest, BinarySearchBranchless)
     }
 }
 
+// Test for Float wrapper class
+TEST(UtilsTest, FloatWrapper)
+{
+    utils::Float a(1.5f);
+    utils::Float b(2.5f);
+    utils::Float zero = utils::Float::zero();
+
+    // Test basic operations
+    EXPECT_EQ(static_cast<float>(a + b), 4.0f);
+    EXPECT_EQ(static_cast<float>(a * b), 3.75f);
+    EXPECT_EQ(static_cast<float>(zero), 0.0f);
+
+    // Test to_f32
+    EXPECT_EQ(a.to_f32().value(), 1.5f);
+    EXPECT_EQ(b.to_f32().value(), 2.5f);
+    EXPECT_EQ(zero.to_f32().value(), 0.0f);
+
+    // Test partial_cmp
+    EXPECT_EQ(a.partial_cmp(b), std::partial_ordering::less);
+    EXPECT_EQ(b.partial_cmp(a), std::partial_ordering::greater);
+    EXPECT_EQ(a.partial_cmp(a), std::partial_ordering::equivalent);
+
+    // Test equality operator
+    EXPECT_TRUE(a == utils::Float(1.5f));
+    EXPECT_FALSE(a == b);
+}
+
+// Test for SparseDataset class
+TEST(UtilsTest, SparseDataset)
+{
+    utils::SparseDataset<utils::Float> dataset(10); // 10 dimensions
+
+    // Create sparse vectors
+    std::vector<std::pair<uint32_t, utils::Float>> vec1 = {
+        {0, utils::Float(1.0f)},
+        {2, utils::Float(3.0f)},
+        {5, utils::Float(2.0f)}};
+
+    std::vector<std::pair<uint32_t, utils::Float>> vec2 = {
+        {1, utils::Float(4.0f)},
+        {5, utils::Float(1.0f)},
+        {7, utils::Float(2.0f)}};
+
+    // Test adding vectors
+    dataset.add(vec1);
+    dataset.add(vec2);
+
+    // Test size and dimensions
+    EXPECT_EQ(dataset.size(), 2);
+    EXPECT_EQ(dataset.dim(), 10);
+
+    // Test retrieving vectors
+    const auto &retrieved_vec1 = dataset.iter_vector(0);
+    const auto &retrieved_vec2 = dataset.iter_vector(1);
+
+    // Check vector contents
+    EXPECT_EQ(retrieved_vec1.size(), 3);
+    EXPECT_EQ(retrieved_vec2.size(), 3);
+
+    EXPECT_EQ(retrieved_vec1[0].first, 0);
+    EXPECT_EQ(static_cast<float>(retrieved_vec1[0].second), 1.0f);
+    EXPECT_EQ(retrieved_vec1[1].first, 2);
+    EXPECT_EQ(static_cast<float>(retrieved_vec1[1].second), 3.0f);
+    EXPECT_EQ(retrieved_vec1[2].first, 5);
+    EXPECT_EQ(static_cast<float>(retrieved_vec1[2].second), 2.0f);
+
+    // Test get method
+    auto [components, values] = dataset.get(0);
+
+    // Note: get() constructs a static vector internally, so we can't directly test
+    // the contents. But we can verify it doesn't crash.
+    EXPECT_NE(components, nullptr);
+    EXPECT_NE(values, nullptr);
+}
+
+// Test for dot_product_dense_sparse function
+TEST(UtilsTest, DotProductDenseSparse)
+{
+    // Create dense vector
+    std::vector<utils::Float> dense = {
+        utils::Float(1.0f), utils::Float(2.0f), utils::Float(3.0f),
+        utils::Float(4.0f), utils::Float(5.0f)};
+
+    // Create sparse vector components and values
+    std::vector<uint32_t> sparse_components = {0, 2, 4, 0}; // Last 0 is a terminator
+    std::vector<utils::Float> sparse_values = {
+        utils::Float(2.0f), utils::Float(1.0f), utils::Float(3.0f), utils::Float::zero()};
+
+    // Calculate expected result: 1.0*2.0 + 3.0*1.0 + 5.0*3.0 = 2.0 + 3.0 + 15.0 = 20.0
+    float expected = 20.0f;
+
+    // Test dot product
+    float result = utils::dot_product_dense_sparse(dense, sparse_components.data(), sparse_values.data());
+    EXPECT_FLOAT_EQ(result, expected);
+
+    // Test with empty sparse vector
+    std::vector<uint32_t> empty_components = {0};
+    std::vector<utils::Float> empty_values = {utils::Float::zero()};
+    result = utils::dot_product_dense_sparse(dense, empty_components.data(), empty_values.data());
+    EXPECT_FLOAT_EQ(result, 0.0f);
+}
+
+// Test for compute_centroid_assignments function
+TEST(UtilsTest, ComputeCentroidAssignments)
+{
+    // Create a dataset
+    utils::SparseDataset<utils::Float> dataset(5); // 5 dimensions
+
+    // Create documents
+    std::vector<std::pair<uint32_t, utils::Float>> doc0 = {
+        {0, utils::Float(1.0f)}, {2, utils::Float(2.0f)}};
+    std::vector<std::pair<uint32_t, utils::Float>> doc1 = {
+        {1, utils::Float(3.0f)}, {3, utils::Float(4.0f)}};
+    std::vector<std::pair<uint32_t, utils::Float>> doc2 = {
+        {0, utils::Float(2.0f)}, {2, utils::Float(3.0f)}};
+    std::vector<std::pair<uint32_t, utils::Float>> doc3 = {
+        {1, utils::Float(1.0f)}, {3, utils::Float(2.0f)}};
+
+    dataset.add(doc0);
+    dataset.add(doc1);
+    dataset.add(doc2);
+    dataset.add(doc3);
+
+    // Doc IDs to cluster
+    std::vector<size_t> doc_ids = {0, 1, 2, 3};
+
+    // Choose centroids
+    std::vector<size_t> centroids = {0, 1};
+
+    // Compute assignments
+    auto assignments = utils::compute_centroid_assignments(
+        doc_ids, dataset, centroids, std::unordered_set<size_t>());
+
+    // Verify basic properties
+    EXPECT_EQ(assignments.size(), 4);
+
+    // Sort assignments by document ID for easy verification
+    std::sort(assignments.begin(), assignments.end(),
+              [](const auto &a, const auto &b)
+              { return a.second < b.second; });
+
+    // Doc 0 should be assigned to centroid 0 (itself)
+    EXPECT_EQ(assignments[0].second, 0);
+    EXPECT_EQ(assignments[0].first, 0);
+
+    // Doc 1 should be assigned to centroid 1 (itself)
+    EXPECT_EQ(assignments[1].second, 1);
+    EXPECT_EQ(assignments[1].first, 1);
+
+    // Doc 2 should be assigned to centroid 0 (more similar pattern)
+    EXPECT_EQ(assignments[2].second, 2);
+    EXPECT_EQ(assignments[2].first, 0);
+
+    // Doc 3 should be assigned to centroid 1 (more similar pattern)
+    EXPECT_EQ(assignments[3].second, 3);
+    EXPECT_EQ(assignments[3].first, 1);
+
+    // Test with excluded centroid
+    std::unordered_set<size_t> to_avoid = {0};
+    auto assignments_with_avoid = utils::compute_centroid_assignments(
+        doc_ids, dataset, centroids, to_avoid);
+
+    // All documents should be assigned to centroid 1 now
+    for (const auto &[centroid_id, doc_id] : assignments_with_avoid)
+    {
+        EXPECT_EQ(centroid_id, 1);
+    }
+}
+
+// Test for do_random_kmeans_on_docids function (basic version)
+TEST(UtilsTest, RandomKmeansOnDocIds)
+{
+    // Create a dataset
+    utils::SparseDataset<utils::Float> dataset(5); // 5 dimensions
+
+    // Create 10 documents with two clear clusters
+    for (int i = 0; i < 5; i++)
+    {
+        // Cluster 1: Strong in dimensions 0, 2
+        std::vector<std::pair<uint32_t, utils::Float>> doc = {
+            {0, utils::Float(1.0f + 0.1f * i)},
+            {2, utils::Float(2.0f + 0.1f * i)}};
+        dataset.add(doc);
+    }
+
+    for (int i = 0; i < 5; i++)
+    {
+        // Cluster 2: Strong in dimensions 1, 3
+        std::vector<std::pair<uint32_t, utils::Float>> doc = {
+            {1, utils::Float(3.0f + 0.1f * i)},
+            {3, utils::Float(2.0f + 0.1f * i)}};
+        dataset.add(doc);
+    }
+
+    // Doc IDs to cluster
+    std::vector<size_t> doc_ids(10);
+    std::iota(doc_ids.begin(), doc_ids.end(), 0);
+
+    // Perform k-means
+    auto result = utils::do_random_kmeans_on_docids(doc_ids, 2, dataset, 1);
+
+    // Verify result size
+    EXPECT_EQ(result.size(), doc_ids.size());
+
+    // Group documents by assigned centroid
+    std::vector<size_t> centroid1_docs;
+    std::vector<size_t> centroid2_docs;
+
+    for (const auto &[centroid_id, doc_id] : result)
+    {
+        if (centroid_id == result[0].first)
+        {
+            centroid1_docs.push_back(doc_id);
+        }
+        else
+        {
+            centroid2_docs.push_back(doc_id);
+        }
+    }
+
+    // Verify we have two non-empty clusters
+    EXPECT_FALSE(centroid1_docs.empty());
+    EXPECT_FALSE(centroid2_docs.empty());
+
+    // Note: we can't verify exact clustering due to random seed,
+    // but we can check if same-type documents tend to cluster together
+
+    // Count documents from our logical "first cluster" in each k-means cluster
+    int first_cluster_in_centroid1 = 0;
+    for (size_t doc_id : centroid1_docs)
+    {
+        if (doc_id < 5)
+        {
+            first_cluster_in_centroid1++;
+        }
+    }
+
+    int first_cluster_in_centroid2 = 0;
+    for (size_t doc_id : centroid2_docs)
+    {
+        if (doc_id < 5)
+        {
+            first_cluster_in_centroid2++;
+        }
+    }
+
+    // Either centroid1 should mostly contain docs 0-4 or centroid2 should
+    bool good_clustering =
+        (first_cluster_in_centroid1 >= 3 && centroid1_docs.size() <= 7) ||
+        (first_cluster_in_centroid2 >= 3 && centroid2_docs.size() <= 7);
+
+    EXPECT_TRUE(good_clustering);
+}
+
+// Test for do_random_kmeans_on_docids_ii_dot_product function
+TEST(UtilsTest, RandomKmeansWithDotProduct)
+{
+    // Create a dataset
+    utils::SparseDataset<utils::Float> dataset(5); // 5 dimensions
+
+    // Create 10 documents with two clear clusters
+    for (int i = 0; i < 5; i++)
+    {
+        // Cluster 1: Strong in dimensions 0, 2
+        std::vector<std::pair<uint32_t, utils::Float>> doc = {
+            {0, utils::Float(1.0f + 0.1f * i)},
+            {2, utils::Float(2.0f + 0.1f * i)}};
+        dataset.add(doc);
+    }
+
+    for (int i = 0; i < 5; i++)
+    {
+        // Cluster 2: Strong in dimensions 1, 3
+        std::vector<std::pair<uint32_t, utils::Float>> doc = {
+            {1, utils::Float(3.0f + 0.1f * i)},
+            {3, utils::Float(2.0f + 0.1f * i)}};
+        dataset.add(doc);
+    }
+
+    // Doc IDs to cluster
+    std::vector<size_t> doc_ids(10);
+    std::iota(doc_ids.begin(), doc_ids.end(), 0);
+
+    // Perform k-means with dot product
+    auto result = utils::do_random_kmeans_on_docids_ii_dot_product(
+        doc_ids, 2, dataset, 1, 0.5f, 5);
+
+    // Verify result size
+    EXPECT_EQ(result.size(), doc_ids.size());
+
+    // Group documents by assigned centroid
+    std::vector<size_t> centroid1_docs;
+    std::vector<size_t> centroid2_docs;
+
+    for (const auto &[centroid_id, doc_id] : result)
+    {
+        if (centroid_id == result[0].first)
+        {
+            centroid1_docs.push_back(doc_id);
+        }
+        else
+        {
+            centroid2_docs.push_back(doc_id);
+        }
+    }
+
+    // Verify we have two non-empty clusters
+    EXPECT_FALSE(centroid1_docs.empty());
+    EXPECT_FALSE(centroid2_docs.empty());
+
+    // Similar check as above
+    int first_cluster_in_centroid1 = 0;
+    for (size_t doc_id : centroid1_docs)
+    {
+        if (doc_id < 5)
+        {
+            first_cluster_in_centroid1++;
+        }
+    }
+
+    int first_cluster_in_centroid2 = 0;
+    for (size_t doc_id : centroid2_docs)
+    {
+        if (doc_id < 5)
+        {
+            first_cluster_in_centroid2++;
+        }
+    }
+
+    bool good_clustering =
+        (first_cluster_in_centroid1 >= 3 && centroid1_docs.size() <= 7) ||
+        (first_cluster_in_centroid2 >= 3 && centroid2_docs.size() <= 7);
+
+    EXPECT_TRUE(good_clustering);
+}
+
+// Test for do_random_kmeans_on_docids_ii_approx_dot_product function
+TEST(UtilsTest, RandomKmeansWithApproxDotProduct)
+{
+    // Create a dataset
+    utils::SparseDataset<utils::Float> dataset(5); // 5 dimensions
+
+    // Create 10 documents with two clear clusters
+    for (int i = 0; i < 5; i++)
+    {
+        // Cluster 1: Strong in dimensions 0, 2
+        std::vector<std::pair<uint32_t, utils::Float>> doc = {
+            {0, utils::Float(1.0f + 0.1f * i)},
+            {2, utils::Float(2.0f + 0.1f * i)}};
+        dataset.add(doc);
+    }
+
+    for (int i = 0; i < 5; i++)
+    {
+        // Cluster 2: Strong in dimensions 1, 3
+        std::vector<std::pair<uint32_t, utils::Float>> doc = {
+            {1, utils::Float(3.0f + 0.1f * i)},
+            {3, utils::Float(2.0f + 0.1f * i)}};
+        dataset.add(doc);
+    }
+
+    // Doc IDs to cluster
+    std::vector<size_t> doc_ids(10);
+    std::iota(doc_ids.begin(), doc_ids.end(), 0);
+
+    // Perform k-means with approximate dot product
+    auto result = utils::do_random_kmeans_on_docids_ii_approx_dot_product(
+        doc_ids, 2, dataset, 1, 5);
+
+    // Verify result size
+    EXPECT_EQ(result.size(), doc_ids.size());
+
+    // Group documents by assigned centroid
+    std::vector<size_t> centroid1_docs;
+    std::vector<size_t> centroid2_docs;
+
+    for (const auto &[centroid_id, doc_id] : result)
+    {
+        if (centroid_id == result[0].first)
+        {
+            centroid1_docs.push_back(doc_id);
+        }
+        else
+        {
+            centroid2_docs.push_back(doc_id);
+        }
+    }
+
+    // Verify we have two non-empty clusters
+    EXPECT_FALSE(centroid1_docs.empty());
+    EXPECT_FALSE(centroid2_docs.empty());
+
+    // Similar check as above
+    int first_cluster_in_centroid1 = 0;
+    for (size_t doc_id : centroid1_docs)
+    {
+        if (doc_id < 5)
+        {
+            first_cluster_in_centroid1++;
+        }
+    }
+
+    int first_cluster_in_centroid2 = 0;
+    for (size_t doc_id : centroid2_docs)
+    {
+        if (doc_id < 5)
+        {
+            first_cluster_in_centroid2++;
+        }
+    }
+
+    bool good_clustering =
+        (first_cluster_in_centroid1 >= 3 && centroid1_docs.size() <= 7) ||
+        (first_cluster_in_centroid2 >= 3 && centroid2_docs.size() <= 7);
+
+    EXPECT_TRUE(good_clustering);
+}
+
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
