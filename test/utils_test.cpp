@@ -559,9 +559,3 @@ TEST(UtilsTest, RandomKmeansWithApproxDotProduct)
 
     EXPECT_TRUE(good_clustering);
 }
-
-int main(int argc, char **argv)
-{
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
