@@ -245,7 +245,7 @@ int main(int argc, char *argv[])
 {
     if (argc != 4)
     {
-        std::cerr << "Usage: " << argv[0] << " [num vectors] [original dimension] [target]" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " [num vectors] [original dimension] [target dimension]" << std::endl;
         return 1;
     }
 
@@ -337,8 +337,7 @@ int main(int argc, char *argv[])
     std::vector<double> error_ratios;
     std::mt19937 gen(42); // Use fixed seed for reproducibility
     std::uniform_int_distribution<> dist(0, n - 1);
-    std::cout << "\nExamples  (" << num_examples << "):" << std::endl;
-    std::cout << "----------------------" << std::endl;
+    std::vector<std::vector<double>> examples;
 
     for (int s = 0; s < num_detail_samples; ++s)
     {
@@ -355,10 +354,8 @@ int main(int argc, char *argv[])
                 error_ratios.push_back(ratio);
 
                 if (s < num_examples)
-                { // Print first 10 samples
-                    std::cout << "Sample " << s << ": Original dist = " << original_dist
-                              << ", Sparse projected dist = " << projected_dist
-                              << ", Ratio = " << ratio << std::endl;
+                {
+                    examples.push_back({original_dist, projected_dist, ratio});
                 }
             }
         }
@@ -385,5 +382,13 @@ int main(int argc, char *argv[])
         std::cout << "\nDistance ratio statistics:" << std::endl;
         std::cout << "Mean ratio: " << mean << " (ideally close to 1.0)" << std::endl;
         std::cout << "Standard deviation: " << std_dev << std::endl;
+    }
+
+    // Print first few examples
+    std::cout << "\nExamples  (" << num_examples << "):" << std::endl;
+    std::cout << "----------------------" << std::endl;
+    for (int s = 0; s < num_examples; ++s)
+    {
+        std::cout << "Sample " << s << ": Original dist = " << examples[s][0] << ", Sparse projected dist = " << examples[s][1] << ", Ratio = " << examples[s][2] << std::endl;
     }
 }
