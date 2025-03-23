@@ -22,4 +22,15 @@ The results of reducing the dimension of 1,000 randomly generated vectors from 1
 
 <img width="594" alt="image" src="https://github.com/user-attachments/assets/1c4467aa-ac72-4629-92cd-716487f8c8aa" />
 
+## Unit tests
 
+To see the unit tests for each component of the SeismicShift algorithm, run the following from the root directory:
+
+```
+cd build
+make
+./tests
+```
+All tests should pass, with the following breakdown:
+
+<img width="386" alt="image" src="https://github.com/user-attachments/assets/07faef3d-b245-4560-a934-e4aa736bbdc9" />
