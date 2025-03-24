@@ -33,10 +33,16 @@ set(INSTALL_GTEST OFF)
 FetchContent_MakeAvailable(googletest)
 
 # Define test executable
-file(GLOB_RECURSE TEST_SOURCES test/*.cpp)
-if(TEST_SOURCES)
-    add_executable(tests ${TEST_SOURCES})
-    target_link_libraries(tests gtest gtest_main nlohmann_json::nlohmann_json)
-    enable_testing()
-    add_test(NAME AllTests COMMAND tests)
-endif()
+set(TEST_SOURCES
+    test/distances_test.cpp
+    test/elias_fano_test.cpp
+    test/json_utils_test.cpp
+    test/main_test.cpp
+    test/utils_test.cpp
+    test/top_k_selector_test.cpp
+)
+
+add_executable(tests ${TEST_SOURCES})
+target_link_libraries(tests gtest gtest_main nlohmann_json::nlohmann_json)
+enable_testing()
+add_test(NAME AllTests COMMAND tests)
