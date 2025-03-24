@@ -40,6 +40,7 @@ set(TEST_SOURCES
     test/main_test.cpp
     test/utils_test.cpp
     test/top_k_selector_test.cpp
+    test/space_usage_test.cpp
 )
 
 add_executable(tests ${TEST_SOURCES})
