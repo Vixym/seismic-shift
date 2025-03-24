@@ -8,7 +8,7 @@ From the root directory, run:
 
 ```
 cd build
-make
+make clean; make
 ./seismic-cpp [num vectors] [original dimension] [target dimension]
 ```
 
@@ -28,7 +28,7 @@ To see the unit tests for each component of the SeismicShift algorithm, run the 
 
 ```
 cd build
-make
+make clean; make
 ./tests
 ```
 All tests should pass, with the following breakdown:

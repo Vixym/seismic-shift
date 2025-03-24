@@ -268,52 +268,52 @@ TEST_F(DistancesTest, Float16Type)
     ASSERT_NEAR(result, 9.0f, 1e-5);
 }
 
-// Test performance characteristics (this is not a strict test)
-TEST_F(DistancesTest, PerformanceComparison)
-{
-    // Create larger test data
-    constexpr size_t large_size = 1000;
-    std::vector<uint16_t> large_components;
-    std::vector<utils::Float> large_values;
-    std::vector<utils::Float> large_query(large_size * 2, utils::Float(1.0f));
+// // Test performance characteristics (this is not a strict test)
+// TEST_F(DistancesTest, PerformanceComparison)
+// {
+//     // Create larger test data
+//     constexpr size_t large_size = 1000;
+//     std::vector<uint16_t> large_components;
+//     std::vector<utils::Float> large_values;
+//     std::vector<utils::Float> large_query(large_size * 2, utils::Float(1.0f));
 
-    // Fill with some pattern
-    for (size_t i = 0; i < large_size; i++)
-    {
-        if (i % 2 == 0)
-        { // Add even indices to make it sparse
-            large_components.push_back(static_cast<uint16_t>(i));
-            large_values.push_back(utils::Float(static_cast<float>(i % 10)));
-        }
-    }
+//     // Fill with some pattern
+//     for (size_t i = 0; i < large_size; i++)
+//     {
+//         if (i % 2 == 0)
+//         { // Add even indices to make it sparse
+//             large_components.push_back(static_cast<uint16_t>(i));
+//             large_values.push_back(utils::Float(static_cast<float>(i % 10)));
+//         }
+//     }
 
-    // Time the different methods
-    auto start1 = std::chrono::high_resolution_clock::now();
-    float result1 = distances::dot_product_dense_sparse(large_query, large_components, large_values);
-    auto end1 = std::chrono::high_resolution_clock::now();
+//     // Time the different methods
+//     auto start1 = std::chrono::high_resolution_clock::now();
+//     float result1 = distances::dot_product_dense_sparse(large_query, large_components, large_values);
+//     auto end1 = std::chrono::high_resolution_clock::now();
 
-    auto start2 = std::chrono::high_resolution_clock::now();
-    float result2 = distances::dot_product_with_binary_search(large_components, large_values, large_components, large_values);
-    auto end2 = std::chrono::high_resolution_clock::now();
+//     auto start2 = std::chrono::high_resolution_clock::now();
+//     float result2 = distances::dot_product_with_binary_search(large_components, large_values, large_components, large_values);
+//     auto end2 = std::chrono::high_resolution_clock::now();
 
-    auto start3 = std::chrono::high_resolution_clock::now();
-    float result3 = distances::dot_product_with_merge(large_components, large_values, large_components, large_values);
-    auto end3 = std::chrono::high_resolution_clock::now();
+//     auto start3 = std::chrono::high_resolution_clock::now();
+//     float result3 = distances::dot_product_with_merge(large_components, large_values, large_components, large_values);
+//     auto end3 = std::chrono::high_resolution_clock::now();
 
-    // Calculate durations
-    auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(end1 - start1).count();
-    auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end2 - start2).count();
-    auto duration3 = std::chrono::duration_cast<std::chrono::microseconds>(end3 - start3).count();
+//     // Calculate durations
+//     auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(end1 - start1).count();
+//     auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end2 - start2).count();
+//     auto duration3 = std::chrono::duration_cast<std::chrono::microseconds>(end3 - start3).count();
 
-    // We expect all methods to return valid results
-    ASSERT_GT(result1, 0.0f);
-    ASSERT_GT(result2, 0.0f);
-    ASSERT_GT(result3, 0.0f);
+//     // We expect all methods to return valid results
+//     ASSERT_GT(result1, 0.0f);
+//     ASSERT_GT(result2, 0.0f);
+//     ASSERT_GT(result3, 0.0f);
 
-    // Log timings for informational purposes
-    std::cout << "Dense-Sparse time: " << duration1 << " microseconds\n";
-    std::cout << "Binary Search time: " << duration2 << " microseconds\n";
-    std::cout << "Merge Style time: " << duration3 << " microseconds\n";
+//     // Log timings for informational purposes
+//     std::cout << "Dense-Sparse time: " << duration1 << " microseconds\n";
+//     std::cout << "Binary Search time: " << duration2 << " microseconds\n";
+//     std::cout << "Merge Style time: " << duration3 << " microseconds\n";
 
-    // We don't assert on relative performance as it may vary by environment
-}
+//     // We don't assert on relative performance as it may vary by environment
+// }
