@@ -5,14 +5,25 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g")
 
+# Fetch dependencies
+include(FetchContent)
+
+# Fetch nlohmann/json for JSON parsing
+FetchContent_Declare(
+    json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.11.2
+)
+FetchContent_MakeAvailable(json)
+
 # Define source files
 file(GLOB_RECURSE SOURCES src/*.cpp)
 
 # Create the executable
 add_executable(${PROJECT_NAME} ${SOURCES})
+target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
 
 # Fetch GoogleTest for unit testing
-include(FetchContent)
 FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
@@ -25,7 +36,7 @@ FetchContent_MakeAvailable(googletest)
 file(GLOB_RECURSE TEST_SOURCES test/*.cpp)
 if(TEST_SOURCES)
     add_executable(tests ${TEST_SOURCES})
-    target_link_libraries(tests gtest gtest_main)
+    target_link_libraries(tests gtest gtest_main nlohmann_json::nlohmann_json)
     enable_testing()
     add_test(NAME AllTests COMMAND tests)
 endif()
