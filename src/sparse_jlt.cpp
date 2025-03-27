@@ -379,9 +379,10 @@ ProgramConfig parse_arguments(int argc, char *argv[])
         {"target-dim", required_argument, 0, 'k'},
         {"no-dense-compare", no_argument, 0, 'N'},
         {"verbose", no_argument, 0, 'v'},
+        {"help", no_argument, 0, 'h'},
         {0, 0, 0, 0}};
 
-    while ((opt = getopt_long(argc, argv, "n:d:k:Nv", long_options, NULL)) != -1)
+    while ((opt = getopt_long(argc, argv, "n:d:k:Nvh", long_options, NULL)) != -1)
     {
         switch (opt)
         {
@@ -400,14 +401,19 @@ ProgramConfig parse_arguments(int argc, char *argv[])
         case 'v':
             config.verbose = true;
             break;
+        case 'h':
+            std::cout << "Usage: " << argv[0]
+                      << " [-n vectors] [-d original-dim] [-k target-dim] [-N] [-v] [-h]" << std::endl;
+            std::cout << "  -n, --vectors       Number of vectors (default: " << config.n << ")" << std::endl;
+            std::cout << "  -d, --original-dim  Original dimension (default: " << config.d << ")" << std::endl;
+            std::cout << "  -k, --target-dim    Target dimension (default: " << config.k << ")" << std::endl;
+            std::cout << "  -N, --no-dense-compare  Skip dense JLT comparison" << std::endl;
+            std::cout << "  -v, --verbose       Verbose output" << std::endl;
+            std::cout << "  -h, --help          Display this help message" << std::endl;
+            exit(0);
         default:
             std::cerr << "Usage: " << argv[0]
-                      << " [-n vectors] [-d original-dim] [-k target-dim] [-N] [-v]" << std::endl;
-            std::cerr << "  -n, --vectors       Number of vectors (default: " << config.n << ")" << std::endl;
-            std::cerr << "  -d, --original-dim Original dimension (default: " << config.d << ")" << std::endl;
-            std::cerr << "  -k, --target-dim   Target dimension (default: " << config.k << ")" << std::endl;
-            std::cerr << "  -N, --no-dense-compare  Skip dense JLT comparison" << std::endl;
-            std::cerr << "  -v, --verbose      Verbose output" << std::endl;
+                      << " [-n vectors] [-d original-dim] [-k target-dim] [-N] [-v] [-h]" << std::endl;
             exit(1);
         }
     }
