@@ -10,20 +10,38 @@
 #include <future>
 #include <getopt.h>
 
-// Configuration struct to hold program settings
-struct ProgramConfig
+// Utility functions for thread configuration
+namespace thread_utils
 {
-    int n = 10000;              // Number of vectors
-    int d = 100000;             // Original dimension
-    int k = 100;                // Target dimension
-    bool compare_dense = false; // Whether to compare with dense JLT
-    bool verbose = true;        // Verbose output
-};
+    int get_hardware_threads()
+    {
+        int hw_threads = std::thread::hardware_concurrency();
+        return hw_threads > 0 ? hw_threads : 4;
+    }
+
+    int validate_thread_count(int requested_threads)
+    {
+        if (requested_threads <= 0)
+            return get_hardware_threads();
+
+        int hw_threads = get_hardware_threads();
+
+        if (requested_threads > hw_threads)
+        {
+            std::cerr << "Warning: Requested threads (" << requested_threads
+                      << ") exceeds hardware concurrency (" << hw_threads
+                      << "). Falling back to " << hw_threads << " threads." << std::endl;
+            return hw_threads;
+        }
+
+        return requested_threads;
+    }
+}
 
 // Utility functions for analysis
 namespace utils
 {
-    // Calculate Euclidean distance between two vectors
+    // Euclidean distance calculation
     double euclidean_distance(const std::vector<double> &a, const std::vector<double> &b)
     {
         double sum = 0.0;
@@ -35,16 +53,13 @@ namespace utils
         return std::sqrt(sum);
     }
 
-    // Generate random data for testing
-    std::vector<std::vector<double>> generate_random_data(int n, int d, unsigned int seed = 42)
+    // Generate random data
+    std::vector<std::vector<double>> generate_random_data(int n, int d, int num_threads = -1)
     {
+        num_threads = thread_utils::validate_thread_count(num_threads);
+
         // Create output vector with pre-allocated space
         std::vector<std::vector<double>> X(n, std::vector<double>(d));
-
-        // Determine number of threads
-        int num_threads = std::thread::hardware_concurrency();
-        if (num_threads == 0)
-            num_threads = 4; // Fallback if hardware_concurrency returns 0
 
         // Parallel generation of random data
         std::vector<std::future<void>> futures;
@@ -52,24 +67,22 @@ namespace utils
         {
             futures.push_back(std::async(std::launch::async, [&](int thread_id)
                                          {
-            // Create thread-local random generator
-            std::mt19937 gen(seed + thread_id);
-            std::normal_distribution<> dist(0, 1);
-
-            // Divide work across threads
-            int start = thread_id * (n / num_threads);
-            int end = (thread_id == num_threads - 1) 
-                      ? n 
-                      : (thread_id + 1) * (n / num_threads);
-
-            // Generate data for this thread's subset of vectors
-            for (int i = start; i < end; ++i)
-            {
-                for (int j = 0; j < d; ++j)
-                {
-                    X[i][j] = dist(gen);
-                }
-            } }, thread));
+                // Create thread-local random generator
+                std::mt19937 gen(42 + thread_id);
+                std::normal_distribution<> dist(0, 1);
+                
+                // Divide work across threads
+                int start = thread_id * (n / num_threads);
+                int end = (thread_id == num_threads - 1) 
+                          ? n 
+                          : (thread_id + 1) * (n / num_threads);
+                
+                // Generate data for this thread's subset of vectors
+                for (int i = start; i < end; ++i) {
+                    for (int j = 0; j < d; ++j) {
+                        X[i][j] = dist(gen);
+                    }
+                } }, thread));
         }
 
         // Wait for all threads to complete
@@ -87,8 +100,6 @@ namespace utils
                                     int num_samples)
     {
         int n = X.size();
-
-        // Sample pairs for comparison
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> dist(0, n - 1);
@@ -100,12 +111,12 @@ namespace utils
         {
             int i = dist(gen);
             int j = dist(gen);
+
             if (i != j)
             {
                 double original_dist = euclidean_distance(X[i], X[j]);
                 double projected_dist = euclidean_distance(Y[i], Y[j]);
 
-                // Avoid division by zero
                 if (original_dist > 1e-10)
                 {
                     double relative_error = std::abs(projected_dist - original_dist) / original_dist;
@@ -128,7 +139,7 @@ private:
     std::mutex gen_mutex;
 
 public:
-    // Parallelized dense matrix generation
+    // Constructor for dense random projection matrix
     DenseJLT(int d, int k) : R_dense(d, std::vector<double>(k))
     {
         // Calculate scaling factor
@@ -137,12 +148,13 @@ public:
         // Parallel matrix generation
         std::vector<std::future<void>> futures;
         int num_threads = std::thread::hardware_concurrency();
+        if (num_threads == 0)
+            num_threads = 4;
 
         for (int thread = 0; thread < num_threads; ++thread)
         {
             futures.push_back(std::async(std::launch::async, [this, d, k, thread, num_threads]()
                                          {
-                // Create thread-local random generator
                 std::random_device rd;
                 std::mt19937 gen(rd() + thread);
                 std::normal_distribution<> dist(0, 1);
@@ -166,7 +178,7 @@ public:
         }
     }
 
-    // Parallel dense matrix transformation
+    // Parallel matrix transformation
     std::vector<std::vector<double>> transform(const std::vector<std::vector<double>> &X)
     {
         int n = X.size();
@@ -176,6 +188,8 @@ public:
         // Parallel transformation
         std::vector<std::future<void>> futures;
         int num_threads = std::thread::hardware_concurrency();
+        if (num_threads == 0)
+            num_threads = 4;
 
         for (int thread = 0; thread < num_threads; ++thread)
         {
@@ -229,7 +243,6 @@ public:
         // If sparsity parameter not provided, set based on dimension
         if (s == -1)
         {
-            // Use log(d) as recommended by literature for good balance of speed and accuracy
             s = std::max(static_cast<int>(std::log(d)), 3);
         }
 
@@ -248,11 +261,11 @@ public:
 
         // Calculate proper scaling factor for sparse JLT
         scaling_factor = std::sqrt(static_cast<double>(d) / (s * k));
-
         std::cout << "Using scaling factor: " << scaling_factor << std::endl;
 
         // Parallel column generation
         std::vector<std::future<std::vector<std::pair<int, double>>>> futures;
+
         for (int j = 0; j < k; ++j)
         {
             futures.push_back(std::async(std::launch::async, [this, d, s]()
@@ -261,38 +274,36 @@ public:
                 std::mt19937 gen(rd());
                 std::uniform_int_distribution<> row_dist(0, d - 1);
                 std::uniform_int_distribution<> sign_dist(0, 1);
-
+                
                 // Generate s distinct random row indices
                 std::unordered_set<int> row_indices;
                 std::vector<std::pair<int, double>> column_data;
-
+                
                 {
                     std::lock_guard<std::mutex> lock(gen_mutex);
-                    while (row_indices.size() < static_cast<size_t>(s))
-                    {
+                    while (row_indices.size() < static_cast<size_t>(s)) {
                         row_indices.insert(row_dist(gen));
                     }
                 }
-
+                
                 // Assign random +/- scaling_factor values
-                for (int row_idx : row_indices)
-                {
+                for (int row_idx : row_indices) {
                     int sign;
                     {
                         std::lock_guard<std::mutex> lock(gen_mutex);
                         sign = sign_dist(gen);
                     }
+                    
                     double value = (sign == 0 ? -1.0 : 1.0) * scaling_factor;
                     column_data.push_back(std::make_pair(row_idx, value));
                 }
-
+                
                 // Sort by row index for faster multiplication
                 std::sort(column_data.begin(), column_data.end(),
-                          [](const std::pair<int, double> &a, const std::pair<int, double> &b)
-                          {
-                              return a.first < b.first;
-                          });
-
+                    [](const std::pair<int, double>& a, const std::pair<int, double>& b) {
+                        return a.first < b.first;
+                    });
+                
                 return column_data; }));
         }
 
@@ -315,6 +326,8 @@ public:
         // Parallel transformation
         std::vector<std::future<void>> futures;
         int num_threads = std::thread::hardware_concurrency();
+        if (num_threads == 0)
+            num_threads = 4;
 
         for (int thread = 0; thread < num_threads; ++thread)
         {
@@ -325,13 +338,10 @@ public:
                           ? n 
                           : (thread_id + 1) * (n / num_threads);
 
-                for (int i = start; i < end; ++i)
-                {
-                    for (int j = 0; j < k; ++j)
-                    {
+                for (int i = start; i < end; ++i) {
+                    for (int j = 0; j < k; ++j) {
                         double sum = 0.0;
-                        for (const auto &entry : R.data[j])
-                        {
+                        for (const auto& entry : R.data[j]) {
                             int row_idx = entry.first;
                             double value = entry.second;
                             sum += X[i][row_idx] * value;
@@ -351,7 +361,7 @@ public:
     }
 };
 
-// Function to demonstrate the theoretical guarantees
+// Theoretical guarantees calculation
 void theoretical_guarantees(int d, double epsilon = 0.1, double delta = 0.05)
 {
     std::cout << "\nTheoretical Guarantees of JL Transform:" << std::endl;
@@ -367,6 +377,18 @@ void theoretical_guarantees(int d, double epsilon = 0.1, double delta = 0.05)
     std::cout << "Required target dimension k ≥ " << k_jl << std::endl;
 }
 
+// Configuration struct to hold program settings
+struct ProgramConfig
+{
+    int n = 10000;             // Number of vectors
+    int d = 100000;            // Original dimension
+    int k = 100;               // Target dimension
+    int s = -1;                // Sparsity parameter
+    bool compare_dense = true; // Whether to compare with dense JLT
+    bool verbose = true;       // Verbose output
+    int num_threads = -1;      // Number of threads to use
+};
+
 // Parse command-line arguments
 ProgramConfig parse_arguments(int argc, char *argv[])
 {
@@ -377,12 +399,14 @@ ProgramConfig parse_arguments(int argc, char *argv[])
         {"vectors", required_argument, 0, 'n'},
         {"original-dim", required_argument, 0, 'd'},
         {"target-dim", required_argument, 0, 'k'},
+        {"sparsity", required_argument, 0, 's'},
+        {"threads", required_argument, 0, 't'},
         {"no-dense-compare", no_argument, 0, 'N'},
         {"verbose", no_argument, 0, 'v'},
         {"help", no_argument, 0, 'h'},
         {0, 0, 0, 0}};
 
-    while ((opt = getopt_long(argc, argv, "n:d:k:Nvh", long_options, NULL)) != -1)
+    while ((opt = getopt_long(argc, argv, "n:d:k:s:t:Nvh", long_options, NULL)) != -1)
     {
         switch (opt)
         {
@@ -395,6 +419,12 @@ ProgramConfig parse_arguments(int argc, char *argv[])
         case 'k':
             config.k = std::stoi(optarg);
             break;
+        case 's':
+            config.s = std::stoi(optarg);
+            break;
+        case 't':
+            config.num_threads = std::stoi(optarg);
+            break;
         case 'N':
             config.compare_dense = false;
             break;
@@ -403,17 +433,21 @@ ProgramConfig parse_arguments(int argc, char *argv[])
             break;
         case 'h':
             std::cout << "Usage: " << argv[0]
-                      << " [-n vectors] [-d original-dim] [-k target-dim] [-N] [-v] [-h]" << std::endl;
+                      << " [options]" << std::endl;
+            std::cout << "Options:" << std::endl;
             std::cout << "  -n, --vectors       Number of vectors (default: " << config.n << ")" << std::endl;
             std::cout << "  -d, --original-dim  Original dimension (default: " << config.d << ")" << std::endl;
             std::cout << "  -k, --target-dim    Target dimension (default: " << config.k << ")" << std::endl;
+            std::cout << "  -s, --sparsity      Sparsity parameter (default: auto)" << std::endl;
+            std::cout << "  -t, --threads       Number of threads to use (default: auto)" << std::endl;
             std::cout << "  -N, --no-dense-compare  Skip dense JLT comparison" << std::endl;
-            std::cout << "  -v, --verbose       Verbose output" << std::endl;
+            std::cout << "  -v, --verbose       Enable verbose output" << std::endl;
             std::cout << "  -h, --help          Display this help message" << std::endl;
+            std::cout << "\nDescription:" << std::endl;
+            std::cout << "  Implements Johnson-Lindenstrauss Transform (JLT) with sparse and dense projections" << std::endl;
             exit(0);
         default:
-            std::cerr << "Usage: " << argv[0]
-                      << " [-n vectors] [-d original-dim] [-k target-dim] [-N] [-v] [-h]" << std::endl;
+            std::cerr << "Try '" << argv[0] << " -h' for more information." << std::endl;
             exit(1);
         }
     }
@@ -426,25 +460,28 @@ int main(int argc, char *argv[])
     // Parse command-line arguments
     ProgramConfig config = parse_arguments(argc, argv);
 
+    // Validate thread count
+    int num_threads = thread_utils::validate_thread_count(config.num_threads);
+
     if (config.verbose)
     {
         std::cout << "Configuration:" << std::endl;
         std::cout << "- Vectors: " << config.n << std::endl;
         std::cout << "- Original dimension: " << config.d << std::endl;
         std::cout << "- Target dimension: " << config.k << std::endl;
+        std::cout << "- Sparsity parameter: " << config.s << std::endl;
+        std::cout << "- Threads: " << num_threads
+                  << " (hardware concurrency: " << std::thread::hardware_concurrency() << ")" << std::endl;
         std::cout << "- Compare dense JLT: " << (config.compare_dense ? "Yes" : "No") << std::endl;
     }
 
-    std::cout << "Number of concurrent threads supported: "
-              << std::thread::hardware_concurrency() << std::endl;
-
     std::cout << "Generating " << config.n << " random points in " << config.d << " dimensions..." << std::endl;
-    auto X = utils::generate_random_data(config.n, config.d);
+    auto X = utils::generate_random_data(config.n, config.d, num_threads);
 
     // Dense JLT comparison (optional)
     if (config.compare_dense)
     {
-        std::cout << "Starting dense JLT, converting to target dimension k = " << config.k << "..." << std::endl;
+        std::cout << "\nStarting dense JLT, converting to target dimension k = " << config.k << "..." << std::endl;
 
         auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -466,12 +503,12 @@ int main(int argc, char *argv[])
     }
 
     // Sparse JLT
-    std::cout << "Starting sparse JLT, converting to target dimension k = " << config.k << "..." << std::endl;
+    std::cout << "\nStarting sparse JLT, converting to target dimension k = " << config.k << "..." << std::endl;
 
     auto start_time = std::chrono::high_resolution_clock::now();
 
     // Create sparse JLT with automatic sparsity parameter
-    SparseJLT sjlt(config.d, config.k);
+    SparseJLT sjlt(config.d, config.k, config.s);
     auto Y_sparse = sjlt.transform(X);
 
     auto sparse_duration = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -519,19 +556,15 @@ int main(int argc, char *argv[])
     // Calculate mean and standard deviation of ratios
     if (!error_ratios.empty())
     {
-        double sum = 0.0;
-        for (double ratio : error_ratios)
-        {
-            sum += ratio;
-        }
+        double sum = std::accumulate(error_ratios.begin(), error_ratios.end(), 0.0);
         double mean = sum / error_ratios.size();
 
-        double sum_sq_diff = 0.0;
-        for (double ratio : error_ratios)
-        {
-            double diff = ratio - mean;
-            sum_sq_diff += diff * diff;
-        }
+        double sum_sq_diff = std::accumulate(error_ratios.begin(), error_ratios.end(), 0.0,
+                                             [mean](double acc, double val)
+                                             {
+                                                 double diff = val - mean;
+                                                 return acc + diff * diff;
+                                             });
         double std_dev = std::sqrt(sum_sq_diff / error_ratios.size());
 
         std::cout << "\nDistance ratio statistics:" << std::endl;
