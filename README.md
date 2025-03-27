@@ -7,6 +7,10 @@ Building a C++ version of Seismic (https://github.com/TusKANNy/seismic) with sup
 From the root directory, run:
 
 ```
+// If fresh copy...
+cmake -B build -S .
+
+// To build...
 cd build
 make clean; make
 ./seismic-cpp [num vectors] [original dimension] [target dimension]
@@ -27,6 +31,10 @@ The results of reducing the dimension of 1,000 randomly generated vectors from 1
 To see the unit tests for each component of the SeismicShift algorithm, run the following from the root directory:
 
 ```
+// If fresh copy...
+cmake -B build -S .
+
+// To build...
 cd build
 make clean; make
 ./tests
