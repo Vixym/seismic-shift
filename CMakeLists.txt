@@ -41,6 +41,8 @@ set(TEST_SOURCES
     test/utils_test.cpp
     test/top_k_selector_test.cpp
     test/space_usage_test.cpp
+    test/sparse_dataset_test.cpp
+    test/quantized_summary_test.cpp
 )
 
 add_executable(tests ${TEST_SOURCES})

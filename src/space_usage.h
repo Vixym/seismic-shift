@@ -146,6 +146,11 @@ public:
     std::size_t space_usage_byte() const override {
         return sizeof(Float16);
     }
+    
+    // Get the raw 16-bit value
+    uint16_t get_raw() const {
+        return value;
+    }
 };
 
 } // namespace seismic
