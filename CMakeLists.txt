@@ -19,6 +19,13 @@ FetchContent_MakeAvailable(json)
 # Define source files
 file(GLOB_RECURSE SOURCES src/*.cpp)
 
+# Add our implementation files explicitly
+list(APPEND SOURCES 
+    src/configuration.cpp
+    src/inverted_index_space_usage.cpp
+    src/knn_space_usage.cpp
+)
+
 # Create the executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
@@ -45,6 +52,10 @@ set(TEST_SOURCES
     test/quantized_summary_test.cpp
     test/inverted_index_test.cpp
     test/seismic_index_test.cpp
+    # Add our implementation files
+    src/configuration.cpp
+    src/inverted_index_space_usage.cpp
+    src/knn_space_usage.cpp
 )
 
 add_executable(tests ${TEST_SOURCES})

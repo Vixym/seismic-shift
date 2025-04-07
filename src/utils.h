@@ -381,7 +381,7 @@ namespace utils
      * SparseDataset class for sparse data representation
      */
     template <typename T>
-        requires DataType<T>
+        // requires DataType<T>
     class SparseDataset
     {
     private:

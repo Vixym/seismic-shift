@@ -31,16 +31,16 @@ protected:
             .summarization_strategy(SummarizationStrategy::fixed_size(3));
 
         // Create the index
-        index = SeismicIndex<float>::new_from_dataset(
+        index = std::make_unique<SeismicIndex<float>>(SeismicIndex<float>::new_from_dataset(
             dataset,
             config,
             std::move(doc_mapping),
             std::move(token_map)
-        );
+        ));
     }
 
     Configuration config;
-    SeismicIndex<float> index;
+    std::unique_ptr<SeismicIndex<float>> index;
 };
 
 TEST_F(SeismicIndexTest, SearchRaw) {
@@ -48,7 +48,7 @@ TEST_F(SeismicIndexTest, SearchRaw) {
     std::vector<std::string> query_tokens = {"word1", "word2"};
     std::vector<float> query_values = {1.0f, 2.0f};
     
-    auto results = index.search_raw(query_tokens, query_values, 2, 2, 0.7f, 0, false);
+    auto results = index->search_raw(query_tokens, query_values, 2, 2, 0.7f, 0, false);
     
     // Should get 2 results
     EXPECT_EQ(results.size(), 2);
@@ -62,7 +62,7 @@ TEST_F(SeismicIndexTest, SearchMapped) {
     std::vector<std::string> query_tokens = {"word1", "word2"};
     std::vector<float> query_values = {1.0f, 2.0f};
     
-    auto results = index.search("query1", query_tokens, query_values, 2, 2, 0.7f, 0, false);
+    auto results = index->search("query1", query_tokens, query_values, 2, 2, 0.7f, 0, false);
     
     // Should get 2 results
     EXPECT_EQ(results.size(), 2);
@@ -80,7 +80,7 @@ TEST_F(SeismicIndexTest, TokenMapping) {
     std::vector<std::string> query_tokens = {"unknown_word", "word1"};
     std::vector<float> query_values = {1.0f, 2.0f};
     
-    auto results = index.search_raw(query_tokens, query_values, 2, 2, 0.7f, 0, false);
+    auto results = index->search_raw(query_tokens, query_values, 2, 2, 0.7f, 0, false);
     
     // Should still get results, but only based on "word1"
     EXPECT_GT(results.size(), 0);
@@ -110,7 +110,7 @@ TEST_F(SeismicIndexTest, ProcessDataWithExistingMapping) {
 }
 
 TEST_F(SeismicIndexTest, SpaceUsage) {
-    size_t space = index.space_usage_byte();
+    size_t space = index->space_usage_byte();
     EXPECT_GT(space, 0);
 }
 
