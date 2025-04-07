@@ -2,9 +2,10 @@ name =          "splade_cocondenser_msmarco"
 title =         "Seismic on Splade Cocondenser embeddings of MS MARCO"
 description =   "Seismic on Splade Cocondenser embeddings of MS MARCO for the Table 1 (row 5) on SIGIR 2024 paper"
 dataset =       "Splade cocondenser on MS-MARCO"
-# compile-command = "cargo build" # Compile in debug mode? default is release mode
-# build-command = "./target/release/build_inverted_index"
-# query-command = "./target/debug/perf_inverted_index"
+language =      "cpp"  # Using C++ bindings instead of Rust
+compile-command = "cmake --build build --config Release"
+build-command = "./build/bin/build_inverted_index"
+query-command = "./build/bin/perf_inverted_index"
 
 [settings]
 k =             10
