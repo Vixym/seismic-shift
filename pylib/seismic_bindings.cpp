@@ -279,7 +279,7 @@ public:
             float score = std::get<1>(result);
             const std::string& doc_id = std::get<2>(result);
             
-            formatted_results.emplace_back(doc_id, score, "");
+            formatted_results.emplace_back(query_id_res, score, doc_id);
         }
 
         return formatted_results;
