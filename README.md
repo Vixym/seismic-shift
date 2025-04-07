@@ -122,7 +122,7 @@ make clean; make
 ```
 All tests should pass, with the following breakdown:
 
-<img width="429" alt="image" src="https://github.com/user-attachments/assets/0dc13c3f-ed04-4cb4-932f-9b915ea5aec8" />
+<img width="430" alt="image" src="https://github.com/user-attachments/assets/0241d29a-e3fb-40f2-a19e-e43daf8ceeb1" />
 
 
 
