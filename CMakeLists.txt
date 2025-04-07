@@ -62,3 +62,6 @@ add_executable(tests ${TEST_SOURCES})
 target_link_libraries(tests gtest gtest_main nlohmann_json::nlohmann_json)
 enable_testing()
 add_test(NAME AllTests COMMAND tests)
+
+# Add Python bindings subdirectory
+add_subdirectory(pylib)
