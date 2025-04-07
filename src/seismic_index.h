@@ -362,6 +362,7 @@ namespace seismic {
         const Configuration& config,
         std::optional<std::unordered_map<std::string, size_t>> input_token_to_id_map = std::nullopt
     ) {
+        // TODO: return to this, use `input_token_to_id_map` in process_data
         // Simplified implementation that doesn't rely on libarchive
         // This is a temporary solution until the proper dependencies are available
         std::cout << "Reading the collection from tar.gz file: " << tar_path << std::endl;

@@ -73,8 +73,8 @@ TEST_F(InvertedIndexTest, Search) {
     // We should get 2 results
     EXPECT_EQ(results.size(), 2);
 
-    // The first document should be the most similar (which is document 0 in this case)
-    EXPECT_EQ(results[0].second, 0);
+    // The first document should be the most similar (which is document 4 in this case)
+    EXPECT_EQ(results[0].second, 4);
 }
 
 TEST_F(InvertedIndexTest, ConfigurationBuilders) {

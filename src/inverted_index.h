@@ -508,7 +508,13 @@ class BlockingStrategy {
                 if (visited.find(prev_offset) == visited.end()) {
                     auto [v_components, v_values] = forward_index.get_with_offset(prev_offset, prev_len);
                     
-                    float distance = distances::dot_product_dense_sparse(query, v_components, v_values);
+                    float distance;
+                    if (query_term_ids.size() < THRESHOLD_BINARY_SEARCH) {
+                        distance = distances::dot_product_with_merge(
+                            query_term_ids, query_values, v_components, v_values);
+                    } else {
+                        distance = distances::dot_product_dense_sparse(query, v_components, v_values);
+                    }
                     
                     visited.insert(prev_offset);
                     heap.push_with_id(-1.0f * distance, prev_offset);
