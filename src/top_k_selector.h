@@ -80,6 +80,11 @@ public:
      */
     virtual std::vector<std::pair<float, size_t>> topk() const = 0;
 
+    /**
+     * Returns the number of distances stored in the data structure.
+     */
+    virtual size_t len() const { return k_; }
+
 protected:
     size_t k_;
     size_t next_id_;
@@ -136,6 +141,8 @@ public:
         
         return result;
     }
+
+    size_t len() const override { return heap_.size(); }
 
 private:
     std::vector<std::pair<float, size_t>> heap_;

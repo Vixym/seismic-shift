@@ -9,6 +9,8 @@
 namespace distances
 {
 
+    // TODO: bring back DataType concept later
+    
     /**
      * Computes the dot product between a dense query and a sparse vector.
      * Before using this function, the query must be made dense. This is much faster
@@ -31,7 +33,7 @@ namespace distances
      * @endcode
      */
     template <typename Q, typename V>
-        requires utils::DataType<Q> && utils::DataType<V>
+        // requires utils::DataType<Q> && utils::DataType<V>
     inline float dot_product_dense_sparse(const std::vector<Q> &query,
                                           const std::vector<uint16_t> &v_components,
                                           const std::vector<V> &v_values)
@@ -45,10 +47,10 @@ namespace distances
         {
             size_t base_idx = i * N_LANES;
 
-            result[0] += query[v_components[base_idx]].to_f32().value_or(0.0f) * v_values[base_idx].to_f32().value_or(0.0f);
-            result[1] += query[v_components[base_idx + 1]].to_f32().value_or(0.0f) * v_values[base_idx + 1].to_f32().value_or(0.0f);
-            result[2] += query[v_components[base_idx + 2]].to_f32().value_or(0.0f) * v_values[base_idx + 2].to_f32().value_or(0.0f);
-            result[3] += query[v_components[base_idx + 3]].to_f32().value_or(0.0f) * v_values[base_idx + 3].to_f32().value_or(0.0f);
+            result[0] += query[v_components[base_idx]] * v_values[base_idx];
+            result[1] += query[v_components[base_idx + 1]] * v_values[base_idx + 1];
+            result[2] += query[v_components[base_idx + 2]] * v_values[base_idx + 2];
+            result[3] += query[v_components[base_idx + 3]] * v_values[base_idx + 3];
         }
 
         // Handle remaining elements
@@ -59,7 +61,7 @@ namespace distances
         {
             for (size_t i = len - rem; i < len; i++)
             {
-                result[0] += query[v_components[i]].to_f32().value_or(0.0f) * v_values[i].to_f32().value_or(0.0f);
+                result[0] += query[v_components[i]] * v_values[i];
             }
         }
 
@@ -91,7 +93,7 @@ namespace distances
      * @endcode
      */
     template <typename Q, typename V>
-        requires utils::DataType<Q> && utils::DataType<V>
+        // requires utils::DataType<Q> && utils::DataType<V>
     inline float dot_product_with_binary_search(
         const std::vector<uint16_t> &query_term_ids,
         const std::vector<Q> &query_values,
@@ -143,7 +145,7 @@ namespace distances
      * @endcode
      */
     template <typename Q, typename V>
-        requires utils::DataType<Q> && utils::DataType<V>
+        // requires utils::DataType<Q> && utils::DataType<V>
     inline float dot_product_with_merge(
         const std::vector<uint16_t> &query_term_ids,
         const std::vector<Q> &query_values,
@@ -174,7 +176,7 @@ namespace distances
             // If there's a match, include in dot product
             if (v_term_ids[i] == q_id)
             {
-                result += v_values[i].to_f32().value_or(0.0f) * q_v.to_f32().value_or(0.0f);
+                result += v_values[i] * q_v;
             }
         }
 

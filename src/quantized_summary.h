@@ -102,6 +102,17 @@ public:
         bool has_next() const {
             return current < distances.size();
         }
+
+        size_t size() const {
+            return distances.size();
+        }
+
+        std::optional<float> operator[](size_t index) const {
+            if (index < distances.size()) {
+                return distances[index];
+            }
+            return std::nullopt;
+        }
     };
 
     /**

@@ -43,6 +43,8 @@ set(TEST_SOURCES
     test/space_usage_test.cpp
     test/sparse_dataset_test.cpp
     test/quantized_summary_test.cpp
+    test/inverted_index_test.cpp
+    test/seismic_index_test.cpp
 )
 
 add_executable(tests ${TEST_SOURCES})
