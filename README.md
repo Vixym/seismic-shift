@@ -2,6 +2,75 @@
 
 Building a C++ version of Seismic (https://github.com/TusKANNy/seismic) with support for dynamic updates + potential other optimizations.
 
+## Testing out a toy example
+
+From the root directory, run:
+
+```
+// If fresh copy...
+cmake -B build -S .
+
+// To build...
+cd build
+make clean; make
+
+// To run the example...
+cd ..
+python3 pylib/example.py
+```
+
+This toy example runs Seismic on a miniature dataset of 3 document vectors and 2 queries. The expected output is:
+
+```
+vxma@dhcp-10-29-193-115 seismic-cpp % python3 pylib/example.py
+Seismic string: S30
+
+=== SeismicIndex Example ===
+Created sample data at: /var/folders/7q/d0q9fdbj5cv076r6_p5xf_jm0000gn/T/tmpxrm79xyc
+
+Building the index...
+Configuration: 
+  Pruning: Global threshold with 10 postings
+  Blocking: Random kmeans with centroid fraction 0.1
+  Summarization: Energy preserving with 0.4 energy
+Distributing and pruning postings: 0 secs
+        Number of posting lists: 4
+Building summaries: 0 secs
+Index dimensions: 4
+Index length: 3
+Index nnz: 9
+Index KNN length: 0
+
+Search results:
+  Query: query1, Score: 5.0, Document: doc1
+  Query: query1, Score: 8.0, Document: doc2
+
+Batch search results:
+Query 1:
+  Query: query1, Score: 5.0, Document: doc1
+  Query: query1, Score: 8.0, Document: doc2
+Query 2:
+  Query: query2, Score: 10.0, Document: doc3
+  Query: query2, Score: 14.0, Document: doc2
+
+Building KNN graph...
+Building KNN graph with 2 neighbors
+KNN graph built successfully
+KNN length after building: 0
+
+Saving index to: /var/folders/7q/d0q9fdbj5cv076r6_p5xf_jm0000gn/T/tmp0li3arff
+Saving ... /var/folders/7q/d0q9fdbj5cv076r6_p5xf_jm0000gn/T/tmp0li3arff.index.seismic
+Save completed successfully
+Saving KNN graph to: /var/folders/7q/d0q9fdbj5cv076r6_p5xf_jm0000gn/T/tmp0li3arff.knn
+Saving KNN graph to /var/folders/7q/d0q9fdbj5cv076r6_p5xf_jm0000gn/T/tmp0li3arff.knn
+KNN graph saved successfully
+
+Example completed successfully!
+
+=== SeismicIndexRaw Example ===
+SeismicIndexRaw requires binary input files, skipping example.
+```
+
 ## Testing out SeismicShift's sparse JLT implementation
 
 From the root directory, run:
