@@ -30,6 +30,24 @@ list(APPEND SOURCES
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
 
+# Create a library target for the core functionality
+add_library(seismic_core STATIC
+    src/configuration.cpp
+    src/inverted_index_space_usage.cpp
+    src/knn_space_usage.cpp
+)
+target_include_directories(seismic_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_link_libraries(seismic_core PRIVATE nlohmann_json::nlohmann_json)
+
+# Create the build_inverted_index executable
+add_executable(build_inverted_index src/bin/build_inverted_index.cpp)
+target_link_libraries(build_inverted_index PRIVATE seismic_core nlohmann_json::nlohmann_json)
+
+# Set output directory for binaries
+set_target_properties(build_inverted_index PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)
+
 # Fetch GoogleTest for unit testing
 FetchContent_Declare(
     googletest

@@ -54,7 +54,7 @@ def get_git_info(experiment_dir):
         sys.exit(1)
 
 
-def compile_rust_code(configs, experiment_dir):
+def compile_cpp_code(configs, experiment_dir):
     """Compile the code and save output."""
     print()
     print(colored("Compiling the code", "green"))
@@ -106,9 +106,12 @@ def get_index_filename(base_filename, configs):
 
 def build_index(configs, experiment_dir):
     """Build the index using the provided configuration."""
-    input_file =  os.path.join(configs["folder"]["data"], configs["filename"]["dataset"])
-    index_folder = configs["folder"]["index"]
-
+    # Expand the tilde (~) in file paths
+    data_folder = os.path.expanduser(configs["folder"]["data"])
+    index_folder = os.path.expanduser(configs["folder"]["index"])
+    
+    input_file = os.path.join(data_folder, configs["filename"]["dataset"])
+    
     os.makedirs(index_folder, exist_ok=True)
     output_file = os.path.join(index_folder, get_index_filename(configs["filename"]["index"], configs))
     
@@ -269,8 +272,12 @@ def compute_accuracy(query_file, gt_file):
 
 def query_execution(configs, query_config, experiment_dir, subsection_name):
     """Execute a query based on the provided configuration."""
-    index_file = os.path.join(configs["folder"]["index"], get_index_filename(configs["filename"]["index"], configs))
-    query_file =  os.path.join(configs["folder"]["data"], configs["filename"]["queries"] ) 
+    # Expand the tilde (~) in file paths
+    data_folder = os.path.expanduser(configs["folder"]["data"])
+    index_folder = os.path.expanduser(configs["folder"]["index"])
+    
+    index_file = os.path.join(index_folder, get_index_filename(configs["filename"]["index"], configs))
+    query_file =  os.path.join(data_folder, configs["filename"]["queries"] ) 
     
     output_file = os.path.join(experiment_dir, f"results_{subsection_name}")
     log_output_file =  os.path.join(experiment_dir, f"log_{subsection_name}") 
@@ -492,7 +499,7 @@ def run_experiment(config_data):
     
     # Compile the code if needed
     if config_data['settings'].get('compile', True):
-        compile_rust_code(config_data, experiment_folder)
+        compile_cpp_code(config_data, experiment_folder)
 
     building_time = 0
     if config_data['settings'].get('build', True):
