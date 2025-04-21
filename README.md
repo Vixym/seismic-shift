@@ -36,11 +36,19 @@ experiment =    "."     # stdout and stderr here of running the experiment is sa
 ...
 ```
 
-### Run the helper script
+### Run the helper script (in progress)
 
 From the root directory, run:
 
-`python3 script/run_experiments.py --exp experiments/sigir2024/splade.toml`
+```
+// If testing runtime performance, you can explicitly restrict the number of permitted threads by:
+export OMP_NUM_THREADS=[number of threads]
+echo $OMP_NUM_THREADS // Should be [number of threads]
+
+// Run the main wrapper script
+python3 script/run_experiments.py --exp experiments/sigir2024/splade.toml
+
+```
 
 At a high level, `run_experiments.py` is a wrapper that:
 1. First builds the InvertedIndex data structure from the provided dataset using `seismic-shift/src/bin/build_inverted_index.cpp`.
@@ -48,6 +56,7 @@ At a high level, `run_experiments.py` is a wrapper that:
 3. Executes a given dataset's queries on this InvertedIndex by deserializing from this intermediate format and running `seismic-shift/src/bin/perf_inverted_index.cpp`.
 
 *Note: currently, steps 1-2 are working smoothly. I'm working on fixing deserialization for step 3 and some performance degradations for step 1 (relative to the original Rust version).
+
 
 ## Testing out a toy example
 
