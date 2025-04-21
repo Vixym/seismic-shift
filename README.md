@@ -12,18 +12,17 @@ https://huggingface.co/datasets/tuskanny/seismic-msmarco-splade-bin/tree/main
 
 Once unpacked, place its contents into a separate directory named `/sparse_datasets` in this format:
 
+```
 sparse_datasets
 └── msmarco_v1_passage
     └── cocondenser
         ├── data
-        │   ├── doc_ids.npy
-        │   ├── documents.bin
-        │   ├── ...
-        ├── indexes
-        ├── qrels.dev.small.tsv
-        ├── docs_anserini.json
-        └── queries_anserini.tsv
-   └── qrels.dev.small.tsv
+            ├── doc_ids.npy
+            ├── documents.bin
+            ├── ...
+        ├── indexes (initially empty)
+    └── qrels.dev.small.tsv
+```
 
 Edit `seismic-shift/experiments/sigir2024/splade.toml` if needed for SeismicShift to locate this `/sparse_datsets` directory. Specifically, edit this section:
 
@@ -37,18 +36,18 @@ experiment =    "."     # stdout and stderr here of running the experiment is sa
 ...
 ```
 
-[folder] 
-data =          "/storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data"
-index =         "/storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes"
-qrels_path =    "/storage/vxma/sparse_datasets/msmarco_v1_passage/qrels.dev.small.tsv"
-experiment =    "."     # stdout and stderr here of running the experiment is saved here. in a specific subfolder for the current execution
+### Run the helper script
 
+From the root directory, run:
 
+`python3 script/run_experiments.py --exp experiments/sigir2024/splade.toml`
 
+At a high level, `run_experiments.py` is a wrapper that:
+1. First builds the InvertedIndex data structure from the provided dataset using `seismic-shift/src/bin/build_inverted_index.cpp`.
+2. Serializes the InvertedIndex into an intermediate format, `[path].index.seismic`. This will be stored in `sparse_datasets/msmarco_v1_passage/cocondenser/indexes`.
+3. Executes a given dataset's queries on this InvertedIndex by deserializing from this intermediate format and running `seismic-shift/src/bin/perf_inverted_index.cpp`.
 
-
-
-
+*Note: currently, steps 1-2 are working smoothly. I'm working on fixing deserialization for step 3 and some performance degradations for step 1 (relative to the original Rust version).
 
 ## Testing out a toy example
 
