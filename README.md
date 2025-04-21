@@ -2,6 +2,54 @@
 
 Building a C++ version of Seismic (https://github.com/TusKANNy/seismic) with support for dynamic updates + potential other optimizations.
 
+## Testing out the end-to-end pipeline (in progress)
+
+### Prepare a dataset
+
+Download this `seismic-msmarco-splade-bin`, provided by the Seismic authors:
+
+https://huggingface.co/datasets/tuskanny/seismic-msmarco-splade-bin/tree/main
+
+Once unpacked, place its contents into a separate directory named `/sparse_datasets` in this format:
+
+sparse_datasets
+└── msmarco_v1_passage
+    └── cocondenser
+        ├── data
+        │   ├── doc_ids.npy
+        │   ├── documents.bin
+        │   ├── ...
+        ├── indexes
+        ├── qrels.dev.small.tsv
+        ├── docs_anserini.json
+        └── queries_anserini.tsv
+   └── qrels.dev.small.tsv
+
+Edit `seismic-shift/experiments/sigir2024/splade.toml` if needed for SeismicShift to locate this `/sparse_datsets` directory. Specifically, edit this section:
+
+```
+...
+[folder] 
+data =          "[path to sparse_datasets]/sparse_datasets/msmarco_v1_passage/cocondenser/data"
+index =         "[path to sparse_datasets]/sparse_datasets/msmarco_v1_passage/cocondenser/indexes"
+qrels_path =    "[path to sparse_datasets]/sparse_datasets/msmarco_v1_passage/qrels.dev.small.tsv"
+experiment =    "."     # stdout and stderr here of running the experiment is saved here. in a specific subfolder for the current execution
+...
+```
+
+[folder] 
+data =          "/storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data"
+index =         "/storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes"
+qrels_path =    "/storage/vxma/sparse_datasets/msmarco_v1_passage/qrels.dev.small.tsv"
+experiment =    "."     # stdout and stderr here of running the experiment is saved here. in a specific subfolder for the current execution
+
+
+
+
+
+
+
+
 ## Testing out a toy example
 
 From the root directory, run:
