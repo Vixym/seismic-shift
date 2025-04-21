@@ -54,7 +54,7 @@ At a high level, `run_experiments.py` is a wrapper that:
 2. Serializes the InvertedIndex into an intermediate format, `[path].index.seismic`. This will be stored in `sparse_datasets/msmarco_v1_passage/cocondenser/indexes`.
 3. Executes a given dataset's queries on this InvertedIndex by deserializing from this intermediate format and running `seismic-shift/src/bin/perf_inverted_index.cpp`.
 
-Note: currently, steps 1-2 are working smoothly. I'm working on fixing deserialization for step 3 and some performance degradations for step 1 (relative to the original Rust version).
+Note: currently, steps 1-2 are working smoothly. I'm working on fixing some minor InvertedIndex-related search bugs for step 3 and some performance degradations for step 1 (relative to the original Rust version).
 
 ## Testing out a toy example
 
