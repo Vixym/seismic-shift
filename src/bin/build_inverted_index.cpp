@@ -10,6 +10,25 @@
 #include "../inverted_index.h"
 #include "../sparse_dataset.h"
 
+#include <cereal/archives/binary.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/types/polymorphic.hpp>
+#include <cereal/types/optional.hpp>
+
+// CEREAL_REGISTER_TYPE(InvertedIndex);
+// CEREAL_REGISTER_TYPE(seismic::ClusteringAlgorithm);
+// CEREAL_REGISTER_TYPE(seismic::PruningStrategy);
+// CEREAL_REGISTER_TYPE(seismic::BlockingStrategy);
+// CEREAL_REGISTER_TYPE(seismic::SummarizationStrategy);
+// CEREAL_REGISTER_TYPE(seismic::KnnConfiguration);
+// CEREAL_REGISTER_TYPE(seismic::Configuration);
+// CEREAL_REGISTER_TYPE(seismic::SpaceUsage);
+// CEREAL_REGISTER_TYPE(seismic::PostingList);
+// CEREAL_REGISTER_TYPE(seismic::Knn);
+// CEREAL_REGISTER_TYPE(seismic::InvertedIndex);
+
+
 using namespace seismic;
 
 // Simple argument parser
@@ -96,12 +115,9 @@ void save_index(const InvertedIndex<float>& index, const std::string& path) {
         throw std::runtime_error("Failed to open file for writing: " + full_path);
     }
     
-    // Write a dummy header
-    const char* header = "SEISMIC_INDEX";
-    file.write(header, strlen(header));
-    
-    // In a real implementation, you would serialize the index here
-    // For now, we'll just create a placeholder file
+    // Serialize using cereal
+    cereal::BinaryOutputArchive archive(file);
+    archive(index);  // This will serialize the entire index in one line
     
     std::cout << "Save completed successfully" << std::endl;
 }

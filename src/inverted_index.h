@@ -22,6 +22,7 @@
 #include "top_k_selector.h"
 #include "elias_fano.h"
 
+
 namespace seismic {
 
 // Forward declaration of template class
@@ -76,6 +77,12 @@ const size_t THRESHOLD_BINARY_SEARCH = 10;
         Type get_type() const { return type; }
         float get_pruning_factor() const { return pruning_factor; }
         size_t get_doc_cut() const { return doc_cut; }
+
+        // Serialization
+        template <class Archive>
+        void serialize(Archive& archive) {
+            archive(type, pruning_factor, doc_cut);
+        }
         
     private:
         Type type;
@@ -118,11 +125,17 @@ const size_t THRESHOLD_BINARY_SEARCH = 10;
             strategy.max_fraction = max_fraction;
             return strategy;
         }
-    
+
         // Getters
         Type get_type() const { return type; }
         size_t get_n_postings() const { return n_postings; }
         float get_max_fraction() const { return max_fraction; }
+
+        // Serialization
+        template <class Archive>
+        void serialize(Archive& archive) {
+            archive(type, n_postings, max_fraction);
+        }
     
     private:
         Type type;
@@ -173,6 +186,12 @@ class BlockingStrategy {
         float get_centroid_fraction() const { return centroid_fraction; }
         size_t get_min_cluster_size() const { return min_cluster_size; }
         const ClusteringAlgorithm& get_clustering_algorithm() const { return clustering_algorithm; }
+
+        // Serialization
+        template <class Archive>
+        void serialize(Archive& archive) {
+            archive(type, block_size, centroid_fraction, min_cluster_size, clustering_algorithm);
+        }
     
     private:
         Type type;
@@ -215,6 +234,12 @@ class BlockingStrategy {
         Type get_type() const { return type; }
         size_t get_n_components() const { return n_components; }
         float get_summary_energy() const { return summary_energy; }
+
+        // Serialization
+        template <class Archive>
+        void serialize(Archive& archive) {
+            archive(type, n_components, summary_energy);
+        }
     
     private:
         Type type;
@@ -240,7 +265,12 @@ class BlockingStrategy {
         // Getters
         size_t get_nknn() const { return nknn; }
         const std::optional<std::string>& get_knn_path() const { return knn_path; }
-        
+
+        // Serialization
+        template <class Archive>
+        void serialize(Archive& archive) {
+            archive(nknn, knn_path);
+        }
     };
 
 /**
@@ -266,6 +296,12 @@ class BlockingStrategy {
         const SummarizationStrategy& get_summarization() const { return summarization; }
         const KnnConfiguration& get_knn_config() const { return knn_config; }
         const std::optional<size_t>& get_batched_indexing() const { return batched_indexing_size; }
+
+        // Serialization
+        template <class Archive>
+        void serialize(Archive& archive) {
+            archive(pruning, blocking, summarization, knn_config, batched_indexing_size);
+        }
     
     private:
         PruningStrategy pruning;
@@ -741,6 +777,11 @@ class BlockingStrategy {
             
             return {term_ids, sorted_values};
         }
+
+        template <class Archive>
+        void serialize(Archive& archive) {
+            archive(packed_postings, block_offsets, summaries);
+        }
 };
 
 /**
@@ -1003,6 +1044,11 @@ class BlockingStrategy {
         
         // Space usage calculation
         size_t space_usage_byte() const;
+
+        template <class Archive>
+        void serialize(Archive& archive) {
+            archive(n_vecs, d, neighbours, nbits); \
+        }
     };
 
 /**
@@ -1332,6 +1378,12 @@ class BlockingStrategy {
      
      // Space usage
      size_t print_space_usage_byte() const;
+
+    template <class Archive>
+    void serialize(Archive& archive) {
+        archive(forward_index_, posting_lists_, config_, knn_);
+    }
+
  };
 
 } // namespace seismic

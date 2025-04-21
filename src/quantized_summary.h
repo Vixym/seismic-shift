@@ -50,6 +50,11 @@ public:
           summaries_ids(std::move(summaries_ids)), values(std::move(values)),
           minimums(std::move(minimums)), quants(std::move(quants)) {}
 
+    template <class Archive>
+    void serialize(Archive& archive) {
+        archive(n_summaries, d, offsets, summaries_ids, values, minimums, quants); \
+    }
+
     /**
      * Creates an iterator to calculate distances between the query vector and all vectors in the dataset.
      * 

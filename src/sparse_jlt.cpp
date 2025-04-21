@@ -455,132 +455,132 @@ ProgramConfig parse_arguments(int argc, char *argv[])
     return config;
 }
 
-int main(int argc, char *argv[])
-{
-    // Parse command-line arguments
-    ProgramConfig config = parse_arguments(argc, argv);
+// int main(int argc, char *argv[])
+// {
+//     // Parse command-line arguments
+//     ProgramConfig config = parse_arguments(argc, argv);
 
-    // Validate thread count
-    int num_threads = thread_utils::validate_thread_count(config.num_threads);
+//     // Validate thread count
+//     int num_threads = thread_utils::validate_thread_count(config.num_threads);
 
-    if (config.verbose)
-    {
-        std::cout << "Configuration:" << std::endl;
-        std::cout << "- Vectors: " << config.n << std::endl;
-        std::cout << "- Original dimension: " << config.d << std::endl;
-        std::cout << "- Target dimension: " << config.k << std::endl;
-        std::cout << "- Sparsity parameter: " << config.s << std::endl;
-        std::cout << "- Threads: " << num_threads
-                  << " (hardware concurrency: " << std::thread::hardware_concurrency() << ")" << std::endl;
-        std::cout << "- Compare dense JLT: " << (config.compare_dense ? "Yes" : "No") << std::endl;
-    }
+//     if (config.verbose)
+//     {
+//         std::cout << "Configuration:" << std::endl;
+//         std::cout << "- Vectors: " << config.n << std::endl;
+//         std::cout << "- Original dimension: " << config.d << std::endl;
+//         std::cout << "- Target dimension: " << config.k << std::endl;
+//         std::cout << "- Sparsity parameter: " << config.s << std::endl;
+//         std::cout << "- Threads: " << num_threads
+//                   << " (hardware concurrency: " << std::thread::hardware_concurrency() << ")" << std::endl;
+//         std::cout << "- Compare dense JLT: " << (config.compare_dense ? "Yes" : "No") << std::endl;
+//     }
 
-    std::cout << "Generating " << config.n << " random points in " << config.d << " dimensions..." << std::endl;
-    auto X = utils::generate_random_data(config.n, config.d, num_threads);
+//     std::cout << "Generating " << config.n << " random points in " << config.d << " dimensions..." << std::endl;
+//     auto X = utils::generate_random_data(config.n, config.d, num_threads);
 
-    // Dense JLT comparison (optional)
-    if (config.compare_dense)
-    {
-        std::cout << "\nStarting dense JLT, converting to target dimension k = " << config.k << "..." << std::endl;
+//     // Dense JLT comparison (optional)
+//     if (config.compare_dense)
+//     {
+//         std::cout << "\nStarting dense JLT, converting to target dimension k = " << config.k << "..." << std::endl;
 
-        auto start_time = std::chrono::high_resolution_clock::now();
+//         auto start_time = std::chrono::high_resolution_clock::now();
 
-        // Create and transform using dense JLT
-        DenseJLT dense_jlt(config.d, config.k);
-        auto Y_dense = dense_jlt.transform(X);
+//         // Create and transform using dense JLT
+//         DenseJLT dense_jlt(config.d, config.k);
+//         auto Y_dense = dense_jlt.transform(X);
 
-        auto dense_duration = std::chrono::duration_cast<std::chrono::milliseconds>(
-                                  std::chrono::high_resolution_clock::now() - start_time)
-                                  .count() /
-                              1000.0;
+//         auto dense_duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+//                                   std::chrono::high_resolution_clock::now() - start_time)
+//                                   .count() /
+//                               1000.0;
 
-        std::cout << "Dense JLT transformation time: " << dense_duration << " seconds" << std::endl;
+//         std::cout << "Dense JLT transformation time: " << dense_duration << " seconds" << std::endl;
 
-        // Accuracy analysis for dense JLT
-        int num_samples = config.n;
-        double dense_error = utils::calculate_relative_error(X, Y_dense, num_samples);
-        std::cout << "Dense JLT avg relative error: " << dense_error << std::endl;
-    }
+//         // Accuracy analysis for dense JLT
+//         int num_samples = config.n;
+//         double dense_error = utils::calculate_relative_error(X, Y_dense, num_samples);
+//         std::cout << "Dense JLT avg relative error: " << dense_error << std::endl;
+//     }
 
-    // Sparse JLT
-    std::cout << "\nStarting sparse JLT, converting to target dimension k = " << config.k << "..." << std::endl;
+//     // Sparse JLT
+//     std::cout << "\nStarting sparse JLT, converting to target dimension k = " << config.k << "..." << std::endl;
 
-    auto start_time = std::chrono::high_resolution_clock::now();
+//     auto start_time = std::chrono::high_resolution_clock::now();
 
-    // Create sparse JLT with automatic sparsity parameter
-    SparseJLT sjlt(config.d, config.k, config.s);
-    auto Y_sparse = sjlt.transform(X);
+//     // Create sparse JLT with automatic sparsity parameter
+//     SparseJLT sjlt(config.d, config.k, config.s);
+//     auto Y_sparse = sjlt.transform(X);
 
-    auto sparse_duration = std::chrono::duration_cast<std::chrono::milliseconds>(
-                               std::chrono::high_resolution_clock::now() - start_time)
-                               .count() /
-                           1000.0;
+//     auto sparse_duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+//                                std::chrono::high_resolution_clock::now() - start_time)
+//                                .count() /
+//                            1000.0;
 
-    std::cout << "Sparse JLT transformation time: " << sparse_duration << " seconds" << std::endl;
+//     std::cout << "Sparse JLT transformation time: " << sparse_duration << " seconds" << std::endl;
 
-    // Accuracy analysis for sparse JLT
-    int num_samples = config.n;
-    double sparse_error = utils::calculate_relative_error(X, Y_sparse, num_samples);
-    std::cout << "Sparse JLT avg relative error: " << sparse_error << std::endl;
+//     // Accuracy analysis for sparse JLT
+//     int num_samples = config.n;
+//     double sparse_error = utils::calculate_relative_error(X, Y_sparse, num_samples);
+//     std::cout << "Sparse JLT avg relative error: " << sparse_error << std::endl;
 
-    // 2. Detailed error analysis
-    std::vector<double> error_ratios;
-    std::mt19937 gen(42); // Use fixed seed for reproducibility
-    std::uniform_int_distribution<> dist(0, config.n - 1);
-    std::vector<std::vector<double>> examples;
-    int num_detail_samples = config.n;
-    int num_examples = 10;
+//     // 2. Detailed error analysis
+//     std::vector<double> error_ratios;
+//     std::mt19937 gen(42); // Use fixed seed for reproducibility
+//     std::uniform_int_distribution<> dist(0, config.n - 1);
+//     std::vector<std::vector<double>> examples;
+//     int num_detail_samples = config.n;
+//     int num_examples = 10;
 
-    for (int s = 0; s < num_detail_samples; ++s)
-    {
-        int i = dist(gen);
-        int j = dist(gen);
-        if (i != j)
-        {
-            double original_dist = utils::euclidean_distance(X[i], X[j]);
-            double projected_dist = utils::euclidean_distance(Y_sparse[i], Y_sparse[j]);
+//     for (int s = 0; s < num_detail_samples; ++s)
+//     {
+//         int i = dist(gen);
+//         int j = dist(gen);
+//         if (i != j)
+//         {
+//             double original_dist = utils::euclidean_distance(X[i], X[j]);
+//             double projected_dist = utils::euclidean_distance(Y_sparse[i], Y_sparse[j]);
 
-            if (original_dist > 1e-10)
-            {
-                double ratio = projected_dist / original_dist;
-                error_ratios.push_back(ratio);
+//             if (original_dist > 1e-10)
+//             {
+//                 double ratio = projected_dist / original_dist;
+//                 error_ratios.push_back(ratio);
 
-                if (s < num_examples)
-                {
-                    examples.push_back({original_dist, projected_dist, ratio});
-                }
-            }
-        }
-    }
+//                 if (s < num_examples)
+//                 {
+//                     examples.push_back({original_dist, projected_dist, ratio});
+//                 }
+//             }
+//         }
+//     }
 
-    // Calculate mean and standard deviation of ratios
-    if (!error_ratios.empty())
-    {
-        double sum = std::accumulate(error_ratios.begin(), error_ratios.end(), 0.0);
-        double mean = sum / error_ratios.size();
+//     // Calculate mean and standard deviation of ratios
+//     if (!error_ratios.empty())
+//     {
+//         double sum = std::accumulate(error_ratios.begin(), error_ratios.end(), 0.0);
+//         double mean = sum / error_ratios.size();
 
-        double sum_sq_diff = std::accumulate(error_ratios.begin(), error_ratios.end(), 0.0,
-                                             [mean](double acc, double val)
-                                             {
-                                                 double diff = val - mean;
-                                                 return acc + diff * diff;
-                                             });
-        double std_dev = std::sqrt(sum_sq_diff / error_ratios.size());
+//         double sum_sq_diff = std::accumulate(error_ratios.begin(), error_ratios.end(), 0.0,
+//                                              [mean](double acc, double val)
+//                                              {
+//                                                  double diff = val - mean;
+//                                                  return acc + diff * diff;
+//                                              });
+//         double std_dev = std::sqrt(sum_sq_diff / error_ratios.size());
 
-        std::cout << "\nDistance ratio statistics:" << std::endl;
-        std::cout << "Mean ratio: " << mean << " (ideally close to 1.0)" << std::endl;
-        std::cout << "Standard deviation: " << std_dev << std::endl;
-    }
+//         std::cout << "\nDistance ratio statistics:" << std::endl;
+//         std::cout << "Mean ratio: " << mean << " (ideally close to 1.0)" << std::endl;
+//         std::cout << "Standard deviation: " << std_dev << std::endl;
+//     }
 
-    // Print first few examples
-    std::cout << "\nExamples (" << num_examples << "):" << std::endl;
-    std::cout << "----------------------" << std::endl;
-    for (int s = 0; s < num_examples; ++s)
-    {
-        std::cout << "Sample " << s << ": Original dist = " << examples[s][0]
-                  << ", Sparse projected dist = " << examples[s][1]
-                  << ", Ratio = " << examples[s][2] << std::endl;
-    }
+//     // Print first few examples
+//     std::cout << "\nExamples (" << num_examples << "):" << std::endl;
+//     std::cout << "----------------------" << std::endl;
+//     for (int s = 0; s < num_examples; ++s)
+//     {
+//         std::cout << "Sample " << s << ": Original dist = " << examples[s][0]
+//                   << ", Sparse projected dist = " << examples[s][1]
+//                   << ", Ratio = " << examples[s][2] << std::endl;
+//     }
 
-    return 0;
-}
+//     return 0;
+// }

@@ -335,6 +335,11 @@ public:
                components.size() * sizeof(uint16_t) +
                values.size() * sizeof(T);
     }
+
+    template <class Archive> \
+    void serialize(Archive& archive) { \
+        archive(n_vecs, d, offsets, components, values); \
+    }
 };
 
 /**
@@ -505,6 +510,11 @@ public:
                offsets.size() * sizeof(size_t) +
                components.size() * sizeof(uint16_t) +
                values.size() * sizeof(T);
+    }
+
+    template <class Archive>
+    void serialize(Archive& archive) {
+        archive(d, offsets, components, values);
     }
 };
 

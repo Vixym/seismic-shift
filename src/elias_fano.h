@@ -78,6 +78,11 @@ namespace seismic
         {
             return data_.size() * sizeof(uint64_t) + sizeof(size_);
         }
+
+        template <class Archive>
+        void serialize(Archive& archive) {
+            archive(data_, size_); \
+        }
     };
 
     // Mutable BitVector for building
@@ -216,6 +221,11 @@ namespace seismic
                    rank_samples_.size() * sizeof(size_t) +
                    select_samples_.size() * sizeof(size_t) +
                    sizeof(num_ones_);
+        }
+        
+        template <class Archive>
+        void serialize(Archive& archive) {
+            archive(bv_, rank_samples_, select_samples_, num_ones_, sample_rate_); \
         }
 
     private:
@@ -408,6 +418,11 @@ namespace seismic
         }
 
         friend class EliasFanoBuilder;
+
+        template <class Archive>
+        void serialize(Archive& archive) {
+            archive(high_bits, low_bits, low_len, universe, num_vals); \
+        }
     };
 
     // Implementation of EliasFanoBuilder::build
