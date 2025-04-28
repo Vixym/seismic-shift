@@ -10,7 +10,7 @@ Download this `seismic-msmarco-splade-bin`, provided by the Seismic authors:
 
 https://huggingface.co/datasets/tuskanny/seismic-msmarco-splade-bin/tree/main
 
-Once unpacked, place its contents into a separate directory named `/sparse_datasets` in this format:
+Once unpacked, place its contents into a separate directory named `/sparse_datasets`. The unpacked contents should already look like this:
 
 ```
 sparse_datasets
@@ -41,6 +41,13 @@ experiment =    "."     # stdout and stderr here of running the experiment is sa
 From the root directory, run:
 
 ```
+// If freshly cloned copy...
+cmake -B build -S .
+
+// Build...
+cd build
+make clean; make
+
 // If testing runtime performance, you can explicitly restrict the number of permitted threads by:
 export OMP_NUM_THREADS=[number of threads]
 echo $OMP_NUM_THREADS // Should be [number of threads]
