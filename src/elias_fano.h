@@ -163,7 +163,7 @@ namespace seismic
         std::vector<size_t> rank_samples_;
         std::vector<size_t> select_samples_;
         size_t num_ones_ = 0;
-        static constexpr size_t sample_rate_ = 64; // Typical sampling rate
+        size_t sample_rate_ = 64; // Typical sampling rate
 
     public:
         DArray() = default;
