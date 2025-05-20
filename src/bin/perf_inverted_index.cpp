@@ -115,29 +115,34 @@ Args parse_args(int argc, char *argv[])
 }
 
 // Function to load the index from a file
-InvertedIndex<float> load_index(const std::string &path) {
+InvertedIndex<float> load_index(const std::string &path)
+{
     std::cout << "Loading index from " << path << "..." << std::endl;
-    std::string full_path = path;  // Adjust if needed - assuming path already includes .index.seismic extension
-    
+    std::string full_path = path; // Adjust if needed - assuming path already includes .index.seismic extension
+
     std::ifstream file(full_path, std::ios::binary);
-    if (!file) {
+    if (!file)
+    {
         throw std::runtime_error("Failed to open file for reading: " + full_path);
     }
-    
+
     // Create an empty index
     InvertedIndex<float> index;
-    
-    try {
+
+    try
+    {
         // Deserialize using cereal
         cereal::BinaryInputArchive archive(file);
-        archive(index);  // This will deserialize the entire index in one line
-        
+        archive(index); // This will deserialize the entire index in one line
+
         std::cout << "Index loaded successfully" << std::endl;
         std::cout << "Number of documents: " << index.len() << std::endl;
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception &e)
+    {
         throw std::runtime_error("Failed to deserialize index: " + std::string(e.what()));
     }
-    
+
     return index;
 }
 
@@ -228,27 +233,25 @@ int main(int argc, char *argv[])
             {
                 const auto &query = queries.get(query_id);
 
-                // TODO: working on debugging inverted_index.search()
-                return 0;
-                // const auto &q_components = query.components;
-                // const auto &q_values = query.values;
+                const auto &q_components = query.components;
+                const auto &q_values = query.values;
 
-                // auto cur_results = inverted_index.search(
-                //     q_components,
-                //     q_values,
-                //     args.k,
-                //     args.query_cut,
-                //     args.heap_factor,
-                //     args.n_knn,
-                //     args.first_sorted);
+                auto cur_results = inverted_index.search(
+                    q_components,
+                    q_values,
+                    args.k,
+                    args.query_cut,
+                    args.heap_factor,
+                    args.n_knn,
+                    args.first_sorted);
 
-                // if (cur_results.size() < args.k)
-                // {
-                //     std::cout << "FAIL! The query " << query_id
-                //               << " has only " << cur_results.size() << " results." << std::endl;
-                // }
+                if (cur_results.size() < args.k)
+                {
+                    std::cout << "FAIL! The query " << query_id
+                              << " has only " << cur_results.size() << " results." << std::endl;
+                }
 
-                // results.push_back(cur_results);
+                results.push_back(cur_results);
             }
         }
 
