@@ -18,7 +18,12 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(pybind11)
 
 # Define source files for the main library
-file(GLOB_RECURSE MAIN_SOURCES ${CMAKE_SOURCE_DIR}/src/*.cpp)
+file(GLOB_RECURSE MAIN_SOURCES 
+    ${CMAKE_SOURCE_DIR}/src/*.cpp
+    ${CMAKE_SOURCE_DIR}/src/*.h
+)
+# Remove binary files from sources
+list(FILTER MAIN_SOURCES EXCLUDE REGEX ".*/bin/.*")
 
 # Add our implementation files explicitly
 list(APPEND MAIN_SOURCES 
