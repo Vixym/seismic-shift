@@ -89,7 +89,13 @@ set(TEST_SOURCES
 )
 
 add_executable(tests ${TEST_SOURCES})
-target_link_libraries(tests gtest gtest_main nlohmann_json::nlohmann_json cereal OpenMP::OpenMP_CXX)
+target_link_libraries(tests PRIVATE 
+    GTest::gtest 
+    GTest::gtest_main 
+    nlohmann_json::nlohmann_json 
+    cereal 
+    OpenMP::OpenMP_CXX
+)
 target_include_directories(tests PRIVATE ${cereal_SOURCE_DIR}/include)
 enable_testing()
 add_test(NAME AllTests COMMAND tests)
