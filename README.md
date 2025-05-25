@@ -2,7 +2,7 @@
 
 Building a C++ version of Seismic (https://github.com/TusKANNy/seismic) with support for dynamic updates + potential other optimizations.
 
-## Testing out the end-to-end pipeline (in progress)
+## Testing out the translated end-to-end pipeline (original Seismic version)
 
 ### Prepare a dataset
 
@@ -61,7 +61,310 @@ At a high level, `run_experiments.py` is a wrapper that:
 2. Serializes the InvertedIndex into an intermediate format, `[path].index.seismic`. This will be stored in `sparse_datasets/msmarco_v1_passage/cocondenser/indexes`.
 3. Executes a given dataset's queries on this InvertedIndex by deserializing from this intermediate format and running `seismic-shift/src/bin/perf_inverted_index.cpp`.
 
-Note: currently, steps 1-2 are working smoothly. I'm working on fixing some minor InvertedIndex-related search bugs for step 3 and some performance degradations for step 1 (relative to the original Rust version).
+### Example results (for `experiments/sigir2024/splade.toml`):
+
+For the portion that runs `perf_inverted_index.cpp` (step #3), the observed output is pasted below. Note that the `Metric of the run: RR@10: ...` and `Metric of the gt : RR@10: ...` (precalculated groundtruth) are observably close, which provides a good sanity check for the accuracy of our C++ Seismic translation.
+
+```
+...
+
+Git info
+Current Branch: main
+Commit ID: 2e6b42f219c4337f1539b728edc44433967673e8
+
+Compiling the code
+Compiling code with cmake --build build --config
+[  7%] Built target seismic_core
+[ 11%] Built target build_inverted_index
+[ 15%] Built target perf_inverted_index
+[ 19%] Built target gtest
+[ 23%] Built target gtest_main
+[ 52%] Built target tests
+[ 56%] Built target sandbox
+[ 60%] Built target sandbox_json
+[ 64%] Built target sandbox_rtti
+[ 70%] Built target sandbox_vs_dll
+[ 74%] Built target sandbox_vs
+[ 78%] Built target performance
+[ 82%] Built target gmock
+[ 86%] Built target gmock_main
+[100%] Built target seismic_cpp
+Code compiled successfully.
+Skipping index building step entirely.
+Evaluation runs with metric RR@10
+Executing query for subsection 'recall_90' with command:
+ ./build/bin/perf_inverted_index --index-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4 -k 10 --query-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin --query-cut 3 --heap-factor 0.9 --n-runs 1 --output-path ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_90
+Running query for subsection: recall_90...
+Performance testing with the following parameters:
+  Index file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4
+  Query file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin
+  Output path: ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_90
+  N queries: 10000
+  K: 10
+  N runs: 1
+  Query cut: 3
+  Heap factor: 0.9
+  N KNN: 0
+  First sorted: false
+Loading index from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4.index.seismic...
+Index loaded successfully
+Number of documents: 8841823
+
+Loading queries from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin...
+Number of Queries: 6980
+Number of Dimensions: 28313
+Avg number of components: 43.9454
+Searching for top-10 results
+Number of evaluated queries: 6980
+Number of documents: 8841823
+Avg number of non-zero components: 121.046
+Time 5008 microsecs per query
+5008
+Total space usage: 11306567207 bytes
+Writing results to ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_90...
+Results written successfully
+Query for subsection 'recall_90' executed successfully.
+Metric of the run: RR@10: 0.36741739436939974
+Metric of the gt : RR@10: 0.38280017737754163
+Executing query for subsection 'recall_91' with command:
+ ./build/bin/perf_inverted_index --index-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4 -k 10 --query-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin --query-cut 4 --heap-factor 0.9 --n-runs 1 --output-path ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_91
+Running query for subsection: recall_91...
+Performance testing with the following parameters:
+  Index file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4
+  Query file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin
+  Output path: ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_91
+  N queries: 10000
+  K: 10
+  N runs: 1
+  Query cut: 4
+  Heap factor: 0.9
+  N KNN: 0
+  First sorted: false
+Loading index from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4.index.seismic...
+Index loaded successfully
+Number of documents: 8841823
+
+Loading queries from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin...
+Number of Queries: 6980
+Number of Dimensions: 28313
+Avg number of components: 43.9454
+Searching for top-10 results
+Number of evaluated queries: 6980
+Number of documents: 8841823
+Avg number of non-zero components: 121.046
+Time 5813 microsecs per query
+5813
+Total space usage: 11306567207 bytes
+Writing results to ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_91...
+Results written successfully
+Query for subsection 'recall_91' executed successfully.
+Metric of the run: RR@10: 0.3700439464228858
+Metric of the gt : RR@10: 0.38280017737754163
+Executing query for subsection 'recall_92' with command:
+ ./build/bin/perf_inverted_index --index-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4 -k 10 --query-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin --query-cut 4 --heap-factor 0.9 --n-runs 1 --output-path ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_92
+Running query for subsection: recall_92...
+Performance testing with the following parameters:
+  Index file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4
+  Query file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin
+  Output path: ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_92
+  N queries: 10000
+  K: 10
+  N runs: 1
+  Query cut: 4
+  Heap factor: 0.9
+  N KNN: 0
+  First sorted: false
+Loading index from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4.index.seismic...
+Index loaded successfully
+Number of documents: 8841823
+
+Loading queries from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin...
+Number of Queries: 6980
+Number of Dimensions: 28313
+Avg number of components: 43.9454
+Searching for top-10 results
+Number of evaluated queries: 6980
+Number of documents: 8841823
+Avg number of non-zero components: 121.046
+Time 5904 microsecs per query
+5904
+Total space usage: 11306567207 bytes
+Writing results to ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_92...
+Results written successfully
+Query for subsection 'recall_92' executed successfully.
+Metric of the run: RR@10: 0.3700439464228858
+Metric of the gt : RR@10: 0.38280017737754163
+Executing query for subsection 'recall_93' with command:
+ ./build/bin/perf_inverted_index --index-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4 -k 10 --query-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin --query-cut 5 --heap-factor 0.9 --n-runs 1 --output-path ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_93
+Running query for subsection: recall_93...
+Performance testing with the following parameters:
+  Index file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4
+  Query file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin
+  Output path: ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_93
+  N queries: 10000
+  K: 10
+  N runs: 1
+  Query cut: 5
+  Heap factor: 0.9
+  N KNN: 0
+  First sorted: false
+Loading index from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4.index.seismic...
+Index loaded successfully
+Number of documents: 8841823
+
+Loading queries from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin...
+Number of Queries: 6980
+Number of Dimensions: 28313
+Avg number of components: 43.9454
+Searching for top-10 results
+Number of evaluated queries: 6980
+Number of documents: 8841823
+Avg number of non-zero components: 121.046
+Time 6549 microsecs per query
+6549
+Total space usage: 11306567207 bytes
+Writing results to ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_93...
+Results written successfully
+Query for subsection 'recall_93' executed successfully.
+Metric of the run: RR@10: 0.37107552189930354
+Metric of the gt : RR@10: 0.38280017737754163
+Executing query for subsection 'recall_94' with command:
+ ./build/bin/perf_inverted_index --index-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4 -k 10 --query-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin --query-cut 8 --heap-factor 0.9 --n-runs 1 --output-path ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_94
+Running query for subsection: recall_94...
+Performance testing with the following parameters:
+  Index file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4
+  Query file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin
+  Output path: ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_94
+  N queries: 10000
+  K: 10
+  N runs: 1
+  Query cut: 8
+  Heap factor: 0.9
+  N KNN: 0
+  First sorted: false
+Loading index from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4.index.seismic...
+Index loaded successfully
+Number of documents: 8841823
+
+Loading queries from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin...
+Number of Queries: 6980
+Number of Dimensions: 28313
+Avg number of components: 43.9454
+Searching for top-10 results
+Number of evaluated queries: 6980
+Number of documents: 8841823
+Avg number of non-zero components: 121.046
+Time 8477 microsecs per query
+8477
+Total space usage: 11306567207 bytes
+Writing results to ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_94...
+Results written successfully
+Query for subsection 'recall_94' executed successfully.
+Metric of the run: RR@10: 0.37399235912129836
+Metric of the gt : RR@10: 0.38280017737754163
+Executing query for subsection 'recall_95' with command:
+ ./build/bin/perf_inverted_index --index-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4 -k 10 --query-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin --query-cut 5 --heap-factor 0.8 --n-runs 1 --output-path ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_95
+Running query for subsection: recall_95...
+Performance testing with the following parameters:
+  Index file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4
+  Query file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin
+  Output path: ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_95
+  N queries: 10000
+  K: 10
+  N runs: 1
+  Query cut: 5
+  Heap factor: 0.8
+  N KNN: 0
+  First sorted: false
+Loading index from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4.index.seismic...
+Index loaded successfully
+Number of documents: 8841823
+
+Loading queries from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin...
+Number of Queries: 6980
+Number of Dimensions: 28313
+Avg number of components: 43.9454
+Searching for top-10 results
+Number of evaluated queries: 6980
+Number of documents: 8841823
+Avg number of non-zero components: 121.046
+Time 9377 microsecs per query
+9377
+Total space usage: 11306567207 bytes
+Writing results to ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_95...
+Results written successfully
+Query for subsection 'recall_95' executed successfully.
+Metric of the run: RR@10: 0.3768639991813341
+Metric of the gt : RR@10: 0.38280017737754163
+Executing query for subsection 'recall_96' with command:
+ ./build/bin/perf_inverted_index --index-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4 -k 10 --query-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin --query-cut 6 --heap-factor 0.8 --n-runs 1 --output-path ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_96
+Running query for subsection: recall_96...
+Performance testing with the following parameters:
+  Index file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4
+  Query file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin
+  Output path: ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_96
+  N queries: 10000
+  K: 10
+  N runs: 1
+  Query cut: 6
+  Heap factor: 0.8
+  N KNN: 0
+  First sorted: false
+Loading index from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4.index.seismic...
+Index loaded successfully
+Number of documents: 8841823
+
+Loading queries from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin...
+Number of Queries: 6980
+Number of Dimensions: 28313
+Avg number of components: 43.9454
+Searching for top-10 results
+Number of evaluated queries: 6980
+Number of documents: 8841823
+Avg number of non-zero components: 121.046
+Time 10188 microsecs per query
+10188
+Total space usage: 11306567207 bytes
+Writing results to ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_96...
+Results written successfully
+Query for subsection 'recall_96' executed successfully.
+Metric of the run: RR@10: 0.37785731341247053
+Metric of the gt : RR@10: 0.38280017737754163
+Executing query for subsection 'recall_97' with command:
+ ./build/bin/perf_inverted_index --index-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4 -k 10 --query-file /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin --query-cut 6 --heap-factor 0.7 --n-runs 1 --output-path ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_97
+Running query for subsection: recall_97...
+Performance testing with the following parameters:
+  Index file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4
+  Query file: /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin
+  Output path: ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_97
+  N queries: 10000
+  K: 10
+  N runs: 1
+  Query cut: 6
+  Heap factor: 0.7
+  N KNN: 0
+  First sorted: false
+Loading index from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summary-energy_0.4.index.seismic...
+Index loaded successfully
+Number of documents: 8841823
+
+Loading queries from /storage/vxma/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin...
+Number of Queries: 6980
+Number of Dimensions: 28313
+Avg number of components: 43.9454
+Searching for top-10 results
+Number of evaluated queries: 6980
+Number of documents: 8841823
+Avg number of non-zero components: 121.046
+Time 14716 microsecs per query
+14716
+Total space usage: 11306567207 bytes
+Writing results to ./splade_cocondenser_msmarco_2025-05-25_18:54:30/results_recall_97...
+Results written successfully
+Query for subsection 'recall_97' executed successfully.
+Metric of the run: RR@10: 0.379833765406831
+Metric of the gt : RR@10: 0.38280017737754163
+```
 
 ## Testing out a toy example
 
