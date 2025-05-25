@@ -16,8 +16,6 @@
 #include <cereal/types/polymorphic.hpp>
 #include <cereal/types/optional.hpp>
 
-using namespace seismic;
-
 // Simple argument parser
 struct Args
 {
@@ -115,7 +113,7 @@ Args parse_args(int argc, char *argv[])
 }
 
 // Function to load the index from a file
-InvertedIndex<float> load_index(const std::string &path)
+seismic::InvertedIndex<float> load_index(const std::string &path)
 {
     std::cout << "Loading index from " << path << "..." << std::endl;
     std::string full_path = path; // Adjust if needed - assuming path already includes .index.seismic extension
@@ -127,7 +125,7 @@ InvertedIndex<float> load_index(const std::string &path)
     }
 
     // Create an empty index
-    InvertedIndex<float> index;
+    seismic::InvertedIndex<float> index;
 
     try
     {
@@ -190,15 +188,15 @@ int main(int argc, char *argv[])
     try
     {
         // Load the index
-        InvertedIndex<float> inverted_index = load_index(*args.index_file);
+        seismic::InvertedIndex<float> inverted_index = load_index(*args.index_file);
 
         // Load queries
         std::cout << "\nLoading queries from " << *args.query_file << "..." << std::endl;
-        SparseDataset<float> queries;
+        seismic::SparseDataset<float> queries;
 
         try
         {
-            queries = SparseDataset<float>::read_bin_file(*args.query_file);
+            queries = seismic::SparseDataset<float>::read_bin_file(*args.query_file);
             std::cout << "Number of Queries: " << queries.len() << std::endl;
             std::cout << "Number of Dimensions: " << queries.dim() << std::endl;
             std::cout << "Avg number of components: "
@@ -233,8 +231,8 @@ int main(int argc, char *argv[])
             {
                 const auto &query = queries.get(query_id);
 
-                const auto &q_components = query.components;
-                const auto &q_values = query.values;
+                const auto &q_components = query.first;
+                const auto &q_values = query.second;
 
                 auto cur_results = inverted_index.search(
                     q_components,

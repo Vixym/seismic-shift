@@ -36,21 +36,6 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(cereal)
 
-# Define source files
-file(GLOB_RECURSE SOURCES src/*.cpp)
-
-# Add our implementation files explicitly
-list(APPEND SOURCES 
-    src/configuration.cpp
-    src/inverted_index_space_usage.cpp
-    src/knn_space_usage.cpp
-)
-
-# Create the executable
-add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json cereal)
-target_include_directories(${PROJECT_NAME} PRIVATE ${cereal_SOURCE_DIR}/include)
-
 # Create a library target for the core functionality
 add_library(seismic_core STATIC
     src/configuration.cpp
@@ -58,15 +43,20 @@ add_library(seismic_core STATIC
     src/knn_space_usage.cpp
 )
 target_include_directories(seismic_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src ${cereal_SOURCE_DIR}/include)
-target_link_libraries(seismic_core PRIVATE nlohmann_json::nlohmann_json cereal)
+target_link_libraries(seismic_core PRIVATE nlohmann_json::nlohmann_json cereal OpenMP::OpenMP_CXX)
 
 # Create the build_inverted_index executable
 add_executable(build_inverted_index src/bin/build_inverted_index.cpp)
-target_link_libraries(build_inverted_index PRIVATE seismic_core nlohmann_json::nlohmann_json cereal)
+target_link_libraries(build_inverted_index PRIVATE seismic_core nlohmann_json::nlohmann_json cereal OpenMP::OpenMP_CXX)
 target_include_directories(build_inverted_index PRIVATE ${cereal_SOURCE_DIR}/include)
 
+# Create the perf_inverted_index executable
+add_executable(perf_inverted_index src/bin/perf_inverted_index.cpp)
+target_link_libraries(perf_inverted_index PRIVATE seismic_core nlohmann_json::nlohmann_json cereal OpenMP::OpenMP_CXX)
+target_include_directories(perf_inverted_index PRIVATE ${cereal_SOURCE_DIR}/include)
+
 # Set output directory for binaries
-set_target_properties(build_inverted_index PROPERTIES
+set_target_properties(build_inverted_index perf_inverted_index PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
 
@@ -99,7 +89,7 @@ set(TEST_SOURCES
 )
 
 add_executable(tests ${TEST_SOURCES})
-target_link_libraries(tests gtest gtest_main nlohmann_json::nlohmann_json cereal)
+target_link_libraries(tests gtest gtest_main nlohmann_json::nlohmann_json cereal OpenMP::OpenMP_CXX)
 target_include_directories(tests PRIVATE ${cereal_SOURCE_DIR}/include)
 enable_testing()
 add_test(NAME AllTests COMMAND tests)
