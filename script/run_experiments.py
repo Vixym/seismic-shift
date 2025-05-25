@@ -501,7 +501,7 @@ def run_experiment(config_data):
     if config_data['settings'].get('compile', True):
         compile_cpp_code(config_data, experiment_folder)
 
-    building_time = 0
+    building_time = 0  # Initialize building_time outside the if block
     if config_data['settings'].get('build', True):
         building_time = build_index(config_data, experiment_folder)
     else:

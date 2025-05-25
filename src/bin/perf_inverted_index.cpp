@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <optional>
 #include <cstring>
+#include <filesystem>
 
 #include "../inverted_index.h"
 #include "../sparse_dataset.h"
@@ -115,8 +116,8 @@ Args parse_args(int argc, char *argv[])
 // Function to load the index from a file
 seismic::InvertedIndex<float> load_index(const std::string &path)
 {
-    std::cout << "Loading index from " << path << "..." << std::endl;
-    std::string full_path = path; // Adjust if needed - assuming path already includes .index.seismic extension
+    std::string full_path = path + ".index.seismic";
+    std::cout << "Loading index from " << full_path << "..." << std::endl;
 
     std::ifstream file(full_path, std::ios::binary);
     if (!file)
