@@ -34,10 +34,15 @@ pybind11_add_module(seismic_cpp seismic_bindings.cpp ${MAIN_SOURCES})
 target_include_directories(seismic_cpp PRIVATE 
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/src
+    ${CEREAL_INCLUDE_DIR}
 )
 
-# Link with nlohmann_json
-target_link_libraries(seismic_cpp PRIVATE nlohmann_json::nlohmann_json)
+# Link with nlohmann_json and cereal
+target_link_libraries(seismic_cpp PRIVATE 
+    nlohmann_json::nlohmann_json
+    cereal
+    OpenMP::OpenMP_CXX
+)
 
 # Install the module
 install(TARGETS seismic_cpp DESTINATION ${CMAKE_CURRENT_SOURCE_DIR})

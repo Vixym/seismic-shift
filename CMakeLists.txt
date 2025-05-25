@@ -36,24 +36,30 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(cereal)
 
+# Set cereal include directory
+set(CEREAL_INCLUDE_DIR ${cereal_SOURCE_DIR}/include)
+
 # Create a library target for the core functionality
 add_library(seismic_core STATIC
     src/configuration.cpp
     src/inverted_index_space_usage.cpp
     src/knn_space_usage.cpp
 )
-target_include_directories(seismic_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src ${cereal_SOURCE_DIR}/include)
+target_include_directories(seismic_core PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src 
+    ${CEREAL_INCLUDE_DIR}
+)
 target_link_libraries(seismic_core PRIVATE nlohmann_json::nlohmann_json cereal OpenMP::OpenMP_CXX)
 
 # Create the build_inverted_index executable
 add_executable(build_inverted_index src/bin/build_inverted_index.cpp)
 target_link_libraries(build_inverted_index PRIVATE seismic_core nlohmann_json::nlohmann_json cereal OpenMP::OpenMP_CXX)
-target_include_directories(build_inverted_index PRIVATE ${cereal_SOURCE_DIR}/include)
+target_include_directories(build_inverted_index PRIVATE ${CEREAL_INCLUDE_DIR})
 
 # Create the perf_inverted_index executable
 add_executable(perf_inverted_index src/bin/perf_inverted_index.cpp)
 target_link_libraries(perf_inverted_index PRIVATE seismic_core nlohmann_json::nlohmann_json cereal OpenMP::OpenMP_CXX)
-target_include_directories(perf_inverted_index PRIVATE ${cereal_SOURCE_DIR}/include)
+target_include_directories(perf_inverted_index PRIVATE ${CEREAL_INCLUDE_DIR})
 
 # Set output directory for binaries
 set_target_properties(build_inverted_index perf_inverted_index PROPERTIES
