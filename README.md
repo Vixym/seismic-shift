@@ -36,7 +36,7 @@ experiment =    "."     # stdout and stderr here of running the experiment is sa
 ...
 ```
 
-### Run the helper script (in progress)
+### Run the helper script
 
 From the root directory, run:
 
