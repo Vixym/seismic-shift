@@ -28,8 +28,12 @@
 // CEREAL_REGISTER_TYPE(seismic::Knn);
 // CEREAL_REGISTER_TYPE(seismic::InvertedIndex);
 
+#include "../dynamic_inverted_index.h"
 
 using namespace seismic;
+
+using TIndex = InvertedIndex<float>;
+using TDataset = SparseDataset<float>;
 
 // Simple argument parser
 struct Args {
@@ -106,7 +110,7 @@ Args parse_args(int argc, char* argv[]) {
 }
 
 // Function to save the index to a file
-void save_index(const InvertedIndex<float>& index, const std::string& path) {
+void save_index(const TIndex& index, const std::string& path) {
     std::string full_path = path + ".index.seismic";
     std::cout << "Saving ... " << full_path << std::endl;
     
@@ -181,10 +185,10 @@ int main(int argc, char* argv[]) {
         
         // Load dataset
         std::cout << "\nLoading dataset from " << args.input_file << "..." << std::endl;
-        SparseDataset<float> dataset;
+        TDataset dataset;
         
         try {
-            dataset = SparseDataset<float>::read_bin_file(args.input_file);
+            dataset = TDataset::read_bin_file(args.input_file);
             std::cout << "Number of Vectors: " << dataset.len() << std::endl;
             std::cout << "Number of Dimensions: " << dataset.dim() << std::endl;
             std::cout << "Avg number of components: " 
@@ -220,7 +224,7 @@ int main(int argc, char* argv[]) {
         std::cout << "\nBuilding the index..." << std::endl;
         
         // Build the inverted index
-        InvertedIndex<float> inverted_index = InvertedIndex<float>::build(dataset, config);
+        TIndex inverted_index = TIndex::build(dataset, config);
         
         // Calculate elapsed time before serialization
         auto before_serialize = std::chrono::high_resolution_clock::now();

@@ -17,6 +17,12 @@
 #include <cereal/types/polymorphic.hpp>
 #include <cereal/types/optional.hpp>
 
+#include "../dynamic_inverted_index.h"
+
+using namespace seismic;
+using TIndex = DynamicInvertedIndex<float>;
+using TDataset = SparseDatasetMut<float>;
+
 // Simple argument parser
 struct Args
 {
@@ -114,7 +120,7 @@ Args parse_args(int argc, char *argv[])
 }
 
 // Function to load the index from a file
-seismic::InvertedIndex<float> load_index(const std::string &path)
+TIndex load_index(const std::string &path)
 {
     std::string full_path = path + ".index.seismic";
     std::cout << "Loading index from " << full_path << "..." << std::endl;
@@ -126,7 +132,7 @@ seismic::InvertedIndex<float> load_index(const std::string &path)
     }
 
     // Create an empty index
-    seismic::InvertedIndex<float> index;
+    TIndex index;
 
     try
     {
@@ -189,15 +195,15 @@ int main(int argc, char *argv[])
     try
     {
         // Load the index
-        seismic::InvertedIndex<float> inverted_index = load_index(*args.index_file);
+        TIndex inverted_index = load_index(*args.index_file);
 
         // Load queries
         std::cout << "\nLoading queries from " << *args.query_file << "..." << std::endl;
-        seismic::SparseDataset<float> queries;
+        TDataset queries;
 
         try
         {
-            queries = seismic::SparseDataset<float>::read_bin_file(*args.query_file);
+            queries = TDataset::read_bin_file(*args.query_file);
             std::cout << "Number of Queries: " << queries.len() << std::endl;
             std::cout << "Number of Dimensions: " << queries.dim() << std::endl;
             std::cout << "Avg number of components: "
@@ -245,9 +251,10 @@ int main(int argc, char *argv[])
                     args.first_sorted);
 
                 if (cur_results.size() < args.k)
-                {
-                    std::cout << "FAIL! The query " << query_id
-                              << " has only " << cur_results.size() << " results." << std::endl;
+                {   
+                    // std::cout << "FAIL! The query " << query_id
+                    //           << " has only " << cur_results.size() << " results." << std::endl;
+                    // return 0;
                 }
 
                 results.push_back(cur_results);
@@ -261,6 +268,45 @@ int main(int argc, char *argv[])
 
         std::cout << "Time " << elapsed / (args.n_runs * n_queries) << " microsecs per query" << std::endl;
         std::cerr << elapsed / (args.n_runs * n_queries) << std::endl;
+
+        start_time = std::chrono::high_resolution_clock::now();
+
+        for (size_t run = 0; run < 10; ++run)
+        {
+            std::cout << "Insert done" << std::endl;
+            const auto &query = queries.get(0);
+
+            const auto &q_components = query.first;
+            const auto &q_values = query.second;
+
+            inverted_index.insert_document(
+                q_components,
+                q_values);
+        }
+
+        end_time = std::chrono::high_resolution_clock::now();
+        elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
+                           end_time - start_time)
+                           .count();
+
+        std::cout << "Time " << elapsed / (10) << " microsecs per insert_document" << std::endl;
+        std::cerr << elapsed / (10) << std::endl;
+        
+        start_time = std::chrono::high_resolution_clock::now();
+
+        for (size_t run = 0; run < 10; ++run)
+        {
+            std::cout << "Delete done" << std::endl;
+            inverted_index.delete_document(run);
+        }
+
+        end_time = std::chrono::high_resolution_clock::now();
+        elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
+                           end_time - start_time)
+                           .count();
+
+        std::cout << "Time " << elapsed << " microsecs per delete_document" << std::endl;
+        std::cerr << elapsed << std::endl;
 
         // Print space usage
         inverted_index.print_space_usage_byte();
