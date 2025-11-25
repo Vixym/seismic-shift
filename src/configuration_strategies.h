@@ -316,7 +316,7 @@ class BlockingStrategy {
             std::vector<std::vector<std::pair<float, size_t>>> docs_search_results(n_vecs);
             
             // Parallel processing of each document
-            #pragma omp parallel for
+            //#pragma omp parallel for
             for (size_t my_doc_id = 0; my_doc_id < index.dataset().len(); ++my_doc_id) {
                 auto [components, values] = index.dataset().get(my_doc_id);
                 
@@ -592,4 +592,4 @@ class BlockingStrategy {
 
 } // namespace seismic
 
-#endif // INVERTED_INDEX_H
+#endif // CONFIGURATION_STRATEGIES_H

@@ -26,15 +26,11 @@ namespace seismic
 
 template <typename T>
 class DynamicInvertedIndex : public SpaceUsage {
-private:
+public:
     SparseDatasetMut<T> forward_index_;
     std::vector<DynamicPostingList> posting_lists_;
     Configuration config_;
     std::optional<Knn> knn_;
-
-    std::vector<uint64_t> packed_postings;
-    std::vector<size_t> block_offsets;
-    QuantizedSummary summaries;
 
     std::vector<uint8_t> alive_;    // same length as forward_index_.len()
     std::vector<std::vector<std::pair<uint16_t, size_t>>> doc_block_membership_;  // doc_block_membership_[doc_id] = list of (component_id, block_id)
@@ -134,6 +130,9 @@ DynamicInvertedIndex<T> DynamicInvertedIndex<T>::build(const SparseDatasetMut<T>
     
     for (size_t doc_id = 0; doc_id < dataset.len(); doc_id += chunk_size) {
         size_t end_id = std::min(doc_id + chunk_size, dataset.len());
+
+        auto test = std::chrono::high_resolution_clock::now() - time_start;
+        std::cout << "Testing 1: " << std::chrono::duration_cast<std::chrono::seconds>(test).count() << " secs" << std::endl;
         
         // Process each document in the chunk
         for (size_t i = doc_id; i < end_id; ++i) {
@@ -145,7 +144,10 @@ DynamicInvertedIndex<T> DynamicInvertedIndex<T>::build(const SparseDatasetMut<T>
                 chunk_inv_pairs[c].emplace_back(score, i);
             }
         }
-        
+
+        test = std::chrono::high_resolution_clock::now() - time_start;
+        std::cout << "Testing 2: " << std::chrono::duration_cast<std::chrono::seconds>(test).count() << " secs" << std::endl;
+
         // If not batched indexing, chunk_inv_pairs already contain all the pairs
         if (chunk_size == dataset.len()) {
             inverted_pairs = std::move(chunk_inv_pairs);
@@ -158,6 +160,9 @@ DynamicInvertedIndex<T> DynamicInvertedIndex<T>::build(const SparseDatasetMut<T>
             }
         }
         
+        test = std::chrono::high_resolution_clock::now() - time_start;
+        std::cout << "Testing 3: " << std::chrono::duration_cast<std::chrono::seconds>(test).count() << " secs" << std::endl;
+
         // Pruning on partial result
         const auto& pruning = config.get_pruning();
         if (pruning.get_type() == PruningStrategy::Type::FixedSize) {
@@ -173,6 +178,10 @@ DynamicInvertedIndex<T> DynamicInvertedIndex<T>::build(const SparseDatasetMut<T>
         }
     }
     
+
+    auto test = std::chrono::high_resolution_clock::now() - time_start;
+    std::cout << "Testing 4: " << std::chrono::duration_cast<std::chrono::seconds>(test).count() << " secs" << std::endl;
+
     // Final pruning
     const auto& pruning = config.get_pruning();
     if (pruning.get_type() == PruningStrategy::Type::GlobalThreshold) {

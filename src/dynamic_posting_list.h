@@ -51,7 +51,8 @@ struct DynamicPostingList : public SpaceUsage {
     static DynamicPostingList build(
         const SparseDatasetMut<T>& dataset,
         const std::vector<std::pair<T, size_t>>& postings,
-        const Configuration& config);
+        const Configuration& config,
+        std::vector<std::vector<std::pair<uint16_t, size_t>>>& doc_block_membership);
 
     template <typename T>
     void evaluate_posting_block(
@@ -124,13 +125,16 @@ template <typename T>
 DynamicPostingList DynamicPostingList::build(
     const SparseDatasetMut<T>& dataset,
     const std::vector<std::pair<T, size_t>>& postings,
-    const Configuration& config) {
+    const Configuration& config,
+    std::vector<std::vector<std::pair<uint16_t, size_t>>>& doc_block_membership) {
             
     // Extract document IDs from postings
     std::vector<size_t> posting_list;
     posting_list.reserve(postings.size());
     for (const auto& [_, doc_id] : postings) {
         posting_list.push_back(doc_id);
+        // TEMP
+        doc_block_membership[doc_id].emplace_back(1, 2);
     }
             
     // Apply blocking strategy
@@ -537,7 +541,7 @@ void DynamicPostingList::search(
             }
             blocks_to_evaluate.clear();
         }
-                
+
         // Prefetch the block
         for (size_t i = 0; i < packed_posting_block.size(); i += 8) {
             // Prefetch the next elements (if available)
@@ -545,7 +549,7 @@ void DynamicPostingList::search(
                 __builtin_prefetch(&packed_posting_block[i + 8], 0, 1);
             }
         }
-                
+
         blocks_to_evaluate.push_back(std::move(packed_posting_block));
     }
             

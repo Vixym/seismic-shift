@@ -358,6 +358,7 @@ private:
     std::vector<size_t> offsets;
     std::vector<uint16_t> components;
     std::vector<T> values;
+    std::vector<bool> alive;
 
 public:
     // Default constructor
@@ -376,15 +377,17 @@ public:
             throw std::invalid_argument("Components must be given in sorted order");
         }
 
-        if (components.back() >= d) {
-            d = components.back() + 1;
+        this->n_vecs += 1;
+        if (components.back() >= this->d) {
+            this->d = components.back() + 1;
         }
 
         this->components.insert(this->components.end(), components.begin(), components.end());
         this->values.insert(this->values.end(), values.begin(), values.end());
         this->offsets.push_back(this->components.size());
+        this->alive.push_back(true);
 
-        return offsets.size()-1;
+        return this->offsets.size()-1;
     }
 
     static SparseDatasetMut<T> read_bin_file_limit(const std::string& fname, std::optional<size_t> limit) {
@@ -439,6 +442,30 @@ public:
         return read_bin_file_limit(fname, std::nullopt);
     }
 
+    void push(const std::vector<std::pair<size_t, T>> pairs) {
+        if (pairs.empty()) {
+            throw std::invalid_argument("Pairs cannot be empty");
+        }
+
+        for (size_t i = 1; i < pairs.size(); ++i) {
+            if (pairs[i-1].first >= pairs[i].first) {
+                throw std::invalid_argument("Components must be given in sorted order");
+            }
+        }
+
+        this->n_vecs += 1;
+        if (pairs.back().first >= this->d) {
+            this->d = pairs.back().first + 1;
+        }
+
+        for (const auto& [c, v] : pairs) {
+            this->components.push_back(c);
+            this->values.push_back(v);
+        }
+        this->offsets.push_back(this->components.size());
+        this->alive.push_back(true);
+    }
+
     /**
      * Adds a new sparse vector to the dataset.
      * 
@@ -458,13 +485,31 @@ public:
             throw std::invalid_argument("Components must be given in sorted order");
         }
 
-        if (components.back() >= d) {
-            d = components.back() + 1;
+        this->n_vecs += 1;
+        if (components.back() >= this->d) {
+            this->d = components.back() + 1;
         }
 
         this->components.insert(this->components.end(), components.begin(), components.end());
         this->values.insert(this->values.end(), values.begin(), values.end());
         this->offsets.push_back(this->components.size());
+        this->alive.push_back(true);
+    }
+
+    void set_dead(size_t id) const {
+        if (id >= len()) {
+            throw std::out_of_range("set_dead: The id is out of range");
+        }
+
+        this->alive[id] = false;
+    }
+
+    bool is_alive(size_t id) const {
+        if (id >= len()) {
+            throw std::out_of_range("is_alive: The id is out of range");
+        }
+
+        return this->alive[id];
     }
 
     /**
@@ -484,8 +529,9 @@ public:
             }
         }
 
-        if (pairs.back().first >= d) {
-            d = pairs.back().first + 1;
+        this->n_vecs += 1;
+        if (pairs.back().first >= this->d) {
+            this->d = pairs.back().first + 1;
         }
 
         for (const auto& [c, v] : pairs) {
@@ -493,6 +539,7 @@ public:
             this->values.push_back(v);
         }
         this->offsets.push_back(this->components.size());
+        this->alive.push_back(true);
     }
 
     /**
@@ -510,7 +557,7 @@ public:
         return offsets[id + 1] - offsets[id];
     }
 
-        std::pair<std::vector<uint16_t>, std::vector<T>> get_with_offset(size_t offset, size_t len) const {
+    std::pair<std::vector<uint16_t>, std::vector<T>> get_with_offset(size_t offset, size_t len) const {
         if (offset + len > components.size()) {
             throw std::out_of_range("The offset + len is out of range");
         }
@@ -603,12 +650,13 @@ public:
         return sizeof(d) + 
                offsets.size() * sizeof(size_t) +
                components.size() * sizeof(uint16_t) +
-               values.size() * sizeof(T);
+               values.size() * sizeof(T) + 
+               alive.size() * sizeof(bool);
     }
-
+    
     template <class Archive>
     void serialize(Archive& archive) {
-        archive(d, offsets, components, values);
+        archive(d, n_vecs, offsets, components, values, alive);
     }
 };
 

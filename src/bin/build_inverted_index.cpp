@@ -29,11 +29,12 @@
 // CEREAL_REGISTER_TYPE(seismic::InvertedIndex);
 
 #include "../dynamic_inverted_index.h"
+#include "../jlt_dynamic_inverted_index.h"
 
 using namespace seismic;
 
-using TIndex = InvertedIndex<float>;
-using TDataset = SparseDataset<float>;
+using TIndex = JltInvertedIndex<float>;
+using TDataset = SparseDatasetMut<float>;
 
 // Simple argument parser
 struct Args {

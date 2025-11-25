@@ -1,4 +1,0 @@
-namespace seismic
-{
-
-} // namespace seismic

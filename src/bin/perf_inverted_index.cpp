@@ -18,9 +18,10 @@
 #include <cereal/types/optional.hpp>
 
 #include "../dynamic_inverted_index.h"
+#include "../jlt_dynamic_inverted_index.h"
 
 using namespace seismic;
-using TIndex = DynamicInvertedIndex<float>;
+using TIndex = JltInvertedIndex<float>;
 using TDataset = SparseDatasetMut<float>;
 
 // Simple argument parser
@@ -269,44 +270,44 @@ int main(int argc, char *argv[])
         std::cout << "Time " << elapsed / (args.n_runs * n_queries) << " microsecs per query" << std::endl;
         std::cerr << elapsed / (args.n_runs * n_queries) << std::endl;
 
-        start_time = std::chrono::high_resolution_clock::now();
+        // start_time = std::chrono::high_resolution_clock::now();
 
-        for (size_t run = 0; run < 10; ++run)
-        {
-            std::cout << "Insert done" << std::endl;
-            const auto &query = queries.get(0);
+        // for (size_t run = 0; run < 10; ++run)
+        // {
+        //     std::cout << "Insert done" << std::endl;
+        //     const auto &query = queries.get(0);
 
-            const auto &q_components = query.first;
-            const auto &q_values = query.second;
+        //     const auto &q_components = query.first;
+        //     const auto &q_values = query.second;
 
-            inverted_index.insert_document(
-                q_components,
-                q_values);
-        }
+        //     inverted_index.insert_document(
+        //         q_components,
+        //         q_values);
+        // }
 
-        end_time = std::chrono::high_resolution_clock::now();
-        elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
-                           end_time - start_time)
-                           .count();
+        // end_time = std::chrono::high_resolution_clock::now();
+        // elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
+        //                    end_time - start_time)
+        //                    .count();
 
-        std::cout << "Time " << elapsed / (10) << " microsecs per insert_document" << std::endl;
-        std::cerr << elapsed / (10) << std::endl;
+        // std::cout << "Time " << elapsed / (10) << " microsecs per insert_document" << std::endl;
+        // std::cerr << elapsed / (10) << std::endl;
         
-        start_time = std::chrono::high_resolution_clock::now();
+        // start_time = std::chrono::high_resolution_clock::now();
 
-        for (size_t run = 0; run < 10; ++run)
-        {
-            std::cout << "Delete done" << std::endl;
-            inverted_index.delete_document(run);
-        }
+        // for (size_t run = 0; run < 10; ++run)
+        // {
+        //     std::cout << "Delete done" << std::endl;
+        //     inverted_index.delete_document(run);
+        // }
 
-        end_time = std::chrono::high_resolution_clock::now();
-        elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
-                           end_time - start_time)
-                           .count();
+        // end_time = std::chrono::high_resolution_clock::now();
+        // elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
+        //                    end_time - start_time)
+        //                    .count();
 
-        std::cout << "Time " << elapsed << " microsecs per delete_document" << std::endl;
-        std::cerr << elapsed << std::endl;
+        // std::cout << "Time " << elapsed << " microsecs per delete_document" << std::endl;
+        // std::cerr << elapsed << std::endl;
 
         // Print space usage
         inverted_index.print_space_usage_byte();
