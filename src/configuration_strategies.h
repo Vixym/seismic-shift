@@ -174,7 +174,7 @@ class BlockingStrategy {
         ClusteringAlgorithm clustering_algorithm;
     };
 
-/**
+    /**
  * Represents the possible choices for the strategy used to summarize blocks.
  */
  class SummarizationStrategy {
@@ -254,7 +254,8 @@ class BlockingStrategy {
     public:
         // Default constructor
         Configuration() : pruning(PruningStrategy()), blocking(BlockingStrategy()),
-                         summarization(SummarizationStrategy()), knn_config(KnnConfiguration()) {}
+                         summarization(SummarizationStrategy()), knn_config(KnnConfiguration()),
+                         dynamic_support(false), transform_function("identity"), summarization_metric("max") {}
     
         // Builder pattern methods
         Configuration& pruning_strategy(const PruningStrategy& pruning);
@@ -262,18 +263,25 @@ class BlockingStrategy {
         Configuration& summarization_strategy(const SummarizationStrategy& summarization);
         Configuration& knn(const KnnConfiguration& knn_config);
         Configuration& batched_indexing(const std::optional<size_t>& batched_indexing);
-    
+        Configuration& set_dynamic_support(const bool dynamic_support);
+        Configuration& set_transform_function(const std::string& transform_function);
+        Configuration& set_summarization_metric(const std::string& summarization_metric);
+
         // Getters
         const PruningStrategy& get_pruning() const { return pruning; }
         const BlockingStrategy& get_blocking() const { return blocking; }
         const SummarizationStrategy& get_summarization() const { return summarization; }
         const KnnConfiguration& get_knn_config() const { return knn_config; }
         const std::optional<size_t>& get_batched_indexing() const { return batched_indexing_size; }
+        const bool& get_dynamic_support() const { return dynamic_support; }
+        const std::string& get_transform_function() const { return transform_function; }
+        const std::string& get_summarization_metric() const { return summarization_metric; }
 
         // Serialization
         template <class Archive>
         void serialize(Archive& archive) {
-            archive(pruning, blocking, summarization, knn_config, batched_indexing_size);
+            archive(pruning, blocking, summarization, knn_config, batched_indexing_size,
+                dynamic_support, transform_function, summarization_metric);
         }
     
     private:
@@ -282,6 +290,9 @@ class BlockingStrategy {
         SummarizationStrategy summarization;
         KnnConfiguration knn_config;
         std::optional<size_t> batched_indexing_size;
+        bool dynamic_support;
+        std::string transform_function;
+        std::string summarization_metric;
     };
 
     /**

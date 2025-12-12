@@ -15,6 +15,7 @@
 #include "sparse_dataset.h"
 #include "sparse_jlt.cpp"
 #include "configuration_strategies.h"
+#include "summary_strategies.h"
 
 namespace seismic
 {
@@ -27,22 +28,24 @@ namespace seismic
  * We use the forward index to convert the offsets of the top-k back to the id of the corresponding documents.
  */
  class MyPostingList : public SpaceUsage {
+    using SparseVector = std::vector<std::pair<uint16_t, float>>;
     private:
         std::vector<uint64_t> packed_postings_;
         std::vector<size_t> block_offsets_;
-        std::vector<std::vector<std::pair<uint16_t, float>>> summaries_; // Summaries are stored as sparse centroid vectors
+        std::vector<std::pair<size_t, SparseVector>> summaries_; // Summaries are stored as (size, summary)
         std::vector<std::pair<size_t, size_t>> doc_block_pairs_;
-
+    
     public:
         // Default constructor
         MyPostingList() = default;
         
         // Constructor with parameters
         MyPostingList(std::vector<uint64_t> packed_postings, std::vector<size_t> block_offsets, 
-                   std::vector<std::vector<std::pair<uint16_t, float>>> summaries)
+                   std::vector<std::pair<size_t, SparseVector>> summaries, std::vector<std::pair<size_t, size_t>> doc_block_pairs)
             : packed_postings_(std::move(packed_postings)),
               block_offsets_(std::move(block_offsets)),
-              summaries_(std::move(summaries)) {}
+              summaries_(std::move(summaries)),
+              doc_block_pairs_(std::move(doc_block_pairs)) {}
         
         // Build a posting list from a dataset and a list of postings
         template <typename T>
@@ -52,9 +55,7 @@ namespace seismic
             const Configuration& config,
             const SparseJLT& jlt) 
         {    
-            // TODO: Change max to centroid
-            (void) jlt;
-
+            (void)jlt;
             // Extract document IDs from postings
             std::vector<size_t> posting_list;
             posting_list.reserve(postings.size());
@@ -83,7 +84,7 @@ namespace seismic
             map_docs_to_blocks(posting_list, block_offsets, doc_block_pairs);
 
             // Create summaries for each block
-            std::vector<std::vector<std::pair<uint16_t, float>>> summaries;
+            std::vector<std::pair<size_t, SparseVector>> summaries;
             summaries.reserve(block_offsets.size());
 
             for (size_t i = 0; i < block_offsets.size() - 1; ++i) {
@@ -92,30 +93,40 @@ namespace seismic
                     posting_list.begin() + block_offsets[i + 1]
                 );
 
-                // Apply summarization strategy
+                std::vector<std::pair<uint16_t, float>> summary;
+                // std::pair<std::vector<uint16_t>, std::vector<T>> summary;
+
+                // // Apply summarization strategy
+                // const auto& summarization = config.get_summarization();
+                
+                // if (summarization.get_type() == SummarizationStrategy::Type::FixedSize) {
+                //     summary = fixed_size_centroid(
+                //         dataset,
+                //         block,
+                //         summarization.get_n_components()
+                //     );
+                // } else if (summarization.get_type() == SummarizationStrategy::Type::EnergyPreserving) {
+                //     summary = energy_preserving_centroid(
+                //         dataset,
+                //         block,
+                //         summarization.get_summary_energy()
+                //     );
+                // }
+
                 const auto& summarization = config.get_summarization();
-                std::pair<std::vector<uint16_t>, std::vector<T>> summary;
-                
-                if (summarization.get_type() == SummarizationStrategy::Type::FixedSize) {
-                    summary = fixed_size_centroid(
-                        dataset,
-                        block,
-                        summarization.get_n_components()
-                    );
-                } else if (summarization.get_type() == SummarizationStrategy::Type::EnergyPreserving) {
-                    summary = energy_preserving_centroid(
-                        dataset,
-                        block,
-                        summarization.get_summary_energy()
-                    );
+                const auto& summarization_metric = config.get_summarization_metric();
+                if (summarization_metric == "max") {
+                    summary = MaxSummary::summary_init(dataset, block, summarization.get_n_components());
+                } else if (summarization_metric == "centroid") {
+                    summary = CentroidSummary::summary_init(dataset, block, summarization.get_n_components());
                 }
-                
-                std::vector<std::pair<uint16_t, float>> paired_summary;
-                paired_summary.reserve(summary.first.size());
-                for (size_t j = 0; j < summary.first.size(); ++j) {
-                    paired_summary.emplace_back(summary.first[j], summary.second[j]);
+
+                const auto& transform_function = config.get_transform_function();
+                if (transform_function == "jlt") {
+                    summary = jlt.transform(summary);
                 }
-                summaries.emplace_back(paired_summary);
+
+                summaries.emplace_back(block.size(), summary);
             }
             
             // Pack document offsets and lengths
@@ -134,8 +145,101 @@ namespace seismic
             return MyPostingList(
                 std::move(packed_postings),
                 std::move(block_offsets),
-                std::move(summaries)
+                std::move(summaries),
+                std::move(doc_block_pairs)
             );
+        }
+
+        template <typename T>
+        void delete_doc(const size_t block_id, const size_t doc_id, const SparseJLT& jlt,
+            const SparseDatasetMut<T>& dataset, const Configuration& config)
+        {
+            (void)jlt;
+            (void)doc_id;
+            (void)config;
+
+            std::vector<uint64_t> block(
+                packed_postings_.begin() + block_offsets_[block_id],
+                packed_postings_.begin() + block_offsets_[block_id + 1]
+            );
+
+            // 1. Retrieve doc from dataset and convert to SparseVector format
+            std::pair<std::vector<uint16_t>, std::vector<T>> doc_vec_pair = dataset.get(doc_id);
+            std::vector<std::pair<uint16_t, float>> doc_vec;
+            for (size_t i = 0; i < doc_vec_pair.first.size(); ++i) {
+                doc_vec.emplace_back(doc_vec_pair.first[i], doc_vec_pair.second[i]);
+            }
+
+            std::vector<std::pair<uint16_t, float>>& summary = summaries_[block_id].second;
+            size_t num_docs_in_block = summaries_[block_id].first;
+    
+            // 2. Transform if needed
+            const auto& transform_function = config.get_transform_function();
+            if (transform_function == "jlt") {
+                doc_vec = jlt.transform(doc_vec);
+            }
+
+            // 3. Update the summaries
+            const auto& summary_metric = config.get_summarization_metric();
+            std::vector<std::pair<uint16_t, float>> new_summary;
+            if (summary_metric == "max") {
+                new_summary = MaxSummary::summary_delete(dataset, summary, doc_vec, block, config.get_summarization().get_n_components());
+            } else if (summary_metric == "centroid") {
+                new_summary = CentroidSummary::summary_delete(summary, doc_vec, num_docs_in_block);
+            }
+
+            summaries_[block_id] = {num_docs_in_block-1, new_summary};
+        }
+
+        size_t insert_doc(const std::vector<uint16_t>& components, const std::vector<float>& values,
+             const SparseJLT& jlt, const Configuration& config, size_t offset, size_t length)
+        {   
+            (void)jlt;
+            (void)config;
+            // 0. Transforming representation and vector transformation if needed
+            std::vector<std::pair<uint16_t, float>> doc_vec;
+            for (size_t i = 0; i < components.size(); ++i) {
+                doc_vec.emplace_back(components[i], values[i]);
+            }
+            const auto& transform_function = config.get_transform_function();
+            if (transform_function == "jlt") {
+                doc_vec = jlt.transform(doc_vec);
+            }
+
+            // 1. Find closest block
+            std::vector<std::pair<uint16_t, float>> indexed_dots = get_distances(components, values, jlt, config);
+            size_t best_block = 0;
+            float best_val = 0.0f;
+            for (const auto& [block_id, dot] : indexed_dots) {
+                if (dot > best_val) {
+                    best_block = block_id;
+                    best_val = dot;
+                }
+            }
+
+            // 2. Add document to block
+            uint64_t packed_posting = pack_offset_len(offset, length);
+            packed_postings_.insert(packed_postings_.begin()+block_offsets_[best_block+1], packed_posting);
+            for (size_t block_id = best_block+1; block_id < block_offsets_.size(); ++block_id) {
+                block_offsets_[block_id] += 1;
+            }
+
+            // 3. Update summary based on summary metric
+            const auto& summary_metric = config.get_summarization_metric();
+            std::vector<std::pair<uint16_t, float>> new_summary;
+
+            if (summary_metric == "max") {
+                new_summary = MaxSummary::summary_insert(summaries_[best_block].second, doc_vec);
+            } else if (summary_metric == "centroid") {
+                new_summary = CentroidSummary::summary_insert(summaries_[best_block].second, doc_vec, summaries_[best_block].first);
+            } else {
+                std::cout << "my_posting_list.h:insert_doc invalid summary metric" << std::endl;
+            }
+
+            summaries_[best_block] = {summaries_[best_block].first+1, new_summary};
+
+            // 4. Return block id of closest block
+            return best_block;
         }
 
         // Search implementation
@@ -149,13 +253,14 @@ namespace seismic
             utils::HeapFaiss& heap,
             std::unordered_set<size_t>& visited,
             const SparseDatasetMut<T>& forward_index,
-            bool sort_summaries) const 
+            bool sort_summaries,
+            const SparseJLT& jlt,
+            const Configuration& config) const 
         {
-            
             std::vector<std::vector<uint64_t>> blocks_to_evaluate;
-            
+
             // Get distances between query and summaries vector of (idx, val) pairs
-            std::vector<std::pair<uint16_t, float>> indexed_dots = get_distances(query_components, query_values);
+            std::vector<std::pair<uint16_t, float>> indexed_dots = get_distances(query_components, query_values, jlt, config);
             
             // Sort summaries by dot product w.r.t. to the query. Useful only in the first list.
             if (sort_summaries) {
@@ -216,26 +321,49 @@ namespace seismic
             }
         }
 
-        std::vector<std::pair<uint16_t, float>> get_distances(const std::vector<uint16_t>& query_components, const std::vector<float>& query_values) const
+        std::vector<std::pair<uint16_t, float>> get_distances(const std::vector<uint16_t>& query_components, const std::vector<float>& query_values,
+            const SparseJLT& jlt, const Configuration& config) const
         {
+            (void) jlt;
+            (void) config;
+            const std::vector<uint16_t>* components = &query_components;
+            const std::vector<float>* values = &query_values;
+
             std::vector<std::pair<uint16_t, float>> distances;
             distances.resize(summaries_.size());
 
-            // std::vector<std::vector<std::pair<uint16_t, float>>>
+            // Transform vectors into new space if needed
+            std::vector<uint16_t> transformed_components;
+            std::vector<float> transformed_values;
+
+            if (config.get_transform_function() == "jlt") {
+                auto transformed_vec = jlt.transform(query_components, query_values);
+
+                transformed_components.reserve(transformed_vec.size());
+                transformed_values.reserve(transformed_vec.size());
+                for (const auto& [c, v] : transformed_vec) {
+                    transformed_components.push_back(c);
+                    transformed_values.push_back(v);
+                }
+
+                components = &transformed_components;
+                values = &transformed_values;
+            }
+            
             for (size_t i = 0; i < summaries_.size(); ++i) {
-                std::vector<std::pair<uint16_t, float>> summary = summaries_[i];
+                std::vector<std::pair<uint16_t, float>> summary = summaries_[i].second;
                 // Two-pointer merge to compute dot product between sparse vectors
                 size_t qi = 0;
                 size_t si = 0;
                 float acc = 0.0f;
 
-                while (qi < query_components.size() && si < summary.size()) {
-                    uint16_t qc = query_components[qi];
+                while (qi < components->size() && si < summary.size()) {
+                    uint16_t qc = (*components)[qi];
                     uint16_t sc = summary[si].first;
 
                     if (qc == sc) {
                         // Matching component: accumulate product
-                        acc += static_cast<float>(query_values[qi]) * static_cast<float>(summary[si].second);
+                        acc += static_cast<float>((*values)[qi]) * static_cast<float>(summary[si].second);
                         ++qi;
                         ++si;
                     } else if (qc < sc) {
@@ -248,7 +376,6 @@ namespace seismic
                 // Store (summary_id, distance/similarity)
                 distances[i] = {static_cast<uint16_t>(i), acc};
             }
-
             return distances;
         }
 
@@ -396,7 +523,7 @@ namespace seismic
             
             return block_offsets;
         }
-    
+
         // Summarization strategies
         template <typename T>
         static std::pair<std::vector<uint16_t>, std::vector<T>> fixed_size_summary(
@@ -502,7 +629,7 @@ namespace seismic
             
             for (const auto& [component_id, value] : components_values) {
                 components.push_back(component_id);
-                values.push_back(value);
+                values.push_back(value/block.size());
             }
             
             return {components, values};
@@ -555,11 +682,11 @@ namespace seismic
             for (const auto& [tid, value] : components_values) {
                 acc += static_cast<float>(value);
                 term_ids.push_back(tid);
-                values.push_back(value);
+                values.push_back(value/block.size());
                 
                 if ((acc / total_sum) > fraction) {
                     break;
-            }
+                }
             }
             
             // Sort term IDs
@@ -642,7 +769,7 @@ namespace seismic
             return {term_ids, sorted_values};
         }
 
-        static void map_docs_to_blocks(std::vector<size_t>& postings, std::vector<size_t> offsets, std::vector<std::pair<size_t, size_t>>& doc_block_pairs)
+        static void map_docs_to_blocks(std::vector<size_t>& postings, std::vector<size_t>& offsets, std::vector<std::pair<size_t, size_t>>& doc_block_pairs)
         {   
             if (offsets.size() == 0 || postings.size() == 0) return;
             const size_t n_blocks = offsets.size() - 1;

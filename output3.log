@@ -1,0 +1,2118 @@
+Running experiment: splade_cocondenser_msmarco
+
+Hardware configuration
+Date: 2025-12-12 11:49:50.997904
+Machine: fast.csail.mit.edu
+CPU usage (%): 0.1
+Machine load: 1.0693359375, 8.32568359375, 9.40576171875
+Memory (free, GiB): 1085
+Memory (avail, GiB): 1084
+Memory (total, GiB): 1510
+for detailed information, check the hardware log file: ./splade_cocondenser_msmarco_2025-12-12_11:49:50/machine.output
+
+WARNING: Your CPU may not be set to performance mode.
+
+
+Git info
+Current Branch: dynamic_seismic
+Commit ID: b4e457f319c6d862662d6d5fa9d945f5cec76dd4
+
+Compiling the code
+Compiling code with cmake --build build --config Release
+[  7%] Built target seismic_core
+[ 11%] Built target build_inverted_index
+[ 13%] Building CXX object CMakeFiles/perf_inverted_index.dir/src/bin/perf_inverted_index.cpp.o
+[ 15%] Linking CXX executable bin/perf_inverted_index
+[ 15%] Built target perf_inverted_index
+[ 19%] Built target test_jlt_index
+[ 23%] Built target gtest
+[ 26%] Built target gtest_main
+[ 28%] Building CXX object CMakeFiles/tests.dir/test/seismic_index_test.cpp.o
+[ 30%] Linking CXX executable tests
+[ 55%] Built target tests
+[ 59%] Built target sandbox
+[ 63%] Built target sandbox_json
+[ 67%] Built target sandbox_rtti
+[ 73%] Built target sandbox_vs_dll
+[ 76%] Built target sandbox_vs
+[ 80%] Built target performance
+[ 84%] Built target gmock
+[ 88%] Built target gmock_main
+[ 90%] Building CXX object pylib/CMakeFiles/seismic_cpp.dir/seismic_bindings.cpp.o
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/pylib/seismic_bindings.cpp: In static member function ‘static PySeismicIndex PySeismicIndex::build(const string&, size_t, float, size_t, float, size_t, std::optional<std::__cxx11::basic_string<char> >, std::optional<long unsigned int>, std::optional<std::unordered_map<std::__cxx11::basic_string<char>, long unsigned int> >, size_t)’:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/pylib/seismic_bindings.cpp:196:16: warning: unused parameter ‘num_threads’ [-Wunused-parameter]
+  196 |         size_t num_threads = 0)
+      |         ~~~~~~~^~~~~~~~~~~~~~~
+[ 92%] Linking CXX shared module seismic_cpp.cpython-310-x86_64-linux-gnu.so
+lto-wrapper: warning: using serial compilation of 3 LTRANS jobs
+[100%] Built target seismic_cpp
+Code compiled successfully.
+
+Dataset filename: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/documents.bin
+Index filename: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_true_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_jlt
+Running: ./build/bin/build_inverted_index --input-file /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/documents.bin --output-file /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_true_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_jlt --n-postings 4000 --summary-energy 0.4 --centroid-fraction 0.1 --knn 0 --clustering-algorithm random-kmeans --kmeans-doc-cut 15 --kmeans-pruning-factor 0.005 --transform jlt --summarization max --dynamic-support true
+Building inverted index with the following parameters:
+  Input file: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/documents.bin
+  Output file: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_true_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_jlt
+  N postings: 4000
+  Summary energy: 0.4
+  Centroid fraction: 0.1
+  Min cluster size: 2
+  KNN: 0
+  Clustering algorithm: random-kmeans
+  K-means doc cut: 15
+  K-means pruning factor: 0.005
+
+Loading dataset from /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/documents.bin...
+Number of Vectors: 8841823
+Number of Dimensions: 28679
+Avg number of components: 121.046
+
+Building the index...
+Distributing and pruning postings: Using sparsity parameter s = 15
+15 rows
+JLT matrix initialization took 99264675 microseconds
+265 secs
+	Number of posting lists: 28679
+Building summaries: 
+122 secs
+No knn needed
+Time to build 466 secs (before serializing)
+Saving ... /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_true_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_jlt.index.seismic
+Save completed successfully
+Time to build 506 secs
+Index built successfully in 517.64 seconds.
+Evaluation runs with metric RR@10
+Executing query for subsection 'recall_90' with command:
+ ./build/bin/perf_inverted_index --index-file /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_true_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_jlt -k 10 --query-file /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin --query-cut 3 --heap-factor 0.9 --n-runs 1 --output-path ./splade_cocondenser_msmarco_2025-12-12_11:49:50/results_recall_90
+Running query for subsection: recall_90...
+Performance testing with the following parameters:
+  Index file: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_true_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_jlt
+  Query file: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin
+  Output path: ./splade_cocondenser_msmarco_2025-12-12_11:49:50/results_recall_90
+  N queries: 10000
+  K: 10
+  N runs: 1
+  Query cut: 3
+  Heap factor: 0.9
+  N KNN: 0
+  First sorted: false
+Loading index from /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_true_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_jlt.index.seismic...
+Index loaded successfully
+Number of documents: 8841823
+
+Loading queries from /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin...
+Number of Queries: 6980
+Number of Dimensions: 28313
+Avg number of components: 43.9454
+Searching for top-10 results
+Number of evaluated queries: 6980
+Number of documents: 8841823
+Avg number of non-zero components: 121.046
+Time 1611 microsecs per query
+11246444
+Adding document to 28 postings lists.
+Index: Time to insert doc 8841823: 667067
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841824: 10612
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841825: 11032
+Adding document to 52 postings lists.
+Index: Time to insert doc 8841826: 13003
+Adding document to 44 postings lists.
+Index: Time to insert doc 8841827: 9823
+Adding document to 29 postings lists.
+Index: Time to insert doc 8841828: 5472
+Adding document to 26 postings lists.
+Index: Time to insert doc 8841829: 4653
+Adding document to 56 postings lists.
+Index: Time to insert doc 8841830: 14769
+Adding document to 80 postings lists.
+Index: Time to insert doc 8841831: 33192
+Adding document to 20 postings lists.
+Index: Time to insert doc 8841832: 3125
+Adding document to 36 postings lists.
+Index: Time to insert doc 8841833: 7412
+Adding document to 68 postings lists.
+Index: Time to insert doc 8841834: 19755
+Adding document to 29 postings lists.
+Index: Time to insert doc 8841835: 5045
+Adding document to 30 postings lists.
+Index: Time to insert doc 8841836: 5662
+Adding document to 42 postings lists.
+Index: Time to insert doc 8841837: 8873
+Adding document to 54 postings lists.
+Index: Time to insert doc 8841838: 15690
+Adding document to 62 postings lists.
+Index: Time to insert doc 8841839: 17634
+Adding document to 40 postings lists.
+Index: Time to insert doc 8841840: 9293
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841841: 4328
+Adding document to 58 postings lists.
+Index: Time to insert doc 8841842: 14981
+Adding document to 30 postings lists.
+Index: Time to insert doc 8841843: 5705
+Adding document to 29 postings lists.
+Index: Time to insert doc 8841844: 5296
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841845: 4087
+Adding document to 57 postings lists.
+Index: Time to insert doc 8841846: 15119
+Adding document to 50 postings lists.
+Index: Time to insert doc 8841847: 11656
+Adding document to 51 postings lists.
+Index: Time to insert doc 8841848: 12267
+Adding document to 32 postings lists.
+Index: Time to insert doc 8841849: 5916
+Adding document to 24 postings lists.
+Index: Time to insert doc 8841850: 3956
+Adding document to 27 postings lists.
+Index: Time to insert doc 8841851: 4726
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841852: 9924
+Adding document to 27 postings lists.
+Index: Time to insert doc 8841853: 4659
+Adding document to 37 postings lists.
+Index: Time to insert doc 8841854: 7479
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841855: 4198
+Adding document to 73 postings lists.
+Index: Time to insert doc 8841856: 21875
+Adding document to 59 postings lists.
+Index: Time to insert doc 8841857: 15409
+Adding document to 28 postings lists.
+Index: Time to insert doc 8841858: 4622
+Adding document to 39 postings lists.
+Index: Time to insert doc 8841859: 8143
+Adding document to 34 postings lists.
+Index: Time to insert doc 8841860: 6460
+Adding document to 62 postings lists.
+Index: Time to insert doc 8841861: 16724
+Adding document to 31 postings lists.
+Index: Time to insert doc 8841862: 5742
+Adding document to 41 postings lists.
+Index: Time to insert doc 8841863: 8883
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841864: 10267
+Adding document to 23 postings lists.
+Index: Time to insert doc 8841865: 3502
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841866: 3989
+Adding document to 63 postings lists.
+Index: Time to insert doc 8841867: 16777
+Adding document to 28 postings lists.
+Index: Time to insert doc 8841868: 4934
+Adding document to 28 postings lists.
+Index: Time to insert doc 8841869: 4868
+Adding document to 31 postings lists.
+Index: Time to insert doc 8841870: 5667
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841871: 4239
+Adding document to 34 postings lists.
+Index: Time to insert doc 8841872: 6409
+Adding document to 62 postings lists.
+Index: Time to insert doc 8841873: 16455
+Adding document to 28 postings lists.
+Index: Time to insert doc 8841874: 4810
+Adding document to 34 postings lists.
+Index: Time to insert doc 8841875: 6390
+Adding document to 19 postings lists.
+Index: Time to insert doc 8841876: 2879
+Adding document to 41 postings lists.
+Index: Time to insert doc 8841877: 8442
+Adding document to 62 postings lists.
+Index: Time to insert doc 8841878: 16486
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841879: 10383
+Adding document to 29 postings lists.
+Index: Time to insert doc 8841880: 5110
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841881: 10157
+Adding document to 30 postings lists.
+Index: Time to insert doc 8841882: 5289
+Adding document to 54 postings lists.
+Index: Time to insert doc 8841883: 13560
+Adding document to 36 postings lists.
+Index: Time to insert doc 8841884: 6918
+Adding document to 44 postings lists.
+Index: Time to insert doc 8841885: 9622
+Adding document to 38 postings lists.
+Index: Time to insert doc 8841886: 7347
+Adding document to 38 postings lists.
+Index: Time to insert doc 8841887: 7534
+Adding document to 33 postings lists.
+Index: Time to insert doc 8841888: 6166
+Adding document to 28 postings lists.
+Index: Time to insert doc 8841889: 4805
+Adding document to 21 postings lists.
+Index: Time to insert doc 8841890: 3155
+Adding document to 32 postings lists.
+Index: Time to insert doc 8841891: 5630
+Adding document to 51 postings lists.
+Index: Time to insert doc 8841892: 12043
+Adding document to 37 postings lists.
+Index: Time to insert doc 8841893: 7144
+Adding document to 51 postings lists.
+Index: Time to insert doc 8841894: 11938
+Adding document to 58 postings lists.
+Index: Time to insert doc 8841895: 14423
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841896: 9901
+Adding document to 63 postings lists.
+Index: Time to insert doc 8841897: 16790
+Adding document to 26 postings lists.
+Index: Time to insert doc 8841898: 4137
+Adding document to 44 postings lists.
+Index: Time to insert doc 8841899: 10006
+Adding document to 27 postings lists.
+Index: Time to insert doc 8841900: 4479
+Adding document to 23 postings lists.
+Index: Time to insert doc 8841901: 3575
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841902: 10065
+Adding document to 49 postings lists.
+Index: Time to insert doc 8841903: 11286
+Adding document to 51 postings lists.
+Index: Time to insert doc 8841904: 12072
+Adding document to 16 postings lists.
+Index: Time to insert doc 8841905: 2238
+Adding document to 33 postings lists.
+Index: Time to insert doc 8841906: 6386
+Adding document to 70 postings lists.
+Index: Time to insert doc 8841907: 20273
+Adding document to 51 postings lists.
+Index: Time to insert doc 8841908: 11904
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841909: 9998
+Adding document to 47 postings lists.
+Index: Time to insert doc 8841910: 10452
+Adding document to 92 postings lists.
+Index: Time to insert doc 8841911: 32210
+Adding document to 44 postings lists.
+Index: Time to insert doc 8841912: 9372
+Adding document to 54 postings lists.
+Index: Time to insert doc 8841913: 13262
+Adding document to 62 postings lists.
+Index: Time to insert doc 8841914: 16448
+Adding document to 33 postings lists.
+Index: Time to insert doc 8841915: 6072
+Adding document to 52 postings lists.
+Index: Time to insert doc 8841916: 12718
+Adding document to 38 postings lists.
+Index: Time to insert doc 8841917: 7433
+Adding document to 57 postings lists.
+Index: Time to insert doc 8841918: 14414
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841919: 3969
+Adding document to 70 postings lists.
+Index: Time to insert doc 8841920: 20105
+Adding document to 40 postings lists.
+Index: Time to insert doc 8841921: 8289
+Adding document to 40 postings lists.
+Index: Time to insert doc 8841922: 7980
+Adding document to 95 postings lists.
+Index: Time to insert doc 8841923: 33945
+Adding document to 56 postings lists.
+Index: Time to insert doc 8841924: 14393
+Adding document to 83 postings lists.
+Index: Time to insert doc 8841925: 26761
+Adding document to 31 postings lists.
+Index: Time to insert doc 8841926: 5603
+Adding document to 30 postings lists.
+Index: Time to insert doc 8841927: 5278
+Adding document to 70 postings lists.
+Index: Time to insert doc 8841928: 20188
+Adding document to 40 postings lists.
+Index: Time to insert doc 8841929: 8318
+Adding document to 29 postings lists.
+Index: Time to insert doc 8841930: 5036
+Adding document to 50 postings lists.
+Index: Time to insert doc 8841931: 11426
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841932: 10249
+Adding document to 55 postings lists.
+Index: Time to insert doc 8841933: 13534
+Adding document to 39 postings lists.
+Index: Time to insert doc 8841934: 7922
+Adding document to 28 postings lists.
+Index: Time to insert doc 8841935: 4658
+Adding document to 54 postings lists.
+Index: Time to insert doc 8841936: 13235
+Adding document to 39 postings lists.
+Index: Time to insert doc 8841937: 7702
+Adding document to 75 postings lists.
+Index: Time to insert doc 8841938: 22672
+Adding document to 34 postings lists.
+Index: Time to insert doc 8841939: 6339
+Adding document to 32 postings lists.
+Index: Time to insert doc 8841940: 5822
+Adding document to 60 postings lists.
+Index: Time to insert doc 8841941: 15510
+Adding document to 40 postings lists.
+Index: Time to insert doc 8841942: 7835
+Adding document to 91 postings lists.
+Index: Time to insert doc 8841943: 32051
+Adding document to 52 postings lists.
+Index: Time to insert doc 8841944: 11845
+Adding document to 47 postings lists.
+Index: Time to insert doc 8841945: 11151
+Adding document to 34 postings lists.
+Index: Time to insert doc 8841946: 6945
+Adding document to 52 postings lists.
+Index: Time to insert doc 8841947: 12995
+Adding document to 86 postings lists.
+Index: Time to insert doc 8841948: 29123
+Adding document to 76 postings lists.
+Index: Time to insert doc 8841949: 23381
+Adding document to 63 postings lists.
+Index: Time to insert doc 8841950: 17177
+Adding document to 44 postings lists.
+Index: Time to insert doc 8841951: 9571
+Adding document to 31 postings lists.
+Index: Time to insert doc 8841952: 5447
+Adding document to 37 postings lists.
+Index: Time to insert doc 8841953: 7374
+Adding document to 17 postings lists.
+Index: Time to insert doc 8841954: 2454
+Adding document to 20 postings lists.
+Index: Time to insert doc 8841955: 3050
+Adding document to 65 postings lists.
+Index: Time to insert doc 8841956: 17873
+Adding document to 64 postings lists.
+Index: Time to insert doc 8841957: 17524
+Adding document to 26 postings lists.
+Index: Time to insert doc 8841958: 4272
+Adding document to 62 postings lists.
+Index: Time to insert doc 8841959: 16156
+Adding document to 14 postings lists.
+Index: Time to insert doc 8841960: 1943
+Adding document to 32 postings lists.
+Index: Time to insert doc 8841961: 5665
+Adding document to 44 postings lists.
+Index: Time to insert doc 8841962: 9653
+Adding document to 41 postings lists.
+Index: Time to insert doc 8841963: 8583
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841964: 10070
+Adding document to 17 postings lists.
+Index: Time to insert doc 8841965: 2401
+Adding document to 58 postings lists.
+Index: Time to insert doc 8841966: 14752
+Adding document to 55 postings lists.
+Index: Time to insert doc 8841967: 13286
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841968: 9607
+Adding document to 38 postings lists.
+Index: Time to insert doc 8841969: 7446
+Adding document to 38 postings lists.
+Index: Time to insert doc 8841970: 7602
+Adding document to 55 postings lists.
+Index: Time to insert doc 8841971: 13472
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841972: 3950
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841973: 10033
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841974: 10145
+Adding document to 36 postings lists.
+Index: Time to insert doc 8841975: 7127
+Adding document to 38 postings lists.
+Index: Time to insert doc 8841976: 7724
+Adding document to 62 postings lists.
+Index: Time to insert doc 8841977: 16226
+Adding document to 67 postings lists.
+Index: Time to insert doc 8841978: 18847
+Adding document to 47 postings lists.
+Index: Time to insert doc 8841979: 10564
+Adding document to 32 postings lists.
+Index: Time to insert doc 8841980: 5734
+Adding document to 50 postings lists.
+Index: Time to insert doc 8841981: 11803
+Adding document to 66 postings lists.
+Index: Time to insert doc 8841982: 18189
+Adding document to 34 postings lists.
+Index: Time to insert doc 8841983: 6423
+Adding document to 32 postings lists.
+Index: Time to insert doc 8841984: 5727
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841985: 10069
+Adding document to 50 postings lists.
+Index: Time to insert doc 8841986: 11769
+Adding document to 38 postings lists.
+Index: Time to insert doc 8841987: 7344
+Adding document to 56 postings lists.
+Index: Time to insert doc 8841988: 14072
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841989: 4041
+Adding document to 51 postings lists.
+Index: Time to insert doc 8841990: 11741
+Adding document to 41 postings lists.
+Index: Time to insert doc 8841991: 8377
+Adding document to 64 postings lists.
+Index: Time to insert doc 8841992: 17141
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841993: 9944
+Adding document to 56 postings lists.
+Index: Time to insert doc 8841994: 13968
+Adding document to 21 postings lists.
+Index: Time to insert doc 8841995: 3190
+Adding document to 56 postings lists.
+Index: Time to insert doc 8841996: 13763
+Adding document to 57 postings lists.
+Index: Time to insert doc 8841997: 14252
+Adding document to 33 postings lists.
+Index: Time to insert doc 8841998: 5927
+Adding document to 67 postings lists.
+Index: Time to insert doc 8841999: 18399
+Adding document to 78 postings lists.
+Index: Time to insert doc 8842000: 23785
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842001: 18700
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842002: 4229
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842003: 7215
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842004: 8335
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842005: 14158
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842006: 13794
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842007: 4652
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842008: 9284
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842009: 14244
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842010: 17379
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842011: 11825
+Adding document to 71 postings lists.
+Index: Time to insert doc 8842012: 20619
+Adding document to 67 postings lists.
+Index: Time to insert doc 8842013: 18437
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842014: 4214
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842015: 10795
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842016: 3693
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842017: 6708
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842018: 5735
+Adding document to 81 postings lists.
+Index: Time to insert doc 8842019: 25613
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842020: 6153
+Adding document to 75 postings lists.
+Index: Time to insert doc 8842021: 22388
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842022: 3316
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842023: 16042
+Adding document to 81 postings lists.
+Index: Time to insert doc 8842024: 25710
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842025: 11356
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842026: 6113
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842027: 9465
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842028: 17347
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842029: 3599
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842030: 8478
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842031: 13119
+Adding document to 66 postings lists.
+Index: Time to insert doc 8842032: 17562
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842033: 17536
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842034: 13400
+Adding document to 70 postings lists.
+Index: Time to insert doc 8842035: 20531
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842036: 4540
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842037: 5108
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842038: 7070
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842039: 8717
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842040: 18784
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842041: 6928
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842042: 10804
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842043: 10463
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842044: 12380
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842045: 4125
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842046: 10219
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842047: 7947
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842048: 5560
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842049: 16500
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842050: 9709
+Adding document to 81 postings lists.
+Index: Time to insert doc 8842051: 25144
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842052: 9211
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842053: 7100
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842054: 9568
+Adding document to 18 postings lists.
+Index: Time to insert doc 8842055: 2482
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842056: 7925
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842057: 6122
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842058: 4348
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842059: 13749
+Adding document to 15 postings lists.
+Index: Time to insert doc 8842060: 1956
+Adding document to 79 postings lists.
+Index: Time to insert doc 8842061: 24307
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842062: 4835
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842063: 12355
+Adding document to 74 postings lists.
+Index: Time to insert doc 8842064: 21668
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842065: 9983
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842066: 7897
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842067: 6555
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842068: 15263
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842069: 3733
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842070: 11598
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842071: 16048
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842072: 7747
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842073: 13699
+Adding document to 77 postings lists.
+Index: Time to insert doc 8842074: 23579
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842075: 10399
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842076: 7266
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842077: 12140
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842078: 6552
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842079: 14671
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842080: 9808
+Adding document to 66 postings lists.
+Index: Time to insert doc 8842081: 17748
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842082: 9319
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842083: 8210
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842084: 16871
+Adding document to 83 postings lists.
+Index: Time to insert doc 8842085: 26635
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842086: 7375
+Adding document to 76 postings lists.
+Index: Time to insert doc 8842087: 22867
+Adding document to 67 postings lists.
+Index: Time to insert doc 8842088: 18435
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842089: 13985
+Adding document to 63 postings lists.
+Index: Time to insert doc 8842090: 16698
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842091: 4584
+Adding document to 83 postings lists.
+Index: Time to insert doc 8842092: 26383
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842093: 13179
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842094: 14858
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842095: 4805
+Adding document to 21 postings lists.
+Index: Time to insert doc 8842096: 3123
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842097: 15363
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842098: 11228
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842099: 14606
+Adding document to 76 postings lists.
+Index: Time to insert doc 8842100: 23207
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842101: 6426
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842102: 8590
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842103: 14980
+Adding document to 15 postings lists.
+Index: Time to insert doc 8842104: 2013
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842105: 9930
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842106: 11003
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842107: 9743
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842108: 2943
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842109: 12964
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842110: 9806
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842111: 12688
+Adding document to 66 postings lists.
+Index: Time to insert doc 8842112: 18270
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842113: 7157
+Adding document to 72 postings lists.
+Index: Time to insert doc 8842114: 20759
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842115: 6311
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842116: 10886
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842117: 7971
+Adding document to 75 postings lists.
+Index: Time to insert doc 8842118: 28192
+Adding document to 63 postings lists.
+Index: Time to insert doc 8842119: 16564
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842120: 6040
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842121: 6468
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842122: 6069
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842123: 16562
+Adding document to 75 postings lists.
+Index: Time to insert doc 8842124: 22099
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842125: 3884
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842126: 8767
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842127: 3998
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842128: 14685
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842129: 14959
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842130: 12757
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842131: 7444
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842132: 5722
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842133: 7904
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842134: 8694
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842135: 15453
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842136: 4581
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842137: 4467
+Adding document to 66 postings lists.
+Index: Time to insert doc 8842138: 18225
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842139: 19210
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842140: 9166
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842141: 12268
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842142: 4983
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842143: 4361
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842144: 6856
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842145: 4738
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842146: 6069
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842147: 4888
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842148: 9363
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842149: 4685
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842150: 9337
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842151: 10742
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842152: 11816
+Adding document to 69 postings lists.
+Index: Time to insert doc 8842153: 19473
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842154: 10248
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842155: 9095
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842156: 6038
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842157: 12001
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842158: 12127
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842159: 3994
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842160: 10660
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842161: 8671
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842162: 17605
+Adding document to 107 postings lists.
+Index: Time to insert doc 8842163: 42288
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842164: 5449
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842165: 14826
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842166: 15241
+Adding document to 21 postings lists.
+Index: Time to insert doc 8842167: 3088
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842168: 6989
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842169: 17279
+Adding document to 69 postings lists.
+Index: Time to insert doc 8842170: 19488
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842171: 3347
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842172: 4348
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842173: 6970
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842174: 9602
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842175: 4671
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842176: 5188
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842177: 4734
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842178: 3596
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842179: 7190
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842180: 4088
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842181: 9481
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842182: 12132
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842183: 19075
+Adding document to 88 postings lists.
+Index: Time to insert doc 8842184: 29400
+Adding document to 80 postings lists.
+Index: Time to insert doc 8842185: 24720
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842186: 17256
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842187: 4284
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842188: 5431
+Adding document to 67 postings lists.
+Index: Time to insert doc 8842189: 18392
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842190: 14722
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842191: 7251
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842192: 15479
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842193: 10002
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842194: 13405
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842195: 9145
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842196: 5832
+Adding document to 19 postings lists.
+Index: Time to insert doc 8842197: 2812
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842198: 9338
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842199: 5709
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842200: 6094
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842201: 4226
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842202: 8738
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842203: 8738
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842204: 12095
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842205: 8833
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842206: 9896
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842207: 8493
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842208: 5105
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842209: 7058
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842210: 14289
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842211: 7835
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842212: 4392
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842213: 5812
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842214: 6131
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842215: 8085
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842216: 11365
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842217: 12621
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842218: 3972
+Adding document to 67 postings lists.
+Index: Time to insert doc 8842219: 18746
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842220: 12314
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842221: 11934
+Adding document to 16 postings lists.
+Index: Time to insert doc 8842222: 2227
+Adding document to 71 postings lists.
+Index: Time to insert doc 8842223: 20726
+Adding document to 71 postings lists.
+Index: Time to insert doc 8842224: 20635
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842225: 4382
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842226: 8722
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842227: 12951
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842228: 4174
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842229: 14139
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842230: 8675
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842231: 9754
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842232: 12470
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842233: 16437
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842234: 4064
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842235: 7233
+Adding document to 72 postings lists.
+Index: Time to insert doc 8842236: 21359
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842237: 6527
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842238: 3956
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842239: 12318
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842240: 3507
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842241: 4370
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842242: 5393
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842243: 16213
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842244: 6328
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842245: 6523
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842246: 9880
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842247: 3531
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842248: 7509
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842249: 9566
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842250: 12709
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842251: 9256
+Adding document to 91 postings lists.
+Index: Time to insert doc 8842252: 31371
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842253: 14526
+Adding document to 19 postings lists.
+Index: Time to insert doc 8842254: 2738
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842255: 15729
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842256: 3561
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842257: 4267
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842258: 16449
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842259: 8808
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842260: 6468
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842261: 4815
+Adding document to 21 postings lists.
+Index: Time to insert doc 8842262: 3135
+Adding document to 69 postings lists.
+Index: Time to insert doc 8842263: 19428
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842264: 15444
+Adding document to 74 postings lists.
+Index: Time to insert doc 8842265: 21565
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842266: 7652
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842267: 9237
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842268: 12973
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842269: 7385
+Adding document to 13 postings lists.
+Index: Time to insert doc 8842270: 1639
+Adding document to 17 postings lists.
+Index: Time to insert doc 8842271: 2415
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842272: 11770
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842273: 3184
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842274: 9273
+Adding document to 15 postings lists.
+Index: Time to insert doc 8842275: 1976
+Adding document to 87 postings lists.
+Index: Time to insert doc 8842276: 29028
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842277: 8757
+Adding document to 17 postings lists.
+Index: Time to insert doc 8842278: 2333
+Adding document to 18 postings lists.
+Index: Time to insert doc 8842279: 2547
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842280: 12112
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842281: 3803
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842282: 15269
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842283: 2893
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842284: 13741
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842285: 14364
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842286: 16253
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842287: 7437
+Adding document to 16 postings lists.
+Index: Time to insert doc 8842288: 2180
+Adding document to 19 postings lists.
+Index: Time to insert doc 8842289: 2781
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842290: 4109
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842291: 2896
+Adding document to 86 postings lists.
+Index: Time to insert doc 8842292: 28422
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842293: 5344
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842294: 6253
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842295: 8182
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842296: 6176
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842297: 7916
+Adding document to 99 postings lists.
+Index: Time to insert doc 8842298: 36736
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842299: 6275
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842300: 3375
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842301: 10008
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842302: 7341
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842303: 4875
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842304: 10255
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842305: 14024
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842306: 5935
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842307: 5674
+Adding document to 67 postings lists.
+Index: Time to insert doc 8842308: 18346
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842309: 5314
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842310: 10853
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842311: 5370
+Adding document to 21 postings lists.
+Index: Time to insert doc 8842312: 3244
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842313: 7005
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842314: 8439
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842315: 14801
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842316: 11237
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842317: 10844
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842318: 13054
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842319: 6567
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842320: 4033
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842321: 6039
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842322: 9041
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842323: 16546
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842324: 4890
+Adding document to 70 postings lists.
+Index: Time to insert doc 8842325: 19962
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842326: 12578
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842327: 8379
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842328: 9983
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842329: 7233
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842330: 14975
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842331: 14156
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842332: 9321
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842333: 10309
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842334: 11799
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842335: 4667
+Adding document to 81 postings lists.
+Index: Time to insert doc 8842336: 25416
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842337: 8557
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842338: 19058
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842339: 5348
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842340: 4717
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842341: 10958
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842342: 15436
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842343: 17636
+Adding document to 75 postings lists.
+Index: Time to insert doc 8842344: 22773
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842345: 9722
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842346: 9044
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842347: 12050
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842348: 5800
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842349: 10556
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842350: 6365
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842351: 12899
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842352: 6038
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842353: 13276
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842354: 3972
+Adding document to 90 postings lists.
+Index: Time to insert doc 8842355: 30274
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842356: 7763
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842357: 6667
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842358: 2954
+Adding document to 79 postings lists.
+Index: Time to insert doc 8842359: 24588
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842360: 15566
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842361: 9910
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842362: 11416
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842363: 8235
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842364: 13273
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842365: 15926
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842366: 13552
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842367: 5913
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842368: 5491
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842369: 11102
+Adding document to 77 postings lists.
+Index: Time to insert doc 8842370: 23494
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842371: 16036
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842372: 11298
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842373: 11122
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842374: 4398
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842375: 18939
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842376: 14906
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842377: 4891
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842378: 9644
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842379: 6461
+Adding document to 69 postings lists.
+Index: Time to insert doc 8842380: 19176
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842381: 11617
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842382: 12055
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842383: 16036
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842384: 2966
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842385: 7924
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842386: 5201
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842387: 3814
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842388: 10544
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842389: 7874
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842390: 6151
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842391: 4761
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842392: 5465
+Adding document to 15 postings lists.
+Index: Time to insert doc 8842393: 1956
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842394: 15708
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842395: 11590
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842396: 4864
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842397: 10351
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842398: 15190
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842399: 3733
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842400: 2974
+Adding document to 21 postings lists.
+Index: Time to insert doc 8842401: 3166
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842402: 3501
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842403: 4937
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842404: 9707
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842405: 7615
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842406: 6011
+Adding document to 74 postings lists.
+Index: Time to insert doc 8842407: 22374
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842408: 4648
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842409: 4245
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842410: 5126
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842411: 8746
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842412: 12427
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842413: 11048
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842414: 6301
+Adding document to 82 postings lists.
+Index: Time to insert doc 8842415: 26293
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842416: 5988
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842417: 4473
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842418: 6235
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842419: 17363
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842420: 2881
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842421: 3757
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842422: 3997
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842423: 15331
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842424: 15018
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842425: 6217
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842426: 10143
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842427: 8675
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842428: 4470
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842429: 4695
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842430: 11258
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842431: 11953
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842432: 19258
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842433: 6858
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842434: 5864
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842435: 9170
+Adding document to 63 postings lists.
+Index: Time to insert doc 8842436: 16824
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842437: 4033
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842438: 3233
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842439: 3921
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842440: 12638
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842441: 12110
+Adding document to 18 postings lists.
+Index: Time to insert doc 8842442: 2480
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842443: 6138
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842444: 5612
+Adding document to 17 postings lists.
+Index: Time to insert doc 8842445: 2463
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842446: 7898
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842447: 11306
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842448: 6609
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842449: 11090
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842450: 6534
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842451: 13447
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842452: 8632
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842453: 3763
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842454: 6841
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842455: 6274
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842456: 13319
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842457: 5501
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842458: 7614
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842459: 9717
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842460: 15318
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842461: 9093
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842462: 11053
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842463: 4974
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842464: 6493
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842465: 15525
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842466: 10049
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842467: 7280
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842468: 7421
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842469: 12292
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842470: 3974
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842471: 3520
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842472: 15815
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842473: 7075
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842474: 15217
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842475: 6618
+Adding document to 21 postings lists.
+Index: Time to insert doc 8842476: 3100
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842477: 12321
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842478: 13881
+Adding document to 18 postings lists.
+Index: Time to insert doc 8842479: 2487
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842480: 14157
+Adding document to 21 postings lists.
+Index: Time to insert doc 8842481: 3088
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842482: 11254
+Adding document to 74 postings lists.
+Index: Time to insert doc 8842483: 21732
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842484: 11523
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842485: 5883
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842486: 8033
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842487: 2980
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842488: 14890
+Adding document to 63 postings lists.
+Index: Time to insert doc 8842489: 16501
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842490: 19034
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842491: 5922
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842492: 4031
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842493: 12457
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842494: 3882
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842495: 8649
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842496: 13498
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842497: 4443
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842498: 10132
+Adding document to 80 postings lists.
+Index: Time to insert doc 8842499: 25322
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842500: 11348
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842501: 7187
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842502: 4626
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842503: 12033
+Adding document to 83 postings lists.
+Index: Time to insert doc 8842504: 26608
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842505: 8193
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842506: 5519
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842507: 7496
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842508: 4328
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842509: 14489
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842510: 11509
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842511: 3480
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842512: 5715
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842513: 9420
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842514: 7646
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842515: 8951
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842516: 3835
+Adding document to 18 postings lists.
+Index: Time to insert doc 8842517: 2498
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842518: 7104
+Adding document to 86 postings lists.
+Index: Time to insert doc 8842519: 28584
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842520: 9686
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842521: 5642
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842522: 2880
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842523: 11700
+Adding document to 67 postings lists.
+Index: Time to insert doc 8842524: 18218
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842525: 3474
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842526: 7305
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842527: 14833
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842528: 10127
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842529: 13985
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842530: 6327
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842531: 3006
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842532: 16823
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842533: 5105
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842534: 17958
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842535: 14122
+Adding document to 77 postings lists.
+Index: Time to insert doc 8842536: 23367
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842537: 5982
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842538: 12049
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842539: 9332
+Adding document to 63 postings lists.
+Index: Time to insert doc 8842540: 16419
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842541: 3292
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842542: 11504
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842543: 17752
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842544: 10763
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842545: 15259
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842546: 10186
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842547: 5482
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842548: 13047
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842549: 6768
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842550: 14138
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842551: 10700
+Adding document to 66 postings lists.
+Index: Time to insert doc 8842552: 18236
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842553: 11836
+Adding document to 66 postings lists.
+Index: Time to insert doc 8842554: 18174
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842555: 9967
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842556: 9110
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842557: 6364
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842558: 10396
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842559: 6286
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842560: 5668
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842561: 10230
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842562: 15980
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842563: 15767
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842564: 6932
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842565: 4893
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842566: 9260
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842567: 7684
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842568: 5428
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842569: 8742
+Adding document to 75 postings lists.
+Index: Time to insert doc 8842570: 22475
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842571: 10100
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842572: 17164
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842573: 9985
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842574: 10020
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842575: 7106
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842576: 7517
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842577: 3538
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842578: 7748
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842579: 11358
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842580: 12661
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842581: 6489
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842582: 7632
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842583: 6918
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842584: 4927
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842585: 4122
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842586: 7478
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842587: 5747
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842588: 7697
+Adding document to 83 postings lists.
+Index: Time to insert doc 8842589: 26698
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842590: 6114
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842591: 12535
+Adding document to 67 postings lists.
+Index: Time to insert doc 8842592: 18277
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842593: 5970
+Adding document to 80 postings lists.
+Index: Time to insert doc 8842594: 24806
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842595: 11752
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842596: 12471
+Adding document to 81 postings lists.
+Index: Time to insert doc 8842597: 25224
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842598: 18693
+Adding document to 73 postings lists.
+Index: Time to insert doc 8842599: 21137
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842600: 7292
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842601: 5198
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842602: 12705
+Adding document to 88 postings lists.
+Index: Time to insert doc 8842603: 29336
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842604: 12640
+Adding document to 79 postings lists.
+Index: Time to insert doc 8842605: 24425
+Adding document to 70 postings lists.
+Index: Time to insert doc 8842606: 19922
+Adding document to 17 postings lists.
+Index: Time to insert doc 8842607: 2333
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842608: 4463
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842609: 11946
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842610: 4867
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842611: 12110
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842612: 6317
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842613: 4926
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842614: 6869
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842615: 6844
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842616: 5880
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842617: 8132
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842618: 18947
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842619: 11658
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842620: 4377
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842621: 13615
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842622: 7563
+Adding document to 77 postings lists.
+Index: Time to insert doc 8842623: 23241
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842624: 3266
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842625: 5189
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842626: 5288
+Adding document to 69 postings lists.
+Index: Time to insert doc 8842627: 19326
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842628: 7657
+Adding document to 93 postings lists.
+Index: Time to insert doc 8842629: 32124
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842630: 10490
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842631: 5551
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842632: 7276
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842633: 9797
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842634: 13944
+Adding document to 88 postings lists.
+Index: Time to insert doc 8842635: 29130
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842636: 9973
+Adding document to 74 postings lists.
+Index: Time to insert doc 8842637: 21768
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842638: 6306
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842639: 5499
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842640: 7335
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842641: 7771
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842642: 8841
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842643: 11318
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842644: 4808
+Adding document to 77 postings lists.
+Index: Time to insert doc 8842645: 23053
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842646: 8480
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842647: 9626
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842648: 4294
+Adding document to 75 postings lists.
+Index: Time to insert doc 8842649: 21996
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842650: 2903
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842651: 4885
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842652: 33331
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842653: 11237
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842654: 7920
+Adding document to 15 postings lists.
+Index: Time to insert doc 8842655: 1986
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842656: 12425
+Adding document to 70 postings lists.
+Index: Time to insert doc 8842657: 19964
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842658: 11266
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842659: 6484
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842660: 5113
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842661: 9323
+Adding document to 74 postings lists.
+Index: Time to insert doc 8842662: 21483
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842663: 3985
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842664: 6856
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842665: 7257
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842666: 13286
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842667: 9594
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842668: 11383
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842669: 4861
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842670: 3573
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842671: 7342
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842672: 8267
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842673: 6443
+Adding document to 70 postings lists.
+Index: Time to insert doc 8842674: 20028
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842675: 9570
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842676: 7691
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842677: 16181
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842678: 7484
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842679: 9697
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842680: 4327
+Adding document to 79 postings lists.
+Index: Time to insert doc 8842681: 24844
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842682: 5208
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842683: 7234
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842684: 15449
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842685: 9340
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842686: 8215
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842687: 10821
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842688: 9577
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842689: 16103
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842690: 14896
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842691: 5893
+Adding document to 19 postings lists.
+Index: Time to insert doc 8842692: 2837
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842693: 4158
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842694: 12214
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842695: 13637
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842696: 13131
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842697: 5346
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842698: 6069
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842699: 8013
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842700: 8651
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842701: 10700
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842702: 9850
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842703: 6485
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842704: 6864
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842705: 9918
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842706: 12677
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842707: 15957
+Adding document to 74 postings lists.
+Index: Time to insert doc 8842708: 21824
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842709: 4123
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842710: 6289
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842711: 16139
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842712: 13507
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842713: 6238
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842714: 10786
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842715: 8951
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842716: 15978
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842717: 3229
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842718: 5372
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842719: 3356
+Adding document to 19 postings lists.
+Index: Time to insert doc 8842720: 2663
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842721: 14530
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842722: 6148
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842723: 11155
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842724: 5430
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842725: 4527
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842726: 10291
+Adding document to 69 postings lists.
+Index: Time to insert doc 8842727: 19267
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842728: 7802
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842729: 10068
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842730: 3377
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842731: 2879
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842732: 17297
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842733: 11859
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842734: 5103
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842735: 10152
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842736: 5885
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842737: 5656
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842738: 4373
+Adding document to 75 postings lists.
+Index: Time to insert doc 8842739: 22469
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842740: 12120
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842741: 8379
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842742: 15432
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842743: 11592
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842744: 4419
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842745: 6319
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842746: 6328
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842747: 16029
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842748: 7466
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842749: 14602
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842750: 8125
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842751: 12315
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842752: 12962
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842753: 9298
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842754: 8461
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842755: 14420
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842756: 4370
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842757: 10103
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842758: 7579
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842759: 10874
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842760: 14977
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842761: 5989
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842762: 9497
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842763: 8526
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842764: 6359
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842765: 4646
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842766: 7538
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842767: 8060
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842768: 2953
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842769: 9425
+Adding document to 66 postings lists.
+Index: Time to insert doc 8842770: 18242
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842771: 13441
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842772: 11760
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842773: 10443
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842774: 5906
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842775: 13246
+Adding document to 77 postings lists.
+Index: Time to insert doc 8842776: 23541
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842777: 16201
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842778: 5960
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842779: 14558
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842780: 6263
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842781: 14443
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842782: 9068
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842783: 4384
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842784: 13007
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842785: 17188
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842786: 10702
+Adding document to 63 postings lists.
+Index: Time to insert doc 8842787: 16689
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842788: 5960
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842789: 11721
+Adding document to 73 postings lists.
+Index: Time to insert doc 8842790: 21545
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842791: 11756
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842792: 10742
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842793: 15437
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842794: 6915
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842795: 8710
+Adding document to 63 postings lists.
+Index: Time to insert doc 8842796: 16752
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842797: 14086
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842798: 7817
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842799: 5828
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842800: 9377
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842801: 18434
+Adding document to 82 postings lists.
+Index: Time to insert doc 8842802: 25978
+Adding document to 71 postings lists.
+Index: Time to insert doc 8842803: 20266
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842804: 6503
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842805: 4572
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842806: 13883
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842807: 12879
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842808: 5274
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842809: 14350
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842810: 17555
+Adding document to 79 postings lists.
+Index: Time to insert doc 8842811: 24009
+Adding document to 84 postings lists.
+Index: Time to insert doc 8842812: 26699
+Adding document to 76 postings lists.
+Index: Time to insert doc 8842813: 22614
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842814: 7965
+Adding document to 71 postings lists.
+Index: Time to insert doc 8842815: 20129
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842816: 7782
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842817: 8363
+Adding document to 70 postings lists.
+Index: Time to insert doc 8842818: 20026
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842819: 5639
+Adding document to 71 postings lists.
+Index: Time to insert doc 8842820: 21095
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842821: 5410
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842822: 3945
+Time 16069 microsecs per insert_document
+16069730
+Deleting doc 0 from 21 posting lists.
+Error: is_alive: The id is out of range
+Query execution for subsection 'recall_90' failed.

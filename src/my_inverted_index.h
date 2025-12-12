@@ -57,6 +57,57 @@ public:
         jlt_(std::move(jlt)),
         knn_(std::move(knn)) {}
          
+    void delete_doc(size_t doc_id)
+    {
+        auto start_time = std::chrono::high_resolution_clock::now();
+        // 1. Remove doc from forward index (mark as dead)
+        forward_index_.set_dead(doc_id);
+
+        // 2. Remove doc from all the posting lists it belongs to (using doc_block_membership_)
+        std::vector<std::pair<size_t, size_t>> doc_block_ids = doc_block_membership_[doc_id];
+        std::cout << "Deleting doc " << doc_id << " from " << doc_block_ids.size() << " posting lists." << std::endl;
+        for (const auto& [component, block_id] : doc_block_ids) {
+            // 2.a. Update summary
+            MyPostingList& posting_list = posting_lists_[component];
+            posting_list.delete_doc(block_id, doc_id, *jlt_, forward_index_, config_);
+        }
+        auto end_time = std::chrono::high_resolution_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
+                    end_time - start_time).count();
+        std::cout << "Index: Time to delete doc " << doc_id << ": " << elapsed << std::endl;
+    }
+
+    void insert_doc(const std::vector<uint16_t>& components, const std::vector<float>& values)
+    {
+        // 1. Add doc to forward index
+        auto start_time = std::chrono::high_resolution_clock::now();
+        size_t doc_id = forward_index_.len();
+        forward_index_.push(components, values);
+
+        std::vector<std::pair<size_t, size_t>> block_ids;
+        block_ids.reserve(components.size());
+
+        // 2. Add doc to posting lists for each of its components
+        start_time = std::chrono::high_resolution_clock::now();
+        std::cout << "Adding document to " << components.size() << " postings lists." << std::endl;
+        for (size_t c = 0; c < components.size(); ++c) {
+            // 2.a. Find closest block, add document to block, and update summary (single function that returns block_id)
+            MyPostingList& posting_list = posting_lists_[components[c]];
+            size_t block_id = posting_list.insert_doc(components, values, *jlt_, config_, forward_index_.id_to_offset(doc_id), components.size());
+
+            // 2.b. Keep track of which block was added to
+            block_ids.emplace_back(c, block_id);
+        }
+
+        // 3. Update doc_block_membership_
+        doc_block_membership_.push_back(block_ids);
+
+        auto end_time = std::chrono::high_resolution_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
+                    end_time - start_time).count();
+        std::cout << "Index: Time to insert doc " << doc_id << ": " << elapsed << std::endl;
+    }
+
     // Search the index
     std::vector<std::pair<float, size_t>> search(
         const std::vector<uint16_t>& query_components,
@@ -70,6 +121,9 @@ public:
         // Create a dense query vector
         std::vector<float> query(dim(), 0.0f);
         for (size_t i = 0; i < query_components.size(); ++i) {
+            if (query_components[i] >= query.size()) {
+                std::cout << "Dense vector creation" << std::endl;
+            }
             query[query_components[i]] = query_values[i];
         }
          
@@ -91,9 +145,14 @@ public:
         
         // Take only up to query_cut components
         size_t components_to_use = std::min(query_cut, sorted_components.size());
-         
+        
         for (size_t i = 0; i < components_to_use; ++i) {
             uint16_t component_id = sorted_components[i].first;
+            if (component_id >= posting_lists_.size()) {
+                std::cout << "Posting list component too large" << std::endl;
+                continue;
+            }
+
             posting_lists_[component_id].search(
                 query,
                 query_components,
@@ -103,7 +162,9 @@ public:
                 heap,
                 visited,
                 forward_index_,
-                i == 0 && first_sorted
+                i == 0 && first_sorted,
+                *jlt_,
+                config_
             );
         }
          
@@ -130,12 +191,15 @@ public:
         // by the pruning strategy.
         // The pruning strategy is applied to partial results, for Global Threshold strategy
         // the final fixed pruning is done only when all chunks have been parsed
+        std::cout << "Building with the following settings:\n dynamic-support:" << config.get_dynamic_support() 
+            << "\n transform-function:" << config.get_transform_function()
+            << "\n summarization-metric:" << config.get_summarization_metric() << std::endl; 
         std::cout << "Distributing and pruning postings: ";
         auto time_start = std::chrono::high_resolution_clock::now();
 
         // Initialize JLT matrix for shared use
-        auto orig_d = dataset.dim();
-        auto transform_d = 2*std::log(orig_d);
+        auto orig_d = dataset.len();
+        auto transform_d = std::log(orig_d);
         auto jlt_ptr = std::make_unique<SparseJLT>(orig_d, transform_d);
         auto jlt_elapsed = std::chrono::high_resolution_clock::now() - time_start;
         std::cout << "JLT matrix initialization took " << std::chrono::duration_cast<std::chrono::microseconds>(jlt_elapsed).count() << " microseconds" << std::endl;
@@ -198,7 +262,7 @@ public:
          
         std::cout << "\tNumber of posting lists: " << inverted_pairs.size() << std::endl;
          
-        std::cout << "Building summaries: ";
+        std::cout << "Building summaries: " << std::endl;
         time_start = std::chrono::high_resolution_clock::now();
          
         // Build summaries and blocks for each posting list
@@ -210,21 +274,28 @@ public:
 
         #pragma omp parallel for
         for (size_t i = 0; i < inverted_pairs.size(); ++i) {
-            MyPostingList posting_list = MyPostingList::build(dataset, inverted_pairs[i], config, *jlt_ptr);
-            posting_lists[i] = posting_list;
-            const auto& doc_block_pairs = posting_list.get_doc_block_pairs();
+            posting_lists[i] = MyPostingList::build(dataset, inverted_pairs[i], config, *jlt_ptr);
+        }
+
+        for (size_t i = 0; i < posting_lists.size(); ++i) {
+            auto doc_block_pairs = posting_lists[i].get_doc_block_pairs();
             for (const auto& [doc_id, block_id] : doc_block_pairs) {
+                if (doc_id >= doc_block_membership.size()) {
+                    std::cerr << "Bad doc_id " << doc_id << " (max " << doc_block_membership.size()-1 << ")\n";
+                    continue;
+                }
                 doc_block_membership[doc_id].emplace_back(i, block_id);
             }
         }
 
         MyInvertedIndex<T> index(dataset, std::move(posting_lists), config, std::move(doc_block_membership), std::move(jlt_ptr));
-        
+
         elapsed = std::chrono::high_resolution_clock::now() - time_start;
         std::cout << std::chrono::duration_cast<std::chrono::seconds>(elapsed).count() << " secs" << std::endl;
          
         // Handle KNN if needed
         if (config.get_knn_config().get_nknn() == 0 && !config.get_knn_config().get_knn_path().has_value()) {
+            std::cout << "No knn needed" << std::endl;
             return index;
         }
          
@@ -242,7 +313,7 @@ public:
         std::cout << std::chrono::duration_cast<std::chrono::seconds>(elapsed).count() << " secs" << std::endl;
          
         return MyInvertedIndex<T>(index.forward_index_, std::move(index.posting_lists_), config, 
-                                   std::move(index.doc_block_membership_), std::move(jlt_ptr), std::move(knn));
+                                   std::move(index.doc_block_membership_), std::move(index.jlt_), std::move(knn));
     }
      
     // Add a KNN graph to the index
@@ -381,7 +452,7 @@ public:
 
     template <class Archive>
     void serialize(Archive& archive) {
-        archive(forward_index_, posting_lists_, config_, knn_);
+        archive(forward_index_, posting_lists_, config_, doc_block_membership_, jlt_, knn_);
     }
 };
 

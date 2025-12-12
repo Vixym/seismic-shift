@@ -1,0 +1,22 @@
+[  7%] Built target seismic_core
+[  9%] Building CXX object CMakeFiles/build_inverted_index.dir/src/bin/build_inverted_index.cpp.o
+[ 11%] Linking CXX executable bin/build_inverted_index
+[ 11%] Built target build_inverted_index
+[ 13%] Building CXX object CMakeFiles/perf_inverted_index.dir/src/bin/perf_inverted_index.cpp.o
+[ 15%] Linking CXX executable bin/perf_inverted_index
+[ 15%] Built target perf_inverted_index
+[ 16%] Building CXX object CMakeFiles/test_jlt_index.dir/src/bin/test_jlt_index.cpp.o
+[ 18%] Linking CXX executable bin/test_jlt_index
+[ 18%] Built target test_jlt_index
+[ 22%] Built target gtest
+[ 26%] Built target gtest_main
+[ 54%] Built target tests
+[ 58%] Built target sandbox
+[ 62%] Built target sandbox_json
+[ 66%] Built target sandbox_rtti
+[ 71%] Built target sandbox_vs_dll
+[ 75%] Built target sandbox_vs
+[ 79%] Built target performance
+[ 83%] Built target gmock
+[ 86%] Built target gmock_main
+[100%] Built target seismic_cpp

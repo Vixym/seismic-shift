@@ -1,0 +1,30 @@
+Building inverted index with the following parameters:
+  Input file: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/documents.bin
+  Output file: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_true_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_none
+  N postings: 4000
+  Summary energy: 0.4
+  Centroid fraction: 0.1
+  Min cluster size: 2
+  KNN: 0
+  Clustering algorithm: random-kmeans
+  K-means doc cut: 15
+  K-means pruning factor: 0.005
+
+Loading dataset from /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/documents.bin...
+Number of Vectors: 8841823
+Number of Dimensions: 28679
+Avg number of components: 121.046
+
+Building the index...
+Distributing and pruning postings: Using sparsity parameter s = 15
+15 rows
+JLT matrix initialization took 100160310 microseconds
+266 secs
+	Number of posting lists: 28679
+Building summaries: 
+124 secs
+No knn needed
+Time to build 474 secs (before serializing)
+Saving ... /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_true_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_none.index.seismic
+Save completed successfully
+Time to build 629 secs

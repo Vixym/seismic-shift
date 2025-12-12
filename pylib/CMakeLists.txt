@@ -25,6 +25,9 @@ file(GLOB_RECURSE MAIN_SOURCES
 # Remove binary files from sources
 list(FILTER MAIN_SOURCES EXCLUDE REGEX ".*/bin/.*")
 
+# EXCLUDE sparse_jlt.cpp because it is included via headers (ODR issue)
+list(FILTER MAIN_SOURCES EXCLUDE REGEX ".*/sparse_jlt\\.cpp$")
+
 # Add our implementation files explicitly
 list(APPEND MAIN_SOURCES 
     ${CMAKE_SOURCE_DIR}/src/configuration.cpp

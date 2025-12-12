@@ -17,11 +17,10 @@
 #include <cereal/types/polymorphic.hpp>
 #include <cereal/types/optional.hpp>
 
-#include "../dynamic_inverted_index.h"
-#include "../jlt_dynamic_inverted_index.h"
+#include "../my_inverted_index.h"
 
 using namespace seismic;
-using TIndex = JltInvertedIndex<float>;
+using TIndex = MyInvertedIndex<float>;
 using TDataset = SparseDatasetMut<float>;
 
 // Simple argument parser
@@ -229,12 +228,10 @@ int main(int argc, char *argv[])
         std::vector<std::vector<std::pair<float, size_t>>> results;
         results.reserve(n_queries);
 
-        auto start_time = std::chrono::high_resolution_clock::now();
-
+        auto query_start = std::chrono::high_resolution_clock::now();
         for (size_t run = 0; run < args.n_runs; ++run)
         {
             results.clear();
-
             for (size_t query_id = 0; query_id < n_queries; ++query_id)
             {
                 const auto &query = queries.get(query_id);
@@ -253,13 +250,47 @@ int main(int argc, char *argv[])
 
                 if (cur_results.size() < args.k)
                 {   
-                    // std::cout << "FAIL! The query " << query_id
-                    //           << " has only " << cur_results.size() << " results." << std::endl;
-                    // return 0;
+                    std::cout << "FAIL! The query " << query_id
+                              << " has only " << cur_results.size() << " results." << std::endl;
+                    return 0;
                 }
 
                 results.push_back(cur_results);
             }
+        }
+
+        auto query_end = std::chrono::high_resolution_clock::now();
+        auto query_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
+                           query_end - query_start)
+                           .count();
+
+        std::cout << "Time " << query_elapsed / (args.n_runs * n_queries) << " microsecs per query" << std::endl;
+        std::cerr << query_elapsed << std::endl;
+
+        auto insert_start = std::chrono::high_resolution_clock::now();
+        for (size_t run = 0; run < 1000; ++run)
+        {
+            const auto &query = queries.get(run);
+            const auto &q_components = query.first;
+            const auto &q_values = query.second;
+
+            inverted_index.insert_doc(
+                q_components,
+                q_values);
+        }
+
+        auto insert_end = std::chrono::high_resolution_clock::now();
+        auto insert_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
+                           insert_end - insert_start)
+                           .count();
+        std::cout << "Time " << insert_elapsed / 1000 << " microsecs per insert_document" << std::endl;
+        std::cerr << insert_elapsed << std::endl;
+        
+        auto start_time = std::chrono::high_resolution_clock::now();
+
+        for (size_t run = 0; run < 1000; ++run)
+        {
+            inverted_index.delete_doc(run);
         }
 
         auto end_time = std::chrono::high_resolution_clock::now();
@@ -267,47 +298,8 @@ int main(int argc, char *argv[])
                            end_time - start_time)
                            .count();
 
-        std::cout << "Time " << elapsed / (args.n_runs * n_queries) << " microsecs per query" << std::endl;
-        std::cerr << elapsed / (args.n_runs * n_queries) << std::endl;
-
-        // start_time = std::chrono::high_resolution_clock::now();
-
-        // for (size_t run = 0; run < 10; ++run)
-        // {
-        //     std::cout << "Insert done" << std::endl;
-        //     const auto &query = queries.get(0);
-
-        //     const auto &q_components = query.first;
-        //     const auto &q_values = query.second;
-
-        //     inverted_index.insert_document(
-        //         q_components,
-        //         q_values);
-        // }
-
-        // end_time = std::chrono::high_resolution_clock::now();
-        // elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
-        //                    end_time - start_time)
-        //                    .count();
-
-        // std::cout << "Time " << elapsed / (10) << " microsecs per insert_document" << std::endl;
-        // std::cerr << elapsed / (10) << std::endl;
-        
-        // start_time = std::chrono::high_resolution_clock::now();
-
-        // for (size_t run = 0; run < 10; ++run)
-        // {
-        //     std::cout << "Delete done" << std::endl;
-        //     inverted_index.delete_document(run);
-        // }
-
-        // end_time = std::chrono::high_resolution_clock::now();
-        // elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
-        //                    end_time - start_time)
-        //                    .count();
-
-        // std::cout << "Time " << elapsed << " microsecs per delete_document" << std::endl;
-        // std::cerr << elapsed << std::endl;
+        std::cout << "Time " << elapsed / 1000 << " microsecs per delete_document" << std::endl;
+        std::cerr << elapsed << std::endl;
 
         // Print space usage
         inverted_index.print_space_usage_byte();

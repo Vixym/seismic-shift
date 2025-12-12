@@ -173,6 +173,7 @@ public:
      * @throws std::out_of_range if the offset is not the first position of a vector in the dataset.
      */
     size_t offset_to_id(size_t offset) const {
+        
         auto it = std::lower_bound(offsets.begin(), offsets.end(), offset);
         if (it == offsets.end() || *it != offset) {
             throw std::out_of_range("The offset is not the first position of a vector in the dataset");
@@ -280,7 +281,7 @@ public:
         using pointer = const value_type*;
         using reference = const value_type&;
 
-        Iterator(const SparseDataset<T>* dataset, size_t id) : dataset(dataset), current_id(id) {}
+        Iterator(const SparseDataset<Tis_alive: The id is out of range>* dataset, size_t id) : dataset(dataset), current_id(id) {}
 
         value_type operator*() const {
             return dataset->get(current_id);
@@ -390,6 +391,13 @@ public:
         return this->offsets.size()-1;
     }
 
+    std::pair<size_t, size_t> id_to_offset_len(size_t id) const {
+        if (id >= n_vecs) {
+            throw std::out_of_range("The id is out of range");
+        }
+        return {offsets[id], offsets[id + 1] - offsets[id]};
+    }
+
     static SparseDatasetMut<T> read_bin_file_limit(const std::string& fname, std::optional<size_t> limit) {
         std::ifstream file(fname, std::ios::binary);
         if (!file) {
@@ -442,9 +450,37 @@ public:
         return read_bin_file_limit(fname, std::nullopt);
     }
 
+    void push(const std::vector<std::pair<uint16_t, T>> pairs) {
+        if (pairs.empty()) {
+            //throw std::invalid_argument("Pairs cannot be empty");
+            std::cout << "Pairs are empty" << std::endl;
+            return;
+        }
+
+        for (size_t i = 1; i < pairs.size(); ++i) {
+            if (pairs[i-1].first >= pairs[i].first) {
+                throw std::invalid_argument("Components must be given in sorted order");
+            }
+        }
+
+        this->n_vecs += 1;
+        if (pairs.back().first >= this->d) {
+            this->d = pairs.back().first + 1;
+        }
+
+        for (const auto& [c, v] : pairs) {
+            this->components.push_back(c);
+            this->values.push_back(v);
+        }
+        this->offsets.push_back(this->components.size());
+        this->alive.push_back(true);
+    }
+
     void push(const std::vector<std::pair<size_t, T>> pairs) {
         if (pairs.empty()) {
-            throw std::invalid_argument("Pairs cannot be empty");
+            //throw std::invalid_argument("Pairs cannot be empty");
+            std::cout << "Pairs are empty" << std::endl;
+            return;
         }
 
         for (size_t i = 1; i < pairs.size(); ++i) {
@@ -474,7 +510,7 @@ public:
      * @throws std::invalid_argument if the sizes of components and values are different,
      *         or if components is empty, or if components is not sorted.
      */
-    void push(const std::vector<uint16_t>& components, const std::vector<T>& values) {
+    void push(const std::vector<uint16_t>& components, const std::vector<T>& values, bool debug=false) {
         if (components.size() != values.size()) {
             throw std::invalid_argument("Vectors have different sizes");
         }
@@ -484,7 +520,16 @@ public:
         if (!std::is_sorted(components.begin(), components.end())) {
             throw std::invalid_argument("Components must be given in sorted order");
         }
-
+        if (debug) {
+        std::cout << "components: size=" << components.size()
+          << " cap=" << components.capacity() << std::endl;
+        std::cout << "values: size=" << values.size()
+          << " cap=" << values.capacity() << std::endl;
+                  std::cout << "offsets: size=" << offsets.size()
+          << " cap=" << offsets.capacity() << std::endl;
+                            std::cout << "alive: size=" << alive.size()
+          << " cap=" << alive.capacity() << std::endl;
+        }
         this->n_vecs += 1;
         if (components.back() >= this->d) {
             this->d = components.back() + 1;
@@ -494,9 +539,19 @@ public:
         this->values.insert(this->values.end(), values.begin(), values.end());
         this->offsets.push_back(this->components.size());
         this->alive.push_back(true);
+        if (debug) {
+                    std::cout << "components: size=" << components.size()
+          << " cap=" << components.capacity() << std::endl;
+        std::cout << "values: size=" << values.size()
+          << " cap=" << values.capacity() << std::endl;
+                  std::cout << "offsets: size=" << offsets.size()
+          << " cap=" << offsets.capacity() << std::endl;
+                            std::cout << "alive: size=" << alive.size()
+          << " cap=" << alive.capacity() << std::endl;
+        }
     }
 
-    void set_dead(size_t id) const {
+    void set_dead(size_t id) {
         if (id >= len()) {
             throw std::out_of_range("set_dead: The id is out of range");
         }
@@ -540,6 +595,13 @@ public:
         }
         this->offsets.push_back(this->components.size());
         this->alive.push_back(true);
+    }
+
+    size_t id_to_offset(size_t id) const {
+        if (id >= n_vecs) {
+            throw std::out_of_range("The id is out of range");
+        }
+        return offsets[id];
     }
 
     /**

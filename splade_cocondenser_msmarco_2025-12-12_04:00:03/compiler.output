@@ -1,0 +1,16 @@
+[  7%] Built target seismic_core
+[ 11%] Built target build_inverted_index
+[ 15%] Built target perf_inverted_index
+[ 19%] Built target test_jlt_index
+[ 23%] Built target gtest
+[ 26%] Built target gtest_main
+[ 55%] Built target tests
+[ 59%] Built target sandbox
+[ 63%] Built target sandbox_json
+[ 67%] Built target sandbox_rtti
+[ 73%] Built target sandbox_vs_dll
+[ 76%] Built target sandbox_vs
+[ 80%] Built target performance
+[ 84%] Built target gmock
+[ 88%] Built target gmock_main
+[100%] Built target seismic_cpp

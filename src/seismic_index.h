@@ -20,7 +20,7 @@
 #include "space_usage.h"
 #include "data_type.h"
 
-#include "dynamic_inverted_index.h"
+#include "my_inverted_index.h"
 
 namespace seismic
 {

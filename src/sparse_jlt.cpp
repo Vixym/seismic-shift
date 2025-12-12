@@ -1,3 +1,6 @@
+#ifndef SPARSE_JLT_CPP
+#define SPARSE_JLT_CPP
+
 #include <iostream>
 #include <vector>
 #include <random>
@@ -9,6 +12,7 @@
 #include <mutex>
 #include <future>
 #include <getopt.h>
+#include <cassert>
 
 #include <cereal/types/vector.hpp>
 #include <cereal/types/utility.hpp>
@@ -184,7 +188,7 @@ public:
     }
 
     // Parallel matrix transformation
-    std::vector<std::vector<double>> transform(const std::vector<std::vector<double>> &X)
+    std::vector<std::vector<double>> transform(const std::vector<std::vector<double>> &X) const
     {
         int n = X.size();
         int k = R_dense[0].size();
@@ -243,11 +247,11 @@ public:
         }
     };
 
-    struct SparseRowMatrix
+    struct SparseColMatrix
     {
         int rows;
         int cols;
-        std::vector<std::vector<std::pair<int, double>>> data;
+        std::vector<std::vector<std::pair<size_t, float>>> data;
 
         template <class Archive>
         void serialize(Archive& archive)
@@ -257,11 +261,11 @@ public:
     };
 
     SparseMatrix R; // Projection matrix
-    SparseRowMatrix row_matrix;
+    SparseColMatrix col_matrix;
     double scaling_factor;
     std::mutex gen_mutex;
-
     int sparsity_;              // target sparsity per column (approx)
+    std::mt19937_64 gen_;
     unsigned int seed_;  // base seed for RNG when extending
 
 public:
@@ -270,28 +274,82 @@ public:
     template <class Archive>
     void serialize(Archive& archive)
     {
-        archive(R, row_matrix, scaling_factor, sparsity_, seed_);
+        archive(R, col_matrix, scaling_factor, sparsity_, seed_);
     }
 
-    // Initialize a sparse row matrix by transposing R
-    void initialize_sparse_row_matrix()
+    std::vector<std::pair<uint16_t, float>> transform(const std::vector<uint16_t> components, const std::vector<float> values, float eps = 0.0f) const
     {
-        // Initialize matrix dimensions
-        row_matrix.rows = R.rows;
-        row_matrix.cols = R.cols;
-        row_matrix.data.clear();
-        row_matrix.data.resize(row_matrix.rows);
+        std::vector<std::pair<uint16_t, float>> single_vec;
+        single_vec.reserve(components.size());
+        for(size_t i = 0; i < components.size(); ++i) {
+            if (components[i] >= static_cast<uint16_t>(col_matrix.cols)){
+                continue;
+            }
+            single_vec.emplace_back(components[i], values[i]);
+        }
 
-        // Iterate through and set values
-        for (int col = 0; col < row_matrix.cols; ++col) {
-            for (const auto& [row, value] : R.data[col]) {
-                row_matrix.data[row].emplace_back(col, value);
+        return transform(single_vec, eps);
+    }
+
+    std::vector<std::pair<uint16_t, float>> transform(const std::vector<std::pair<uint16_t, float>>& v, float eps = 0.0f) const
+    {
+        // TODO: Modify matrix if input is of bigger dimension
+        std::unordered_map<uint16_t, float> acc;
+
+        for (const auto& [coord, col_val] : v) {
+            const auto& col = col_matrix.data[coord];
+            for (const auto& [row, row_val] : col) {
+                acc[row] += row_val * col_val;
+            }
+        }
+
+        std::vector<std::pair<uint16_t, float>> result;
+        result.reserve(acc.size());
+
+        for (const auto& [coord, val] : acc) {
+            if (eps > 0.0f && std::fabs(val) < eps) continue;
+            result.emplace_back(coord, val);
+        }
+
+        std::sort(result.begin(), result.end(),
+                  [](const auto &a, const auto &b) {
+                      return a.first < b.first;
+                  });
+
+        return result;
+    }
+
+    void build_sparse_projection_matrix() {
+        if (col_matrix.rows == 0 || col_matrix.cols == 0) return;
+
+        int nnz_per_col = std::min<int>(sparsity_, col_matrix.rows);
+
+        std::uniform_int_distribution<int> row_dist(0, col_matrix.rows - 1);
+        std::uniform_int_distribution<int> sign_dist(0, 1);
+
+        std::cout << col_matrix.rows << " rows" << std::endl;
+        float scale = 1.0f / std::sqrt(static_cast<float>(nnz_per_col));
+
+        // For each input dimension j, choose s random rows i and set X[i, j] = ±1/sqrt(s)
+        for (int j = 0; j < col_matrix.cols; ++j) {
+            std::unordered_set<int> chosen_rows;
+            chosen_rows.reserve(nnz_per_col);
+
+            while ((int)chosen_rows.size() < nnz_per_col) {
+                int r = row_dist(gen_);
+                chosen_rows.insert(r);
+            }
+
+            for (int r : chosen_rows) {
+                float sign = sign_dist(gen_) ? 1.0f : -1.0f;
+                float value = sign * scale;
+                col_matrix.data[j].emplace_back(r, value);
             }
         }
     }
 
     // Initialize a sparse random projection matrix
-    SparseJLT(int d, int k, int s = -1, unsigned int seed = 42) : sparsity_(s), seed_(seed)
+    SparseJLT(int d, int k, int s = -1, unsigned int seed = 42) : sparsity_(s), gen_(seed)
     {
         // If sparsity parameter not provided, set based on dimension
         if (s == -1) {
@@ -306,65 +364,69 @@ public:
         std::cout << "Using sparsity parameter s = " << s << std::endl;
         sparsity_ = s;
 
-        // Initialize the sparse matrix
-        R.rows = d;
-        R.cols = k;
-        R.data.resize(k);
+        col_matrix.rows = k;
+        col_matrix.cols = d;
+        col_matrix.data.assign(d, {});
 
-        // Calculate proper scaling factor for sparse JLT
-        scaling_factor = std::sqrt(static_cast<double>(d) / (sparsity_ * k));
-        std::cout << "Using scaling factor: " << scaling_factor << std::endl;
+        build_sparse_projection_matrix();
 
-        // Parallel column generation
-        std::vector<std::future<std::vector<std::pair<int, double>>>> futures;
+        // // Initialize the sparse matrix
+        // R.rows = d;
+        // R.cols = k;
+        // R.data.resize(k);
 
-        for (int j = 0; j < k; ++j) {
-            futures.push_back(std::async(std::launch::async, [this, d, s]()
-                                         {
-                std::random_device rd;
-                std::mt19937 gen(rd());
-                std::uniform_int_distribution<> row_dist(0, d - 1);
-                std::uniform_int_distribution<> sign_dist(0, 1);
+        // // Calculate proper scaling factor for sparse JLT
+        // scaling_factor = std::sqrt(static_cast<double>(d) / (sparsity_ * k));
+        // std::cout << "Using scaling factor: " << scaling_factor << std::endl;
+
+        // // Parallel column generation
+        // std::vector<std::future<std::vector<std::pair<int, double>>>> futures;
+
+        // for (int j = 0; j < k; ++j) {
+        //     futures.push_back(std::async(std::launch::async, [this, d, s]()
+        //                                  {
+        //         std::random_device rd;
+        //         std::mt19937 gen(rd());
+        //         std::uniform_int_distribution<> row_dist(0, d - 1);
+        //         std::uniform_int_distribution<> sign_dist(0, 1);
                 
-                // Generate s distinct random row indices
-                std::unordered_set<int> row_indices;
-                std::vector<std::pair<int, double>> column_data;
+        //         // Generate s distinct random row indices
+        //         std::unordered_set<int> row_indices;
+        //         std::vector<std::pair<int, double>> column_data;
                 
-                {
-                    std::lock_guard<std::mutex> lock(gen_mutex);
-                    while (row_indices.size() < static_cast<size_t>(s)) {
-                        row_indices.insert(row_dist(gen));
-                    }
-                }
+        //         {
+        //             std::lock_guard<std::mutex> lock(gen_mutex);
+        //             while (row_indices.size() < static_cast<size_t>(s)) {
+        //                 row_indices.insert(row_dist(gen));
+        //             }
+        //         }
                 
-                // Assign random +/- scaling_factor values
-                for (int row_idx : row_indices) {
-                    int sign;
-                    {
-                        std::lock_guard<std::mutex> lock(gen_mutex);
-                        sign = sign_dist(gen);
-                    }
+        //         // Assign random +/- scaling_factor values
+        //         for (int row_idx : row_indices) {
+        //             int sign;
+        //             {
+        //                 std::lock_guard<std::mutex> lock(gen_mutex);
+        //                 sign = sign_dist(gen);
+        //             }
                     
-                    double value = (sign == 0 ? -1.0 : 1.0) * scaling_factor;
-                    column_data.push_back(std::make_pair(row_idx, value));
-                }
+        //             double value = (sign == 0 ? -1.0 : 1.0) * scaling_factor;
+        //             column_data.push_back(std::make_pair(row_idx, value));
+        //         }
                 
-                // Sort by row index for faster multiplication
-                std::sort(column_data.begin(), column_data.end(),
-                    [](const std::pair<int, double>& a, const std::pair<int, double>& b) {
-                        return a.first < b.first;
-                    });
+        //         // Sort by row index for faster multiplication
+        //         std::sort(column_data.begin(), column_data.end(),
+        //             [](const std::pair<int, double>& a, const std::pair<int, double>& b) {
+        //                 return a.first < b.first;
+        //             });
                 
-                return column_data; }));
-        }
+        //         return column_data; }));
+        // }
 
-        // Collect results
-        for (size_t j = 0; j < futures.size(); ++j)
-        {
-            R.data[j] = futures[j].get();
-        }
-
-        initialize_sparse_row_matrix();
+        // // Collect results
+        // for (size_t j = 0; j < futures.size(); ++j)
+        // {
+        //     R.data[j] = futures[j].get();
+        // }
     }
 
     void modify_matrix_dimensions(int new_dimension)
@@ -423,72 +485,95 @@ public:
         R.rows = new_dimension;
     }
 
-    // Applies the JLT transform to a sparse vector. Input-size d sparse vector; Output-size k dense vector
-    std::vector<std::pair<size_t, float>> transform_vector(const std::vector<uint16_t>& components, const std::vector<float>& values) const
-    {
-        // Update JLT matrix size if input vector has greater dimensionality
-        //if (components.back() >= row_matrix.cols) modify_matrix_dimensions(components.back()+1);
+    // // Applies the JLT transform to a sparse vector. Input-size d sparse vector; Output-size k dense vector
+    // std::vector<std::pair<size_t, float>> transform_vector(const std::vector<uint16_t>& components, const std::vector<float>& values) const
+    // {
+    //     auto start = std::chrono::high_resolution_clock::now();
+    //     // Create dense vector
+    //     std::vector<float> dense_vector;
+    //     dense_vector.resize(R.rows);
+    //     for (size_t i  = 0; i < components.size(); ++i) {
+    //         dense_vector[components[i]] = values[i];
+    //     }
+    //     std::vector<std::vector<float>> matrix;
+    //     matrix.resize(1);
+    //     matrix[0] = dense_vector;
+    //     std::vector<std::vector<float>> transformed = transform(matrix);
+    //     std::vector<float> this_vec = transformed[0];
 
-        size_t k = row_matrix.cols;
+    //     std::vector<std::pair<size_t, float>> new_sparse_vector;
+    //     for (size_t i = 0; i < this_vec.size(); ++i) {
+    //         if (this_vec[i] != 0.0f) {
+    //             new_sparse_vector.emplace_back(i, this_vec[i]);
+    //         }
+    //     }
+    //     auto elapsed = std::chrono::high_resolution_clock::now() - start;
+    //     std::cout << "Vector transformation took " << std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count() << " microsecondss" << std::endl;
+    //     return new_sparse_vector;
 
-        // Initialize output vector
-        std::vector<float> transformed_vector = std::vector<float>(k, 0.0);
+    //     // TODO: Update JLT matrix size if input vector has greater dimensionality
+    //     //if (components.back() >= row_matrix.cols) modify_matrix_dimensions(components.back()+1);
 
-        // Apply the matrix multiplication using a two pointer linear scan
-        const uint16_t* comp_begin = components.data();
-        const uint16_t* comp_end   = comp_begin + components.size();
-        const float*    val_begin  = values.data();
+    //     size_t k = col_matrix.cols;
 
-        for (size_t j = 0; j < k; ++j) {
-            const auto& row = row_matrix.data[j];
+    //     // Initialize output vector
+    //     std::vector<float> transformed_vector = std::vector<float>(k, 0.0);
 
-            const auto* row_begin = row.data();
-            const auto* row_end   = row_begin + row.size();
+    //     // Apply the matrix multiplication using a two pointer linear scan
+    //     const uint16_t* comp_begin = components.data();
+    //     const uint16_t* comp_end   = comp_begin + components.size();
+    //     const float*    val_begin  = values.data();
 
-            const uint16_t* comp_ptr = comp_begin;
-            const float*    val_ptr  = val_begin;
-            const auto*     row_ptr  = row_begin;
+    //     for (size_t j = 0; j < k; ++j) {
+    //         const auto& row = row_matrix.data[j];
 
-            float sum = 0.0;
+    //         const auto* row_begin = row.data();
+    //         const auto* row_end   = row_begin + row.size();
 
-            while (comp_ptr != comp_end && row_ptr != row_end) {
-                size_t idx_x = static_cast<int>(*comp_ptr);
-                size_t idx_r = row_ptr->first;
+    //         const uint16_t* comp_ptr = comp_begin;
+    //         const float*    val_ptr  = val_begin;
+    //         const auto*     row_ptr  = row_begin;
 
-                if (idx_x == idx_r) {
-                    sum += static_cast<float>(*val_ptr) * row_ptr->second;
-                    ++comp_ptr;
-                    ++val_ptr;
-                    ++row_ptr;
-                } else if (idx_x < idx_r) {
-                    ++comp_ptr;
-                    ++val_ptr;
-                } else {
-                    ++row_ptr;
-                }
-            }
+    //         float sum = 0.0;
 
-            transformed_vector[j] = sum;
-        }
+    //         while (comp_ptr != comp_end && row_ptr != row_end) {
+    //             size_t idx_x = static_cast<int>(*comp_ptr);
+    //             size_t idx_r = row_ptr->first;
 
-        std::vector<std::pair<size_t, float>> sparse_output;
-        for(size_t comp = 0; comp < transformed_vector.size(); ++comp) {
-            if (transformed_vector[comp] != 0.0) {
-                sparse_output.emplace_back(comp, transformed_vector[comp]);
-            }
-        }
+    //             if (idx_x == idx_r) {
+    //                 sum += static_cast<float>(*val_ptr) * row_ptr->second;
+    //                 ++comp_ptr;
+    //                 ++val_ptr;
+    //                 ++row_ptr;
+    //             } else if (idx_x < idx_r) {
+    //                 ++comp_ptr;
+    //                 ++val_ptr;
+    //             } else {
+    //                 ++row_ptr;
+    //             }
+    //         }
 
-        return sparse_output;
-    }
+    //         transformed_vector[j] = sum;
+    //     }
+
+    //     std::vector<std::pair<size_t, float>> sparse_output;
+    //     for(size_t comp = 0; comp < transformed_vector.size(); ++comp) {
+    //         if (transformed_vector[comp] != 0.0) {
+    //             sparse_output.emplace_back(comp, transformed_vector[comp]);
+    //         }
+    //     }
+
+    //     return sparse_output;
+    // }
 
     // Parallel matrix transformation
-    std::vector<std::vector<double>> matrix_transform(const std::vector<std::vector<double>> &X)
+    std::vector<std::vector<float>> transform_matrix(const std::vector<std::vector<float>> &X) const
     {
         int n = X.size();
         int k = R.cols;
 
         // Initialize output matrix Y
-        std::vector<std::vector<double>> Y(n, std::vector<double>(k, 0.0));
+        std::vector<std::vector<float>> Y(n, std::vector<float>(k, 0.0));
 
         // Parallel transformation
         std::vector<std::future<void>> futures;
@@ -510,7 +595,7 @@ public:
                         double sum = 0.0;
                         for (const auto& entry : R.data[j]) {
                             int row_idx = entry.first;
-                            double value = entry.second;
+                            float value = entry.second;
                             sum += X[i][row_idx] * value;
                         }
                         Y[i][j] = sum;
@@ -643,7 +728,7 @@ ProgramConfig parse_arguments(int argc, char *argv[])
 //     }
 
 //     std::cout << "Generating " << config.n << " random points in " << config.d << " dimensions..." << std::endl;
-//     auto X = utils::generate_random_data(config.n, config.d, num_threads);
+//     auto X = utils::D(config.n, config.d, num_threads);
 
 //     // Dense JLT comparison (optional)
 //     if (config.compare_dense)
@@ -751,3 +836,5 @@ ProgramConfig parse_arguments(int argc, char *argv[])
 
 //     return 0;
 // }
+
+#endif // SPARSE_JLT_CPP
