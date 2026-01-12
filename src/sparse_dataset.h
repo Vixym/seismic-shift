@@ -364,8 +364,6 @@ public:
         offsets.push_back(0);
     }
 
-<<<<<<< HEAD
-=======
     size_t add_document(const std::vector<uint16_t>& components, const std::vector<T>& values) {
         if (components.size() != values.size()) {
             throw std::invalid_argument("Vectors have different sizes");
@@ -501,7 +499,6 @@ public:
         this->alive.push_back(true);
     }
 
->>>>>>> 273eb61 (Testable dynamic support)
     /**
      * Adds a new sparse vector to the dataset.
      * 
@@ -556,8 +553,6 @@ public:
             this->values.push_back(v);
         }
         this->offsets.push_back(this->components.size());
-<<<<<<< HEAD
-=======
         this->alive.push_back(true);
     }
 
@@ -566,7 +561,6 @@ public:
             throw std::out_of_range("id_to_offset::The id is out of range");
         }
         return offsets[id];
->>>>>>> 273eb61 (Testable dynamic support)
     }
 
     /**
@@ -584,8 +578,6 @@ public:
         return offsets[id + 1] - offsets[id];
     }
 
-<<<<<<< HEAD
-=======
     std::pair<std::vector<uint16_t>, std::vector<T>> get_with_offset(size_t offset, size_t len) const {
         if (offset + len > components.size()) {
             throw std::out_of_range("The offset + len is out of range");
@@ -605,7 +597,6 @@ public:
         return offsets[id];
     }
 
->>>>>>> 273eb61 (Testable dynamic support)
     /**
      * Returns the number of vectors in the dataset.
      * 
