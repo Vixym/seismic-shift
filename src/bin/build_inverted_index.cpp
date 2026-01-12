@@ -202,8 +202,9 @@ int main(int argc, char* argv[]) {
         config.pruning_strategy(pruning);
         
         // Set blocking strategy
-        BlockingStrategy blocking = BlockingStrategy::random_kmeans(
-            args.centroid_fraction, args.min_cluster_size, clustering_algorithm);
+        BlockingStrategy blocking = BlockingStrategy::fixed_size(400);
+        //BlockingStrategy blocking = BlockingStrategy::random_kmeans(
+        //    args.centroid_fraction, args.min_cluster_size, clustering_algorithm);
         config.blocking_strategy(blocking);
         
         // Set summarization strategy

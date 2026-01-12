@@ -42,7 +42,7 @@ private:
 
     // Returns the range of positions of the slice with the given `id`.
     static std::pair<size_t, size_t> vector_range(const std::vector<size_t>& offsets, size_t id) {
-        assert(id < offsets.size() - 1 && "The id is out of range");
+        assert(id < offsets.size() - 1 && "vector_range::The id is out of range");
         return {offsets[id], offsets[id + 1]};
     }
 
@@ -69,7 +69,7 @@ public:
      */
     std::pair<std::vector<uint16_t>, std::vector<T>> get(size_t id) const {
         if (id >= n_vecs) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("get::The id is out of range");
         }
 
         auto [start, end] = vector_range(offsets, id);
@@ -108,7 +108,7 @@ public:
      */
     size_t vector_offset(size_t id) const {
         if (id >= n_vecs) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("vector_offset::The id is out of range");
         }
 
         return offsets[id];
@@ -123,7 +123,7 @@ public:
      */
     size_t vector_len(size_t id) const {
         if (id >= n_vecs) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("vector_len::The id is out of range");
         }
 
         return offsets[id + 1] - offsets[id];
@@ -189,7 +189,7 @@ public:
      */
     size_t id_to_offset(size_t id) const {
         if (id >= n_vecs) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("id_to_offset::The id is out of range");
         }
         return offsets[id];
     }
@@ -203,7 +203,7 @@ public:
      */
     std::pair<size_t, size_t> id_to_offset_len(size_t id) const {
         if (id >= n_vecs) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("id_to_offset_len::The id is out of range");
         }
         return {offsets[id], offsets[id + 1] - offsets[id]};
     }
@@ -364,6 +364,144 @@ public:
         offsets.push_back(0);
     }
 
+<<<<<<< HEAD
+=======
+    size_t add_document(const std::vector<uint16_t>& components, const std::vector<T>& values) {
+        if (components.size() != values.size()) {
+            throw std::invalid_argument("Vectors have different sizes");
+        }
+        if (components.empty()) {
+            throw std::invalid_argument("Components cannot be empty");
+        }
+        if (!std::is_sorted(components.begin(), components.end())) {
+            throw std::invalid_argument("Components must be given in sorted order");
+        }
+
+        this->n_vecs += 1;
+        if (components.back() >= this->d) {
+            this->d = components.back() + 1;
+        }
+
+        this->components.insert(this->components.end(), components.begin(), components.end());
+        this->values.insert(this->values.end(), values.begin(), values.end());
+        this->offsets.push_back(this->components.size());
+        this->alive.push_back(true);
+
+        return this->offsets.size()-2;
+    }
+
+    std::pair<size_t, size_t> id_to_offset_len(size_t id) const {
+        if (id >= n_vecs) {
+            throw std::out_of_range("id_to_offset_len::The id is out of range");
+        }
+        return {offsets[id], offsets[id + 1] - offsets[id]};
+    }
+
+    static SparseDatasetMut<T> read_bin_file_limit(const std::string& fname, std::optional<size_t> limit) {
+        std::ifstream file(fname, std::ios::binary);
+        if (!file) {
+            throw std::runtime_error("Cannot open file: " + fname);
+        }
+
+        uint32_t n_vecs;
+        file.read(reinterpret_cast<char*>(&n_vecs), sizeof(n_vecs));
+
+        if (limit) {
+            n_vecs = std::min(n_vecs, static_cast<uint32_t>(*limit));
+        }
+
+        SparseDatasetMut<T> dataset;
+        
+        for (uint32_t i = 0; i < n_vecs; ++i) {
+            uint32_t n;
+            file.read(reinterpret_cast<char*>(&n), sizeof(n));
+
+            std::vector<uint16_t> components(n);
+            std::vector<T> values(n);
+
+            for (uint32_t j = 0; j < n; ++j) {
+                uint32_t c;
+                file.read(reinterpret_cast<char*>(&c), sizeof(c));
+                components[j] = static_cast<uint16_t>(c);
+            }
+
+            for (uint32_t j = 0; j < n; ++j) {
+                float v;
+                file.read(reinterpret_cast<char*>(&v), sizeof(v));
+                values[j] = static_cast<T>(v);
+            }
+
+            dataset.push(components, values);
+        }
+
+        return dataset;
+    }
+
+    size_t offset_to_id(size_t offset) const {
+        auto it = std::lower_bound(offsets.begin(), offsets.end(), offset);
+        if (it == offsets.end() || *it != offset) {
+            throw std::out_of_range("The offset is not the first position of a vector in the dataset");
+        }
+        return std::distance(offsets.begin(), it);
+    }
+
+    static SparseDatasetMut<T> read_bin_file(const std::string& fname) {
+        return read_bin_file_limit(fname, std::nullopt);
+    }
+
+    void push(const std::vector<std::pair<uint16_t, T>> pairs) {
+        if (pairs.empty()) {
+            //throw std::invalid_argument("Pairs cannot be empty");
+            std::cout << "Pairs are empty" << std::endl;
+            return;
+        }
+
+        for (size_t i = 1; i < pairs.size(); ++i) {
+            if (pairs[i-1].first >= pairs[i].first) {
+                throw std::invalid_argument("Components must be given in sorted order");
+            }
+        }
+
+        this->n_vecs += 1;
+        if (pairs.back().first >= this->d) {
+            this->d = pairs.back().first + 1;
+        }
+
+        for (const auto& [c, v] : pairs) {
+            this->components.push_back(c);
+            this->values.push_back(v);
+        }
+        this->offsets.push_back(this->components.size());
+        this->alive.push_back(true);
+    }
+
+    void push(const std::vector<std::pair<size_t, T>> pairs) {
+        if (pairs.empty()) {
+            //throw std::invalid_argument("Pairs cannot be empty");
+            std::cout << "Pairs are empty" << std::endl;
+            return;
+        }
+
+        for (size_t i = 1; i < pairs.size(); ++i) {
+            if (pairs[i-1].first >= pairs[i].first) {
+                throw std::invalid_argument("Components must be given in sorted order");
+            }
+        }
+
+        this->n_vecs += 1;
+        if (pairs.back().first >= this->d) {
+            this->d = pairs.back().first + 1;
+        }
+
+        for (const auto& [c, v] : pairs) {
+            this->components.push_back(c);
+            this->values.push_back(v);
+        }
+        this->offsets.push_back(this->components.size());
+        this->alive.push_back(true);
+    }
+
+>>>>>>> 273eb61 (Testable dynamic support)
     /**
      * Adds a new sparse vector to the dataset.
      * 
@@ -418,6 +556,17 @@ public:
             this->values.push_back(v);
         }
         this->offsets.push_back(this->components.size());
+<<<<<<< HEAD
+=======
+        this->alive.push_back(true);
+    }
+
+    size_t id_to_offset(size_t id) const {
+        if (id >= n_vecs) {
+            throw std::out_of_range("id_to_offset::The id is out of range");
+        }
+        return offsets[id];
+>>>>>>> 273eb61 (Testable dynamic support)
     }
 
     /**
@@ -429,12 +578,34 @@ public:
      */
     size_t vector_len(size_t id) const {
         if (id >= len()) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("vector_len::The id is out of range");
         }
 
         return offsets[id + 1] - offsets[id];
     }
 
+<<<<<<< HEAD
+=======
+    std::pair<std::vector<uint16_t>, std::vector<T>> get_with_offset(size_t offset, size_t len) const {
+        if (offset + len > components.size()) {
+            throw std::out_of_range("The offset + len is out of range");
+        }
+
+        std::vector<uint16_t> v_components(components.begin() + offset, components.begin() + offset + len);
+        std::vector<T> v_values(values.begin() + offset, values.begin() + offset + len);
+
+        return {v_components, v_values};
+    }
+
+    size_t vector_offset(size_t id) const {
+        if (id >= len()) {
+            throw std::out_of_range("vector_offset::The id is out of range");
+        }
+
+        return offsets[id];
+    }
+
+>>>>>>> 273eb61 (Testable dynamic support)
     /**
      * Returns the number of vectors in the dataset.
      * 
@@ -480,7 +651,7 @@ public:
      */
     std::pair<std::vector<uint16_t>, std::vector<T>> get(size_t id) const {
         if (id >= len()) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("get::The id is out of range");
         }
 
         auto [start, end] = SparseDataset<T>::vector_range(offsets, id);
