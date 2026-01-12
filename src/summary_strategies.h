@@ -64,7 +64,121 @@ public:
         return components_values;
     }
 
-    static SparseVector summary_init(
+    static SparseVector summary_init_packed_energy_preserving(
+        const SparseDatasetMut<float>& dataset,
+        const std::vector<size_t>& block,
+        const float fraction)
+    {
+        std::unordered_map<uint16_t, float> hash;
+            
+        // For each document in the block
+        for (size_t packed_posting : block) {
+            // Skip doc is doc is dead
+            auto [offset, len] = unpack_offset_len(packed_posting);
+            size_t doc_id = dataset.offset_to_id(offset);
+            if (!dataset.is_alive(doc_id)) continue;
+
+            // For each component in the document, store the largest value seen so far
+            auto [components, values] = dataset.get(doc_id);
+            
+            for (size_t i = 0; i < components.size(); ++i) {
+                uint16_t component_id = components[i];
+                float value = values[i];
+                auto it = hash.find(component_id);
+                if (it == hash.end() || it->second < value) {
+                    hash[component_id] = value;
+                }
+            }
+        }
+
+        // Convert to vector of pairs for sorting
+        std::vector<std::pair<uint16_t, float>> components_values(hash.begin(), hash.end());
+
+        // Sort by decreasing values
+        std::sort(components_values.begin(), components_values.end(),
+                    [](const auto& a, const auto& b) { return a.second > b.second; });
+        
+        // Calculate total energy
+        float total_sum = 0.0f;
+        for (const auto& [_, value] : components_values) {
+            total_sum += static_cast<float>(value);
+        }
+
+        // Select components that preserve the desired energy fraction
+        SparseVector summary_vector;
+        float acc = 0.0f;
+        for (const auto& [tid, value] : components_values) {
+            acc += static_cast<float>(value);
+            summary_vector.emplace_back(tid, value);
+
+            if ((acc / total_sum) > fraction) {
+                break;
+            }
+        }
+
+        // Sort summary vector by component
+        std::sort(summary_vector.begin(), summary_vector.end(),
+                     [](const auto& a, const auto& b) { return a.first < b.first; });
+
+        return summary_vector;
+    }
+
+    static SparseVector summary_init_energy_preserving(
+        const SparseDatasetMut<float>& dataset,
+        const std::vector<size_t>& block,
+        const float fraction
+        )
+    {
+        std::unordered_map<uint16_t, float> hash;
+            
+        // For each document in the block
+        for (size_t doc_id : block) {
+            // For each component in the document, store the largest value seen so far
+            auto [components, values] = dataset.get(doc_id);
+            
+            for (size_t i = 0; i < components.size(); ++i) {
+                uint16_t component_id = components[i];
+                float value = values[i];
+                auto it = hash.find(component_id);
+                if (it == hash.end() || it->second < value) {
+                    hash[component_id] = value;
+                }
+            }
+        }
+
+        // Convert to vector of pairs for sorting
+        std::vector<std::pair<uint16_t, float>> components_values(hash.begin(), hash.end());
+
+        // Sort by decreasing values
+        std::sort(components_values.begin(), components_values.end(),
+                    [](const auto& a, const auto& b) { return a.second > b.second; });
+        
+        // Calculate total energy
+        float total_sum = 0.0f;
+        for (const auto& [_, value] : components_values) {
+            total_sum += static_cast<float>(value);
+        }
+
+        // Select components that preserve the desired energy fraction
+        SparseVector summary_vector;
+        float acc = 0.0f;
+        for (const auto& [tid, value] : components_values) {
+            acc += static_cast<float>(value);
+            summary_vector.emplace_back(tid, value);
+
+            if ((acc / total_sum) > fraction) {
+                break;
+            }
+        }
+
+        // Sort summary vector by component
+        std::sort(summary_vector.begin(), summary_vector.end(),
+                     [](const auto& a, const auto& b) { return a.first < b.first; });
+
+        return summary_vector;
+    }
+
+    static SparseVector summary_init_fixed_size(
         const SparseDatasetMut<float>& dataset,
         const std::vector<size_t>& block,
         const size_t n_components)
@@ -153,11 +267,13 @@ public:
         const SparseVector& summary, 
         const SparseVector& vec,
         const std::vector<size_t>& block,
-        const size_t n_components)
+        const size_t n_components,
+        const float fraction)
     {
         (void)summary;
         (void)vec;
-        return summary_init(dataset, block, n_components);
+        (void)n_components;
+        return summary_init_packed_energy_preserving(dataset, block, fraction);
     }
 };
 
@@ -166,7 +282,64 @@ class CentroidSummary
 public:
     CentroidSummary() = default;
 
-    static SparseVector summary_init(
+    static SparseVector summary_init_energy_preserving(
+        const SparseDatasetMut<float>& dataset,
+        const std::vector<size_t>& block,
+        const float fraction
+        )
+    {
+        std::unordered_map<uint16_t, float> hash;
+            
+        // For each document in the block
+        for (size_t doc_id : block) {
+            // For each component in the document, accumulate values
+            auto [components, values] = dataset.get(doc_id);
+            
+            for (size_t i = 0; i < components.size(); ++i) {
+                uint16_t component_id = components[i];
+                float value = values[i];
+                auto it = hash.find(component_id);
+                if (it == hash.end()){
+                    hash[component_id] = value;
+                } else {
+                    hash[component_id] += value;
+                }
+            }
+        }
+
+        // Convert to vector of pairs for sorting
+        std::vector<std::pair<uint16_t, float>> components_values(hash.begin(), hash.end());
+
+        // Sort by decreasing values
+        std::sort(components_values.begin(), components_values.end(),
+                    [](const auto& a, const auto& b) { return a.second > b.second; });
+        
+        // Calculate total energy
+        float total_sum = 0.0f;
+        for (const auto& [_, value] : components_values) {
+            total_sum += static_cast<float>(value);
+        }
+
+        // Select components that preserve the desired energy fraction
+        SparseVector summary_vector;
+        float acc = 0.0f;
+        for (const auto& [tid, value] : components_values) {
+            acc += static_cast<float>(value);
+            summary_vector.emplace_back(tid, value/block.size());
+
+            if ((acc / total_sum) > fraction) {
+                break;
+            }
+        }
+
+        // Sort summary vector by component
+        std::sort(summary_vector.begin(), summary_vector.end(),
+                     [](const auto& a, const auto& b) { return a.first < b.first; });
+
+        return summary_vector;
+    }
+
+    static SparseVector summary_init_fixed_size(
         const SparseDatasetMut<float>& dataset,
         const std::vector<size_t>& block,
         const size_t n_components)
@@ -281,7 +454,7 @@ public:
         }
 
         while (i < summary.size()) {
-            result.emplace_back(summary[i].first, (summary[i].second*num_docs)/(num_docs+1));
+            result.emplace_back(summary[i].first, (summary[i].second*num_docs)/(num_docs-1));
             ++i;
         }
 

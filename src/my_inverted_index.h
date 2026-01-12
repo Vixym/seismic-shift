@@ -65,7 +65,6 @@ public:
 
         // 2. Remove doc from all the posting lists it belongs to (using doc_block_membership_)
         std::vector<std::pair<size_t, size_t>> doc_block_ids = doc_block_membership_[doc_id];
-        std::cout << "Deleting doc " << doc_id << " from " << doc_block_ids.size() << " posting lists." << std::endl;
         for (const auto& [component, block_id] : doc_block_ids) {
             // 2.a. Update summary
             MyPostingList& posting_list = posting_lists_[component];
@@ -74,7 +73,6 @@ public:
         auto end_time = std::chrono::high_resolution_clock::now();
         auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
                     end_time - start_time).count();
-        std::cout << "Index: Time to delete doc " << doc_id << ": " << elapsed << std::endl;
     }
 
     void insert_doc(const std::vector<uint16_t>& components, const std::vector<float>& values)
@@ -89,14 +87,15 @@ public:
 
         // 2. Add doc to posting lists for each of its components
         start_time = std::chrono::high_resolution_clock::now();
-        std::cout << "Adding document to " << components.size() << " postings lists." << std::endl;
+        //std::cout << "Adding document to " << components.size() << " postings lists." << std::endl;
         for (size_t c = 0; c < components.size(); ++c) {
             // 2.a. Find closest block, add document to block, and update summary (single function that returns block_id)
+            if (components[c] >= posting_lists_.size()) break;
             MyPostingList& posting_list = posting_lists_[components[c]];
             size_t block_id = posting_list.insert_doc(components, values, *jlt_, config_, forward_index_.id_to_offset(doc_id), components.size());
 
             // 2.b. Keep track of which block was added to
-            block_ids.emplace_back(c, block_id);
+            block_ids.emplace_back(components[c], block_id);
         }
 
         // 3. Update doc_block_membership_
@@ -105,7 +104,18 @@ public:
         auto end_time = std::chrono::high_resolution_clock::now();
         auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(
                     end_time - start_time).count();
-        std::cout << "Index: Time to insert doc " << doc_id << ": " << elapsed << std::endl;
+        //std::cout << "Index: Time to insert doc " << doc_id << ": " << elapsed << std::endl;
+    }
+
+    // Call this function if too empty (too many tombstones/deletes)
+    void resize()
+    {
+        // 1. Iterate through posting lists
+        for (size_t i = 0; i < posting_lists_.size(); ++i) {
+            // 2. Delete from each posting list
+            MyPostingList& posting_list = posting_lists_[i];
+            posting_list.resize(forward_index_);
+        }
     }
 
     // Search the index
@@ -116,13 +126,15 @@ public:
         size_t query_cut,
         float heap_factor,
         size_t n_knn,
-        bool first_sorted) const 
+        bool first_sorted,
+        bool debug = false) const 
     {
         // Create a dense query vector
         std::vector<float> query(dim(), 0.0f);
         for (size_t i = 0; i < query_components.size(); ++i) {
             if (query_components[i] >= query.size()) {
                 std::cout << "Dense vector creation" << std::endl;
+                continue;
             }
             query[query_components[i]] = query_values[i];
         }
@@ -164,7 +176,8 @@ public:
                 forward_index_,
                 i == 0 && first_sorted,
                 *jlt_,
-                config_
+                config_,
+                debug
             );
         }
          
@@ -186,29 +199,36 @@ public:
     /// `n_postings`: minimum number of postings to select for each component
     static MyInvertedIndex<T> build(const SparseDatasetMut<T>& dataset, const Configuration& config) 
     { 
+        auto time_start = std::chrono::high_resolution_clock::now();
+        std::cout << "Building with the following settings:\n"
+            << "DEBUG dynamic-support: " << config.get_dynamic_support() << "\n"
+            << "DEBUG transform-function: " << config.get_transform_function() << "\n"
+            << "DEBUG summarization-metric: " << config.get_summarization_metric() << std::endl;
         // Distribute pairs (score, doc_id) to corresponding components for each chunk.
         // We use pairs because later each posting list will be sorted by score
         // by the pruning strategy.
         // The pruning strategy is applied to partial results, for Global Threshold strategy
         // the final fixed pruning is done only when all chunks have been parsed
-        std::cout << "Building with the following settings:\n dynamic-support:" << config.get_dynamic_support() 
-            << "\n transform-function:" << config.get_transform_function()
-            << "\n summarization-metric:" << config.get_summarization_metric() << std::endl; 
-        std::cout << "Distributing and pruning postings: ";
-        auto time_start = std::chrono::high_resolution_clock::now();
 
         // Initialize JLT matrix for shared use
         auto orig_d = dataset.len();
         auto transform_d = std::log(orig_d);
-        auto jlt_ptr = std::make_unique<SparseJLT>(orig_d, transform_d);
+
+        std::unique_ptr<SparseJLT> jlt_ptr;
+        if (config.get_transform_function() == "jlt") {
+            jlt_ptr = std::make_unique<SparseJLT>(orig_d, transform_d);
+        }
+
         auto jlt_elapsed = std::chrono::high_resolution_clock::now() - time_start;
-        std::cout << "JLT matrix initialization took " << std::chrono::duration_cast<std::chrono::microseconds>(jlt_elapsed).count() << " microseconds" << std::endl;
+        std::cout << "DEBUG JLT-matrix-initialization: " << std::chrono::duration_cast<std::chrono::seconds>(jlt_elapsed).count() << " seconds" << std::endl;
 
         std::vector<std::vector<std::pair<T, size_t>>> inverted_pairs(dataset.dim());
         std::vector<std::vector<std::pair<T, size_t>>> chunk_inv_pairs(dataset.dim());
          
         size_t chunk_size = config.get_batched_indexing().value_or(dataset.len());
         
+        std::cout << "Distributing and pruning posting lists:" << std::endl;
+        auto debug_start = std::chrono::high_resolution_clock::now();
         for (size_t doc_id = 0; doc_id < dataset.len(); doc_id += chunk_size) {
             size_t end_id = std::min(doc_id + chunk_size, dataset.len());
              
@@ -238,8 +258,10 @@ public:
             // Pruning on partial result
             const auto& pruning = config.get_pruning();
             if (pruning.get_type() == PruningStrategy::Type::FixedSize) {
-                fixed_pruning(inverted_pairs, pruning.get_n_postings());
+                std::cout << "DEBUG Fixed-pruning" << std::endl;
+                //fixed_pruning(inverted_pairs, pruning.get_n_postings());
             } else if (pruning.get_type() == PruningStrategy::Type::GlobalThreshold) {
+                std::cout << "DEBUG Global-pruning" << std::endl;
                 global_threshold_pruning(inverted_pairs, pruning.get_n_postings());
             }
              
@@ -249,21 +271,20 @@ public:
                 chunk_inv_pairs.resize(dataset.dim());
             }
         }
-         
+
         // Final pruning
         const auto& pruning = config.get_pruning();
         if (pruning.get_type() == PruningStrategy::Type::GlobalThreshold) {
             size_t max_postings = static_cast<size_t>(pruning.get_n_postings() * pruning.get_max_fraction());
             fixed_pruning(inverted_pairs, max_postings);
         }
-         
-        auto elapsed = std::chrono::high_resolution_clock::now() - time_start;
-        std::cout << std::chrono::duration_cast<std::chrono::seconds>(elapsed).count() << " secs" << std::endl;
-         
+        auto debug_elapsed = std::chrono::high_resolution_clock::now() - debug_start;
+        std::cout << "DEBUG distribute-and-prune-postings: " << std::chrono::duration_cast<std::chrono::seconds>(debug_elapsed).count() << " seconds" << std::endl;
+
         std::cout << "\tNumber of posting lists: " << inverted_pairs.size() << std::endl;
          
         std::cout << "Building summaries: " << std::endl;
-        time_start = std::chrono::high_resolution_clock::now();
+        debug_start = std::chrono::high_resolution_clock::now();
          
         // Build summaries and blocks for each posting list
         std::vector<MyPostingList> posting_lists(inverted_pairs.size());
@@ -276,22 +297,29 @@ public:
         for (size_t i = 0; i < inverted_pairs.size(); ++i) {
             posting_lists[i] = MyPostingList::build(dataset, inverted_pairs[i], config, *jlt_ptr);
         }
+        std::cout << "Finished building all posting lists" << std::endl;
 
-        for (size_t i = 0; i < posting_lists.size(); ++i) {
-            auto doc_block_pairs = posting_lists[i].get_doc_block_pairs();
-            for (const auto& [doc_id, block_id] : doc_block_pairs) {
-                if (doc_id >= doc_block_membership.size()) {
-                    std::cerr << "Bad doc_id " << doc_id << " (max " << doc_block_membership.size()-1 << ")\n";
-                    continue;
+        // If dynamic, need to record doc to block -- otherwise we can skip in the static case
+        if (config.get_dynamic_support()) {
+            for (size_t i = 0; i < posting_lists.size(); ++i) {
+                auto doc_block_pairs = posting_lists[i].get_doc_block_pairs();
+                for (const auto& [doc_id, block_id] : doc_block_pairs) {
+                    if (doc_id >= doc_block_membership.size()) {
+                        std::cerr << "Bad doc_id " << doc_id << " (max " << doc_block_membership.size()-1 << ")\n";
+                        continue;
+                    }
+                    doc_block_membership[doc_id].emplace_back(i, block_id);
                 }
-                doc_block_membership[doc_id].emplace_back(i, block_id);
             }
         }
 
+        debug_elapsed = std::chrono::high_resolution_clock::now() - debug_start;
+        std::cout << "DEBUG build-summaries: " << std::chrono::duration_cast<std::chrono::seconds>(debug_elapsed).count() << " seconds" << std::endl;
+
         MyInvertedIndex<T> index(dataset, std::move(posting_lists), config, std::move(doc_block_membership), std::move(jlt_ptr));
 
-        elapsed = std::chrono::high_resolution_clock::now() - time_start;
-        std::cout << std::chrono::duration_cast<std::chrono::seconds>(elapsed).count() << " secs" << std::endl;
+        auto elapsed = std::chrono::high_resolution_clock::now() - time_start;
+        std::cout << "DEBUG Total-time-to-build:" << std::chrono::duration_cast<std::chrono::seconds>(elapsed).count() << " secs" << std::endl;
          
         // Handle KNN if needed
         if (config.get_knn_config().get_nknn() == 0 && !config.get_knn_config().get_knn_path().has_value()) {

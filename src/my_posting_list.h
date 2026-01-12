@@ -68,7 +68,7 @@ namespace seismic
             const auto& blocking = config.get_blocking();
             
             if (blocking.get_type() == BlockingStrategy::Type::FixedSize) {
-                block_offsets = fixed_size_blocking(posting_list, blocking.get_block_size());
+                block_offsets = fixed_size_blocking(posting_list, blocking.get_block_size(), dataset);
             } else if (blocking.get_type() == BlockingStrategy::Type::RandomKmeans) {
                 block_offsets = blocking_with_random_kmeans(
                     posting_list,
@@ -94,31 +94,13 @@ namespace seismic
                 );
 
                 std::vector<std::pair<uint16_t, float>> summary;
-                // std::pair<std::vector<uint16_t>, std::vector<T>> summary;
-
-                // // Apply summarization strategy
-                // const auto& summarization = config.get_summarization();
-                
-                // if (summarization.get_type() == SummarizationStrategy::Type::FixedSize) {
-                //     summary = fixed_size_centroid(
-                //         dataset,
-                //         block,
-                //         summarization.get_n_components()
-                //     );
-                // } else if (summarization.get_type() == SummarizationStrategy::Type::EnergyPreserving) {
-                //     summary = energy_preserving_centroid(
-                //         dataset,
-                //         block,
-                //         summarization.get_summary_energy()
-                //     );
-                // }
 
                 const auto& summarization = config.get_summarization();
                 const auto& summarization_metric = config.get_summarization_metric();
                 if (summarization_metric == "max") {
-                    summary = MaxSummary::summary_init(dataset, block, summarization.get_n_components());
+                    summary = MaxSummary::summary_init_energy_preserving(dataset, block, summarization.get_summary_energy());
                 } else if (summarization_metric == "centroid") {
-                    summary = CentroidSummary::summary_init(dataset, block, summarization.get_n_components());
+                    summary = CentroidSummary::summary_init_energy_preserving(dataset, block, summarization.get_summary_energy());
                 }
 
                 const auto& transform_function = config.get_transform_function();
@@ -183,9 +165,11 @@ namespace seismic
             const auto& summary_metric = config.get_summarization_metric();
             std::vector<std::pair<uint16_t, float>> new_summary;
             if (summary_metric == "max") {
-                new_summary = MaxSummary::summary_delete(dataset, summary, doc_vec, block, config.get_summarization().get_n_components());
+                new_summary = MaxSummary::summary_delete(dataset, summary, doc_vec, block, config.get_summarization().get_n_components(), config.get_summarization().get_summary_energy());
             } else if (summary_metric == "centroid") {
                 new_summary = CentroidSummary::summary_delete(summary, doc_vec, num_docs_in_block);
+            } else {
+                std::cout << "my_posting_list.h:delete_doc invalid summary metric" << std::endl;
             }
 
             summaries_[block_id] = {num_docs_in_block-1, new_summary};
@@ -209,7 +193,7 @@ namespace seismic
             // 1. Find closest block
             std::vector<std::pair<uint16_t, float>> indexed_dots = get_distances(components, values, jlt, config);
             size_t best_block = 0;
-            float best_val = 0.0f;
+            float best_val = -std::numeric_limits<float>::infinity();
             for (const auto& [block_id, dot] : indexed_dots) {
                 if (dot > best_val) {
                     best_block = block_id;
@@ -242,6 +226,33 @@ namespace seismic
             return best_block;
         }
 
+        template <typename T>
+        void resize(const SparseDatasetMut<T>& dataset)
+        {
+            std::vector<uint64_t> new_packed_postings;
+            std::vector<size_t> new_block_offsets;
+            new_block_offsets.push_back(0);
+
+            for (size_t block_id = 0; block_id < block_offsets_.size()-1; ++block_id) {
+                const size_t starting_id = block_offsets_[block_id];
+                const size_t ending_id = block_offsets_[block_id+1];
+
+                for (size_t posting_idx = starting_id; posting_idx < ending_id; ++posting_idx) {
+                    uint64_t packed_posting = packed_postings_[posting_idx];
+                    auto [offset, len] = unpack_offset_len(packed_posting);
+                    size_t id = dataset.offset_to_id(offset);
+                    if (dataset.is_alive(id)) {
+                        new_packed_postings.push_back(packed_posting);
+                    }
+                }
+
+                new_block_offsets.push_back(new_packed_postings.size());
+            }
+
+            packed_postings_ = new_packed_postings;
+            block_offsets_ = new_block_offsets;
+        }
+
         // Search implementation
         template <typename T>
         void search(
@@ -255,25 +266,34 @@ namespace seismic
             const SparseDatasetMut<T>& forward_index,
             bool sort_summaries,
             const SparseJLT& jlt,
-            const Configuration& config) const 
+            const Configuration& config,
+            const bool debug = false) const 
         {
+            auto start = std::chrono::high_resolution_clock::now();
+            if (debug) {
+                start = std::chrono::high_resolution_clock::now();
+            }
             std::vector<std::vector<uint64_t>> blocks_to_evaluate;
 
             // Get distances between query and summaries vector of (idx, val) pairs
-            std::vector<std::pair<uint16_t, float>> indexed_dots = get_distances(query_components, query_values, jlt, config);
+            std::vector<std::pair<uint16_t, float>> indexed_dots = get_distances(query_components, query_values, jlt, config, debug);
             
             // Sort summaries by dot product w.r.t. to the query. Useful only in the first list.
             if (sort_summaries) {
                 std::sort(indexed_dots.begin(), indexed_dots.end(),
                         [](const auto& a, const auto& b) { return a.second > b.second; });
             }
-            
+            const size_t block_threshold = indexed_dots.size() * .75;
+            size_t num_blocks_processed = 0;
             for (const auto& [block_id, dot] : indexed_dots) {
+                num_blocks_processed += 1;
                 // Skip blocks that cannot contribute to the top-k
-                if (heap.len() == k && dot < -heap_factor * heap.topk().front().first) {
-                    continue;
+                if (config.get_summarization_metric() == "max"){
+                    if (heap.len() == k && dot < -heap_factor * heap.topk().front().first) continue;
+                } else if (config.get_summarization_metric() == "centroid") {
+                    if (heap.len() == k && num_blocks_processed >= block_threshold) continue;
                 }
-                
+
                 // Get the block of postings
                 std::vector<uint64_t> packed_posting_block(
                     packed_postings_.begin() + block_offsets_[block_id],
@@ -319,13 +339,22 @@ namespace seismic
                     forward_index
                 );
             }
+            if (debug) {
+                auto elapsed = std::chrono::high_resolution_clock::now() - start;
+                std::cout << "Time to search:" << std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count() << " microseconds" << std::endl;
+            }
         }
 
         std::vector<std::pair<uint16_t, float>> get_distances(const std::vector<uint16_t>& query_components, const std::vector<float>& query_values,
-            const SparseJLT& jlt, const Configuration& config) const
+            const SparseJLT& jlt, const Configuration& config, const bool debug = false) const
         {
             (void) jlt;
             (void) config;
+            auto start = std::chrono::high_resolution_clock::now();
+            auto transform_start = std::chrono::high_resolution_clock::now();
+            if (debug) {
+                start = std::chrono::high_resolution_clock::now();
+            }
             const std::vector<uint16_t>* components = &query_components;
             const std::vector<float>* values = &query_values;
 
@@ -333,14 +362,14 @@ namespace seismic
             distances.resize(summaries_.size());
 
             // Transform vectors into new space if needed
+            if (debug) {
+                transform_start = std::chrono::high_resolution_clock::now();
+            }
             std::vector<uint16_t> transformed_components;
             std::vector<float> transformed_values;
-
             if (config.get_transform_function() == "jlt") {
                 auto transformed_vec = jlt.transform(query_components, query_values);
 
-                transformed_components.reserve(transformed_vec.size());
-                transformed_values.reserve(transformed_vec.size());
                 for (const auto& [c, v] : transformed_vec) {
                     transformed_components.push_back(c);
                     transformed_values.push_back(v);
@@ -348,6 +377,10 @@ namespace seismic
 
                 components = &transformed_components;
                 values = &transformed_values;
+            }
+            if (debug) {
+                auto elapsed = std::chrono::high_resolution_clock::now() - transform_start;
+                std::cout << "Time to transform:" << std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count() << " microseconds" << std::endl;
             }
             
             for (size_t i = 0; i < summaries_.size(); ++i) {
@@ -375,6 +408,11 @@ namespace seismic
 
                 // Store (summary_id, distance/similarity)
                 distances[i] = {static_cast<uint16_t>(i), acc};
+            }
+
+            if (debug) {
+                auto elapsed = std::chrono::high_resolution_clock::now() - start;
+                std::cout << "Time to get distances:" << std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count() << " microsecs" << std::endl;
             }
             return distances;
         }
@@ -434,21 +472,114 @@ namespace seismic
                 heap.push_with_id(-1.0f * distance, prev_offset);
             }
         }
-    
+
         // Blocking strategies
-        static std::vector<size_t> fixed_size_blocking(const std::vector<size_t>& posting_list, size_t block_size) 
+        static std::vector<size_t> fixed_size_blocking(std::vector<size_t>& posting_list, size_t num_blocks, const SparseDatasetMut<float>& dataset) 
         {
-            // Create block offsets for fixed-size blocks
-            std::vector<size_t> block_offsets;
+            if (posting_list.empty()) return {0};
+            num_blocks = std::min(num_blocks, posting_list.size());
+            std::vector<size_t> reordered_posting_list;
+            reordered_posting_list.reserve(posting_list.size());       
             
-            for (size_t i = 0; i < posting_list.size(); i += block_size) {
-                block_offsets.push_back(i);
+            std::vector<size_t> block_offsets;
+            block_offsets.reserve(num_blocks + 1);
+
+            // Randomly select cluster representatives
+            std::vector<size_t> shuffled = posting_list;
+            {
+                std::random_device rd;
+                std::mt19937 rng(rd());
+                std::shuffle(shuffled.begin(), shuffled.end(), rng);
+            }
+            std::vector<size_t> centroid_docs(shuffled.begin(), shuffled.begin() + num_blocks);
+
+            // Assign each x to argmax_j <x, μ(j)>
+            std::vector<std::pair<size_t, size_t>> clustering_results;
+            clustering_results.resize(posting_list.size());
+
+            // Helper function to compute dot between sparse vectors
+            auto sparse_dot = [&](const auto& a_idx, const auto& a_val,
+                    const auto& b_idx, const auto& b_val) -> float 
+            {
+                size_t i = 0, j = 0;
+                float acc = 0.0;
+                while (i < a_idx.size() && j < b_idx.size()) {
+                    if (a_idx[i] == b_idx[j]) {
+                        acc += static_cast<float>(a_val[i]) * static_cast<float>(b_val[j]);
+                        ++i; ++j;
+                    } else if (a_idx[i] < b_idx[j]) {
+                        ++i;
+                    } else {
+                        ++j;
+                    }
+                }
+                return acc;
+            };
+
+            #pragma omp parallel for
+            for (size_t i = 0; i < posting_list.size(); ++i) {
+                size_t doc_id = posting_list[i];
+
+                assert(doc_id < dataset.len());
+
+                const auto& x = dataset.get(doc_id);
+                const auto& x_idx = x.first;
+                const auto& x_val = x.second;
+
+                size_t best_j = 0;
+                double best_score = -std::numeric_limits<double>::infinity();
+
+                for (size_t j = 0; j < centroid_docs.size(); ++j) {
+                    const auto& mu = dataset.get(centroid_docs[j]);
+                    const auto& mu_idx = mu.first;
+                    const auto& mu_val = mu.second;
+
+                    double s = sparse_dot(x_idx, x_val, mu_idx, mu_val);
+                    if (s > best_score) {
+                        best_score = s;
+                        best_j = j;
+                    }
+                }
+                clustering_results[i] = {best_j, doc_id};
+            }
+
+            // Start with offset 0
+            block_offsets.push_back(0);
+            
+            // Group by centroid ID
+            std::sort(clustering_results.begin(), clustering_results.end(),
+                     [](const auto& a, const auto& b) { return a.first < b.first; });
+            
+            size_t current_centroid = clustering_results[0].first;
+            for (const auto& [centroid_id, doc_id] : clustering_results) {
+                if (centroid_id != current_centroid) {
+                    // New centroid group
+                    block_offsets.push_back(reordered_posting_list.size());
+                    current_centroid = centroid_id;
+                }
+                reordered_posting_list.push_back(doc_id);
             }
             
-            // Add the final offset
-            block_offsets.push_back(posting_list.size());
+            // Add final offset
+            block_offsets.push_back(reordered_posting_list.size());
+            
+            // Copy reordered list back to original
+            assert(reordered_posting_list.size() == posting_list.size());
+            posting_list = std::move(reordered_posting_list);
             
             return block_offsets;
+
+            // // Create block offsets for fixed-size blocks
+            // std::vector<size_t> block_offsets;
+            
+            // for (size_t i = 0; i < posting_list.size(); i += block_size) {
+            //     block_offsets.push_back(i);
+            // }
+            
+            // // Add the final offset
+            // block_offsets.push_back(posting_list.size());
+            
+            // return block_offsets;
         }
         
         template <typename T>
@@ -477,11 +608,65 @@ namespace seismic
                    "Please, decrease centroid_fraction!");
             
             std::vector<size_t> reordered_posting_list;
-            reordered_posting_list.reserve(posting_list.size());
+            reordered_posting_list.reserve(posting_list.size());       
             
             std::vector<size_t> block_offsets;
             block_offsets.reserve(n_centroids + 1);
             
+            // Begin approximate knn neighbors
+            // // Helper function to compute dot between sparse vectors
+            // auto sparse_dot = [&](const auto& a_idx, const auto& a_val,
+            //         const auto& b_idx, const auto& b_val) -> float 
+            // {
+            //     size_t i = 0, j = 0;
+            //     float acc = 0.0;
+            //     while (i < a_idx.size() && j < b_idx.size()) {
+            //         if (a_idx[i] == b_idx[j]) {
+            //             acc += static_cast<float>(a_val[i]) * static_cast<float>(b_val[j]);
+            //             ++i; ++j;
+            //         } else if (a_idx[i] < b_idx[j]) {
+            //             ++i;
+            //         } else {
+            //             ++j;
+            //         }
+            //     }
+            //     return acc;
+            // };
+
+            // // Randomly select centroids
+            // std::vector<size_t> shuffled = posting_list;
+            // {
+            //     std::random_device rd;
+            //     std::mt19937 rng(rd());
+            //     std::shuffle(shuffled.begin(), shuffled.end(), rng);
+            // }
+            // std::vector<size_t> centroid_docs(shuffled.begin(), shuffled.begin() + n_centroids);
+
+            // // assign each x to argmax_j <x, μ(j)>
+            // std::vector<std::pair<size_t, size_t>> clustering_results;
+            // clustering_results.reserve(posting_list.size());
+
+            // for (size_t doc_id : posting_list) {
+            //     const auto& x = dataset.get(doc_id);
+            //     const auto& x_idx = x.first;
+            //     const auto& x_val = x.second;
+
+            //     size_t best_j = 0;
+            //     double best_score = -std::numeric_limits<double>::infinity();
+
+            //     for (size_t j = 0; j < centroid_docs.size(); ++j) {
+            //         const auto& mu = dataset.get(centroid_docs[j]);
+            //         const auto& mu_idx = mu.first;
+            //         const auto& mu_val = mu.second;
+
+            //         double s = sparse_dot(x_idx, x_val, mu_idx, mu_val);
+            //         if (s > best_score) {
+            //             best_score = s;
+            //             best_j = j;
+            //         }
+            //     }
+            //     clustering_results.emplace_back(best_j, doc_id);
+            // }
             // TEMPORARY SOLUTION: Use simple round-robin clustering
             // This avoids the type compatibility issues between seismic::SparseDatasetMut and utils::SparseDatasetMut
             std::vector<std::pair<size_t, size_t>> clustering_results;
@@ -752,7 +937,7 @@ namespace seismic
                 
                 if ((acc / total_sum) > fraction) {
                     break;
-            }
+                }
             }
             
             // Sort term IDs

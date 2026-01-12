@@ -42,7 +42,7 @@ private:
 
     // Returns the range of positions of the slice with the given `id`.
     static std::pair<size_t, size_t> vector_range(const std::vector<size_t>& offsets, size_t id) {
-        assert(id < offsets.size() - 1 && "The id is out of range");
+        assert(id < offsets.size() - 1 && "vector_range::The id is out of range");
         return {offsets[id], offsets[id + 1]};
     }
 
@@ -69,7 +69,7 @@ public:
      */
     std::pair<std::vector<uint16_t>, std::vector<T>> get(size_t id) const {
         if (id >= n_vecs) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("get::The id is out of range");
         }
 
         auto [start, end] = vector_range(offsets, id);
@@ -108,7 +108,7 @@ public:
      */
     size_t vector_offset(size_t id) const {
         if (id >= n_vecs) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("vector_offset::The id is out of range");
         }
 
         return offsets[id];
@@ -123,7 +123,7 @@ public:
      */
     size_t vector_len(size_t id) const {
         if (id >= n_vecs) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("vector_len::The id is out of range");
         }
 
         return offsets[id + 1] - offsets[id];
@@ -190,7 +190,7 @@ public:
      */
     size_t id_to_offset(size_t id) const {
         if (id >= n_vecs) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("id_to_offset::The id is out of range");
         }
         return offsets[id];
     }
@@ -204,7 +204,7 @@ public:
      */
     std::pair<size_t, size_t> id_to_offset_len(size_t id) const {
         if (id >= n_vecs) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("id_to_offset_len::The id is out of range");
         }
         return {offsets[id], offsets[id + 1] - offsets[id]};
     }
@@ -281,7 +281,7 @@ public:
         using pointer = const value_type*;
         using reference = const value_type&;
 
-        Iterator(const SparseDataset<Tis_alive: The id is out of range>* dataset, size_t id) : dataset(dataset), current_id(id) {}
+        Iterator(const SparseDataset<T>* dataset, size_t id) : dataset(dataset), current_id(id) {}
 
         value_type operator*() const {
             return dataset->get(current_id);
@@ -388,12 +388,12 @@ public:
         this->offsets.push_back(this->components.size());
         this->alive.push_back(true);
 
-        return this->offsets.size()-1;
+        return this->offsets.size()-2;
     }
 
     std::pair<size_t, size_t> id_to_offset_len(size_t id) const {
         if (id >= n_vecs) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("id_to_offset_len::The id is out of range");
         }
         return {offsets[id], offsets[id + 1] - offsets[id]};
     }
@@ -599,7 +599,7 @@ public:
 
     size_t id_to_offset(size_t id) const {
         if (id >= n_vecs) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("id_to_offset::The id is out of range");
         }
         return offsets[id];
     }
@@ -613,7 +613,7 @@ public:
      */
     size_t vector_len(size_t id) const {
         if (id >= len()) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("vector_len::The id is out of range");
         }
 
         return offsets[id + 1] - offsets[id];
@@ -632,7 +632,7 @@ public:
 
     size_t vector_offset(size_t id) const {
         if (id >= len()) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("vector_offset::The id is out of range");
         }
 
         return offsets[id];
@@ -683,7 +683,7 @@ public:
      */
     std::pair<std::vector<uint16_t>, std::vector<T>> get(size_t id) const {
         if (id >= len()) {
-            throw std::out_of_range("The id is out of range");
+            throw std::out_of_range("get::The id is out of range");
         }
 
         auto [start, end] = SparseDataset<T>::vector_range(offsets, id);

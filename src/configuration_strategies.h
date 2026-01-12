@@ -80,7 +80,7 @@ const size_t THRESHOLD_BINARY_SEARCH = 10;
         };
     
         // Default constructor - FixedSize with n_postings = 3500
-        PruningStrategy() : type(Type::FixedSize), n_postings(3500), max_fraction(0.0f) {}
+        PruningStrategy() : type(Type::FixedSize), n_postings(3500), max_fraction(1.0f) {}
     
         // FixedSize constructor
         static PruningStrategy fixed_size(size_t n_postings) {
