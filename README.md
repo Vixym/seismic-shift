@@ -432,6 +432,44 @@ Notes:
 - Delete latency is high with `--summarization max` because each delete recomputes the
   affected block summaries; use `--summarization centroid` for delete-heavy workloads.
 
+### 3. Centroid summaries + JLT (recommended for dynamic workloads)
+
+`--summarization centroid` keeps a running centroid per block, so deletes (and inserts)
+update the summary **incrementally** instead of recomputing it. Combining it with
+`--transform jlt` (which projects summaries into a low-dimensional dense space) gives a
+fully dynamic index. Build it the same way, swapping the two flags:
+
+```
+./build/bin/build_inverted_index \
+  --input-file  [path]/documents.bin \
+  --output-file [path]/indexes/my_centroid_jlt_index \
+  --n-postings 4000 --summary-energy 0.4 --centroid-fraction 0.1 --knn 0 \
+  --clustering-algorithm random-kmeans \
+  --dynamic-support true --summarization centroid --transform jlt
+```
+
+Then verify it exactly as above:
+
+```
+./build/bin/test_dynamic \
+  --index-file [path]/indexes/my_centroid_jlt_index \
+  --query-file [path]/data/queries.bin \
+  --n-ops 200
+```
+
+On the 1M SPLADE subset, centroid summaries make updates dramatically cheaper than
+`max` while staying correct (per-operation latency, 200 ops, single-threaded):
+
+| Summarization / transform | Insert | Delete | Insert correctness | Delete correctness |
+| ------------------------- | ------ | ------ | ------------------ | ------------------ |
+| `max` / `none`            | 19.5 ms | 430 ms | 198/200 retrievable | 200/200 gone |
+| `centroid` / `jlt`        | 5.1 ms  | 0.40 ms | 198/200 retrievable | 200/200 gone |
+
+The ~1000x faster delete comes from `max` having to recompute each affected block
+summary (a max cannot be decremented) whereas `centroid` simply removes the doc's
+contribution from the running mean. (`resize()` compaction is summary-independent and
+takes ~19 s over the 1M index in both cases.)
+
 ## Testing out a toy example
 
 From the root directory, run:
