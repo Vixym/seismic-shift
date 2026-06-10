@@ -69,6 +69,12 @@ target_include_directories(test_jlt_index PRIVATE ${CEREAL_INCLUDE_DIR} )
 
 set_target_properties(test_jlt_index PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
+# Dynamic update (insert/delete/resize) end-to-end verification driver
+add_executable(test_dynamic src/bin/test_dynamic.cpp)
+target_link_libraries(test_dynamic PRIVATE seismic_core nlohmann_json::nlohmann_json cereal OpenMP::OpenMP_CXX)
+target_include_directories(test_dynamic PRIVATE ${CEREAL_INCLUDE_DIR})
+set_target_properties(test_dynamic PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
 # Set output directory for binaries
 set_target_properties(build_inverted_index perf_inverted_index PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"

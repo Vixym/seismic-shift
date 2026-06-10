@@ -366,6 +366,72 @@ Metric of the run: RR@10: 0.379833765406831
 Metric of the gt : RR@10: 0.38280017737754163
 ```
 
+## Testing dynamic updates (insert / delete)
+
+SeismicShift supports building a *dynamic* index that can be updated in place via
+`insert_doc`, `delete_doc`, and a `resize` (compaction) pass. To exercise and verify
+this path end-to-end there is a dedicated driver, `test_dynamic`, which loads a built
+index, inserts a batch of documents, deletes them again, and checks both correctness
+(inserted docs become retrievable; deleted docs disappear after `resize`) and the
+per-operation latency.
+
+### 1. Build a dynamic-support index
+
+The index must be built with `--dynamic-support true` so the document→block membership
+needed for in-place updates is recorded. Two knobs control how summaries behave under
+updates:
+
+- `--summarization max | centroid` — `max` summaries must be **recomputed** on delete
+  (a max cannot be decremented), so deletes are expensive; `centroid` summaries support
+  cheap incremental updates.
+- `--transform none | jlt` — when `jlt` is set, insert/delete apply the JLT to the
+  document vector before updating the summary. With `none` the JLT is not used.
+
+```
+./build/bin/build_inverted_index \
+  --input-file  [path]/documents.bin \
+  --output-file [path]/indexes/my_dynamic_index \
+  --n-postings 4000 --summary-energy 0.4 --centroid-fraction 0.1 --knn 0 \
+  --clustering-algorithm random-kmeans \
+  --dynamic-support true --summarization max --transform none
+```
+
+This writes `[path]/indexes/my_dynamic_index.index.seismic`.
+
+### 2. Run the dynamic verification driver
+
+`test_dynamic` takes the index base path (without the `.index.seismic` suffix). It uses
+the query vectors as the documents to insert.
+
+```
+./build/bin/test_dynamic \
+  --index-file [path]/indexes/my_dynamic_index \
+  --query-file [path]/data/queries.bin \
+  --n-ops 200
+```
+
+Expected output (numbers are from a 1M-document SPLADE subset, `summarization max`,
+`transform none`):
+
+```
+Loaded. documents=1000000 dim=28674
+[baseline] search returned 10 results (top score 13.9759)
+[insert] inserting 200 docs ...
+[insert] len 1000000 -> 1000200 | retrievable 198/200 | 19510.5 us/insert
+[delete] deleting the 200 just-inserted docs ...
+[delete] removed 200 docs | gone 200/200 | 430275 us/delete | resize 19422 ms
+[final] search returned 10 results after insert+delete+resize
+==== DYNAMIC VERIFICATION PASSED ====
+```
+
+Notes:
+- `retrievable k/N` counts how many freshly inserted docs are returned when searching
+  for their own vector; a couple of misses on an approximate index (heap-factor < 1,
+  coarse blocks) are expected, not a correctness failure.
+- `gone N/N` confirms deleted docs are no longer retrievable after `resize()`.
+- Delete latency is high with `--summarization max` because each delete recomputes the
+  affected block summaries; use `--summarization centroid` for delete-heavy workloads.
+
 ## Testing out a toy example
 
 From the root directory, run:

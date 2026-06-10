@@ -293,7 +293,11 @@ public:
         std::vector<std::vector<std::pair<size_t, size_t>>> doc_block_membership;
         doc_block_membership.resize(dataset.len());
 
-        #pragma omp parallel for
+        // Dynamic scheduling: posting-list sizes are highly skewed (most lists are
+        // tiny, a few are at the pruning cap and dominate build cost). Static
+        // scheduling left threads idle at the tail; dynamic lets free threads grab
+        // remaining heavy lists.
+        #pragma omp parallel for schedule(dynamic, 16)
         for (size_t i = 0; i < inverted_pairs.size(); ++i) {
             posting_lists[i] = MyPostingList::build(dataset, inverted_pairs[i], config, *jlt_ptr);
         }

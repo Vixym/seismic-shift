@@ -477,7 +477,14 @@ namespace seismic
         static std::vector<size_t> fixed_size_blocking(std::vector<size_t>& posting_list, size_t num_blocks, const SparseDatasetMut<float>& dataset) 
         {
             if (posting_list.empty()) return {0};
-            num_blocks = std::min(num_blocks, posting_list.size());
+            // Cap the number of centroids per posting list. Blocking cost is
+            // O(L * num_blocks * nnz); with the configured block_size (~400 =
+            // 0.1*L at the pruning cap) the largest lists dominate build time.
+            // Capping num_blocks makes that cost grow ~linearly in L instead of
+            // quadratically, at the cost of coarser blocks (a recall/latency
+            // tradeoff we measure separately). Tune via MAX_CENTROIDS_PER_LIST.
+            static constexpr size_t MAX_CENTROIDS_PER_LIST = 64;
+            num_blocks = std::min({num_blocks, posting_list.size(), MAX_CENTROIDS_PER_LIST});
             std::vector<size_t> reordered_posting_list;
             reordered_posting_list.reserve(posting_list.size());       
             
@@ -497,15 +504,16 @@ namespace seismic
             std::vector<std::pair<size_t, size_t>> clustering_results;
             clustering_results.resize(posting_list.size());
 
-            // Helper function to compute dot between sparse vectors
-            auto sparse_dot = [&](const auto& a_idx, const auto& a_val,
-                    const auto& b_idx, const auto& b_val) -> float 
+            // Helper: dot product between two sorted sparse vectors given as raw
+            // pointers (zero-copy views) so the hot loop allocates nothing.
+            auto sparse_dot = [](const uint16_t* a_idx, const float* a_val, size_t a_n,
+                                 const uint16_t* b_idx, const float* b_val, size_t b_n) -> float
             {
                 size_t i = 0, j = 0;
-                float acc = 0.0;
-                while (i < a_idx.size() && j < b_idx.size()) {
+                float acc = 0.0f;
+                while (i < a_n && j < b_n) {
                     if (a_idx[i] == b_idx[j]) {
-                        acc += static_cast<float>(a_val[i]) * static_cast<float>(b_val[j]);
+                        acc += a_val[i] * b_val[j];
                         ++i; ++j;
                     } else if (a_idx[i] < b_idx[j]) {
                         ++i;
@@ -516,25 +524,33 @@ namespace seismic
                 return acc;
             };
 
-            #pragma omp parallel for
+            // Pre-fetch the centroid views ONCE (zero-copy into the dataset arrays).
+            // The earlier version called dataset.get() for every (doc, centroid) pair,
+            // allocating and copying two vectors each time, which made blocking
+            // allocator-bound. Views remove that entirely.
+            std::vector<SparseDatasetMut<float>::VectorView> centroid_views;
+            centroid_views.reserve(centroid_docs.size());
+            for (size_t j = 0; j < centroid_docs.size(); ++j) {
+                centroid_views.push_back(dataset.get_view(centroid_docs[j]));
+            }
+
+            // No inner `#pragma omp parallel for` here: this runs inside the outer
+            // parallel-for over posting lists in MyInvertedIndex::build. A nested
+            // region (OpenMP nesting is off by default) serialized the largest
+            // lists onto a single thread, creating a long single-threaded tail.
             for (size_t i = 0; i < posting_list.size(); ++i) {
                 size_t doc_id = posting_list[i];
-
                 assert(doc_id < dataset.len());
 
-                const auto& x = dataset.get(doc_id);
-                const auto& x_idx = x.first;
-                const auto& x_val = x.second;
+                const auto xv = dataset.get_view(doc_id);
 
                 size_t best_j = 0;
-                double best_score = -std::numeric_limits<double>::infinity();
+                float best_score = -std::numeric_limits<float>::infinity();
 
-                for (size_t j = 0; j < centroid_docs.size(); ++j) {
-                    const auto& mu = dataset.get(centroid_docs[j]);
-                    const auto& mu_idx = mu.first;
-                    const auto& mu_val = mu.second;
-
-                    double s = sparse_dot(x_idx, x_val, mu_idx, mu_val);
+                for (size_t j = 0; j < centroid_views.size(); ++j) {
+                    const auto& mu = centroid_views[j];
+                    float s = sparse_dot(xv.components, xv.values, xv.len,
+                                         mu.components, mu.values, mu.len);
                     if (s > best_score) {
                         best_score = s;
                         best_j = j;

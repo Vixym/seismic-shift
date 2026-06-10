@@ -130,15 +130,16 @@ public:
         )
     {
         std::unordered_map<uint16_t, float> hash;
-            
+
         // For each document in the block
         for (size_t doc_id : block) {
-            // For each component in the document, store the largest value seen so far
-            auto [components, values] = dataset.get(doc_id);
-            
-            for (size_t i = 0; i < components.size(); ++i) {
-                uint16_t component_id = components[i];
-                float value = values[i];
+            // For each component in the document, store the largest value seen so far.
+            // Zero-copy view avoids allocating two vectors per doc in this hot loop.
+            const auto v = dataset.get_view(doc_id);
+
+            for (size_t i = 0; i < v.len; ++i) {
+                uint16_t component_id = v.components[i];
+                float value = v.values[i];
                 auto it = hash.find(component_id);
                 if (it == hash.end() || it->second < value) {
                     hash[component_id] = value;
@@ -152,7 +153,7 @@ public:
         // Sort by decreasing values
         std::sort(components_values.begin(), components_values.end(),
                     [](const auto& a, const auto& b) { return a.second > b.second; });
-        
+
         // Calculate total energy
         float total_sum = 0.0f;
         for (const auto& [_, value] : components_values) {

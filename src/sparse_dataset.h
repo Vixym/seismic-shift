@@ -687,11 +687,34 @@ public:
         }
 
         auto [start, end] = SparseDataset<T>::vector_range(offsets, id);
-        
+
         std::vector<uint16_t> v_components(components.begin() + start, components.begin() + end);
         std::vector<T> v_values(values.begin() + start, values.begin() + end);
 
         return {v_components, v_values};
+    }
+
+    /**
+     * Zero-copy view of a document's (components, values) directly into the
+     * dataset's contiguous storage. Unlike get(), this allocates nothing, which
+     * matters in hot build loops (blocking/summarization) that touch every doc
+     * against every centroid. The view is valid only while the dataset is not
+     * mutated (push/set_dead do not move existing entries, but a reallocation
+     * from push() would invalidate outstanding views).
+     */
+    struct VectorView {
+        const uint16_t* components;
+        const T* values;
+        size_t len;
+    };
+
+    VectorView get_view(size_t id) const {
+        if (id >= len()) {
+            throw std::out_of_range("get_view::The id is out of range");
+        }
+        size_t start = offsets[id];
+        size_t end = offsets[id + 1];
+        return VectorView{components.data() + start, values.data() + start, end - start};
     }
 
     /**
