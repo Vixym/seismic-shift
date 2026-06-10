@@ -20,6 +20,8 @@
 #include "space_usage.h"
 #include "data_type.h"
 
+#include "my_inverted_index.h"
+
 namespace seismic
 {
     // TODO: return to space usage calculation here

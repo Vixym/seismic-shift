@@ -1,0 +1,70 @@
+Running experiment: splade_cocondenser_msmarco
+
+Hardware configuration
+Date: 2025-12-12 04:00:03.390075
+Machine: fast.csail.mit.edu
+CPU usage (%): 0.5
+Machine load: 9.2900390625, 32.30517578125, 22.85009765625
+Memory (free, GiB): 1079
+Memory (avail, GiB): 1078
+Memory (total, GiB): 1510
+for detailed information, check the hardware log file: ./splade_cocondenser_msmarco_2025-12-12_04:00:03/machine.output
+
+WARNING: Your CPU may not be set to performance mode.
+
+
+Git info
+Current Branch: dynamic_seismic
+Commit ID: b4e457f319c6d862662d6d5fa9d945f5cec76dd4
+
+Compiling the code
+Compiling code with cmake --build build --config Release
+[  7%] Built target seismic_core
+[ 11%] Built target build_inverted_index
+[ 15%] Built target perf_inverted_index
+[ 19%] Built target test_jlt_index
+[ 23%] Built target gtest
+[ 26%] Built target gtest_main
+[ 55%] Built target tests
+[ 59%] Built target sandbox
+[ 63%] Built target sandbox_json
+[ 67%] Built target sandbox_rtti
+[ 73%] Built target sandbox_vs_dll
+[ 76%] Built target sandbox_vs
+[ 80%] Built target performance
+[ 84%] Built target gmock
+[ 88%] Built target gmock_main
+[100%] Built target seismic_cpp
+Code compiled successfully.
+
+Dataset filename: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/documents.bin
+Index filename: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_true_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_none
+Running: ./build/bin/build_inverted_index --input-file /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/documents.bin --output-file /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_true_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_none --n-postings 4000 --summary-energy 0.4 --centroid-fraction 0.1 --knn 0 --clustering-algorithm random-kmeans --kmeans-doc-cut 15 --kmeans-pruning-factor 0.005 --transform none --summarization max --dynamic-support true
+Building inverted index with the following parameters:
+  Input file: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/documents.bin
+  Output file: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_true_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_none
+  N postings: 4000
+  Summary energy: 0.4
+  Centroid fraction: 0.1
+  Min cluster size: 2
+  KNN: 0
+  Clustering algorithm: random-kmeans
+  K-means doc cut: 15
+  K-means pruning factor: 0.005
+
+Loading dataset from /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/documents.bin...
+Number of Vectors: 8841823
+Number of Dimensions: 28679
+Avg number of components: 121.046
+
+Building the index...
+Distributing and pruning postings: Using sparsity parameter s = 15
+15 rows
+JLT matrix initialization took 100054661 microseconds
+265 secs
+	Number of posting lists: 28679
+Building summaries: 
+terminate called after throwing an instance of 'std::out_of_range'
+  what():  The offset is not the first position of a vector in the dataset
+Aborted (core dumped)
+ERROR: Index building failed.

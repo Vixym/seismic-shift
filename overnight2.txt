@@ -1,0 +1,67 @@
+Running experiment: splade_cocondenser_msmarco
+
+Hardware configuration
+Date: 2025-12-08 19:25:25.748667
+Machine: fast.csail.mit.edu
+CPU usage (%): 0.2
+Machine load: 0.25146484375, 0.08984375, 0.025390625
+Memory (free, GiB): 1168
+Memory (avail, GiB): 1166
+Memory (total, GiB): 1510
+for detailed information, check the hardware log file: ./splade_cocondenser_msmarco_2025-12-08_19:25:25/machine.output
+
+WARNING: Your CPU may not be set to performance mode.
+
+
+Git info
+Current Branch: dynamic_seismic
+Commit ID: b4e457f319c6d862662d6d5fa9d945f5cec76dd4
+
+Compiling the code
+Compiling code with cmake --build build --config Release
+[  7%] Built target seismic_core
+[ 11%] Built target build_inverted_index
+[ 13%] Building CXX object CMakeFiles/perf_inverted_index.dir/src/bin/perf_inverted_index.cpp.o
+[ 15%] Linking CXX executable bin/perf_inverted_index
+[ 15%] Built target perf_inverted_index
+[ 18%] Built target test_jlt_index
+[ 22%] Built target gtest
+[ 26%] Built target gtest_main
+[ 54%] Built target tests
+[ 58%] Built target sandbox
+[ 62%] Built target sandbox_json
+[ 66%] Built target sandbox_rtti
+[ 71%] Built target sandbox_vs_dll
+[ 75%] Built target sandbox_vs
+[ 79%] Built target performance
+[ 83%] Built target gmock
+[ 86%] Built target gmock_main
+[100%] Built target seismic_cpp
+Code compiled successfully.
+
+Dataset filename: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/documents.bin
+Index filename: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_True_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_jlt
+Running: ./build/bin/build_inverted_index --input-file /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/documents.bin --output-file /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_True_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_jlt --n-postings 4000 --summary-energy 0.4 --centroid-fraction 0.1 --knn 0 --clustering-algorithm random-kmeans --kmeans-doc-cut 15 --kmeans-pruning-factor 0.005
+Building inverted index with the following parameters:
+  Input file: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/documents.bin
+  Output file: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_True_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_jlt
+  N postings: 4000
+  Summary energy: 0.4
+  Centroid fraction: 0.1
+  Min cluster size: 2
+  KNN: 0
+  Clustering algorithm: random-kmeans
+  K-means doc cut: 15
+  K-means pruning factor: 0.005
+
+Loading dataset from /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/documents.bin...
+Traceback (most recent call last):
+  File "/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/script/run_experiments.py", line 547, in <module>
+    main(args.exp, args.skip_build)
+  File "/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/script/run_experiments.py", line 538, in main
+    run_experiment(config_data)
+  File "/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/script/run_experiments.py", line 508, in run_experiment
+    building_time = build_index(config_data, experiment_folder)
+  File "/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/script/run_experiments.py", line 180, in build_index
+    for line in iter(build_process.stdout.readline, b''):
+KeyboardInterrupt

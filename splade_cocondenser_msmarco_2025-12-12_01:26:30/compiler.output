@@ -1,0 +1,10 @@
+[  7%] Built target seismic_core
+[ 11%] Built target build_inverted_index
+[ 13%] Building CXX object CMakeFiles/perf_inverted_index.dir/src/bin/perf_inverted_index.cpp.o
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/perf_inverted_index.cpp: In function ‘int main(int, char**)’:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/perf_inverted_index.cpp:268:22: error: ‘elapsed’ was not declared in this scope
+  268 |         std::cerr << elapsed / (args.n_runs * n_queries) << std::endl;
+      |                      ^~~~~~~
+gmake[2]: *** [CMakeFiles/perf_inverted_index.dir/build.make:79: CMakeFiles/perf_inverted_index.dir/src/bin/perf_inverted_index.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:399: CMakeFiles/perf_inverted_index.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

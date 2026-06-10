@@ -1,0 +1,60 @@
+[  7%] Built target seismic_core
+[  9%] Building CXX object CMakeFiles/build_inverted_index.dir/src/bin/build_inverted_index.cpp.o
+[ 11%] Linking CXX executable bin/build_inverted_index
+[ 11%] Built target build_inverted_index
+[ 13%] Building CXX object CMakeFiles/perf_inverted_index.dir/src/bin/perf_inverted_index.cpp.o
+[ 15%] Linking CXX executable bin/perf_inverted_index
+[ 15%] Built target perf_inverted_index
+[ 17%] Building CXX object CMakeFiles/test_jlt_index.dir/src/bin/test_jlt_index.cpp.o
+[ 19%] Linking CXX executable bin/test_jlt_index
+[ 19%] Built target test_jlt_index
+[ 21%] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o
+[ 23%] Linking CXX static library ../../../lib/libgtest.a
+[ 23%] Built target gtest
+[ 25%] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
+[ 26%] Linking CXX static library ../../../lib/libgtest_main.a
+[ 26%] Built target gtest_main
+[ 28%] Building CXX object CMakeFiles/tests.dir/test/distances_test.cpp.o
+[ 30%] Building CXX object CMakeFiles/tests.dir/test/elias_fano_test.cpp.o
+[ 32%] Building CXX object CMakeFiles/tests.dir/test/json_utils_test.cpp.o
+[ 34%] Building CXX object CMakeFiles/tests.dir/test/main_test.cpp.o
+[ 36%] Building CXX object CMakeFiles/tests.dir/test/utils_test.cpp.o
+[ 38%] Building CXX object CMakeFiles/tests.dir/test/top_k_selector_test.cpp.o
+[ 40%] Building CXX object CMakeFiles/tests.dir/test/space_usage_test.cpp.o
+[ 42%] Building CXX object CMakeFiles/tests.dir/test/seismic_index_test.cpp.o
+[ 44%] Linking CXX executable tests
+[ 55%] Built target tests
+[ 57%] Building CXX object _deps/cereal-build/sandbox/CMakeFiles/sandbox.dir/sandbox.cpp.o
+[ 59%] Linking CXX executable sandbox
+[ 59%] Built target sandbox
+[ 61%] Building CXX object _deps/cereal-build/sandbox/CMakeFiles/sandbox_json.dir/sandbox_json.cpp.o
+[ 63%] Linking CXX executable sandbox_json
+[ 63%] Built target sandbox_json
+[ 65%] Building CXX object _deps/cereal-build/sandbox/CMakeFiles/sandbox_rtti.dir/sandbox_rtti.cpp.o
+[ 67%] Linking CXX executable sandbox_rtti
+[ 67%] Built target sandbox_rtti
+[ 69%] Building CXX object _deps/cereal-build/sandbox/sandbox_shared_lib/CMakeFiles/sandbox_vs_dll.dir/base.cpp.o
+[ 71%] Building CXX object _deps/cereal-build/sandbox/sandbox_shared_lib/CMakeFiles/sandbox_vs_dll.dir/derived.cpp.o
+[ 73%] Linking CXX shared library libsandbox_vs_dll.so
+[ 73%] Built target sandbox_vs_dll
+[ 75%] Building CXX object _deps/cereal-build/sandbox/CMakeFiles/sandbox_vs.dir/sandbox_vs.cpp.o
+[ 76%] Linking CXX executable sandbox_vs
+[ 76%] Built target sandbox_vs
+[ 78%] Building CXX object _deps/cereal-build/sandbox/CMakeFiles/performance.dir/performance.cpp.o
+[ 80%] Linking CXX executable performance
+[ 80%] Built target performance
+[ 82%] Building CXX object _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.o
+[ 84%] Linking CXX static library ../../../lib/libgmock.a
+[ 84%] Built target gmock
+[ 86%] Building CXX object _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o
+[ 88%] Linking CXX static library ../../../lib/libgmock_main.a
+[ 88%] Built target gmock_main
+[ 90%] Building CXX object pylib/CMakeFiles/seismic_cpp.dir/seismic_bindings.cpp.o
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/pylib/seismic_bindings.cpp: In static member function ‘static PySeismicIndex PySeismicIndex::build(const string&, size_t, float, size_t, float, size_t, std::optional<std::__cxx11::basic_string<char> >, std::optional<long unsigned int>, std::optional<std::unordered_map<std::__cxx11::basic_string<char>, long unsigned int> >, size_t)’:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/pylib/seismic_bindings.cpp:196:16: warning: unused parameter ‘num_threads’ [-Wunused-parameter]
+  196 |         size_t num_threads = 0)
+      |         ~~~~~~~^~~~~~~~~~~~~~~
+[ 92%] Building CXX object pylib/CMakeFiles/seismic_cpp.dir/__/src/data_type.cpp.o
+[ 94%] Linking CXX shared module seismic_cpp.cpython-310-x86_64-linux-gnu.so
+lto-wrapper: warning: using serial compilation of 3 LTRANS jobs
+[100%] Built target seismic_cpp

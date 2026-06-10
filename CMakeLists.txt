@@ -61,6 +61,14 @@ add_executable(perf_inverted_index src/bin/perf_inverted_index.cpp)
 target_link_libraries(perf_inverted_index PRIVATE seismic_core nlohmann_json::nlohmann_json cereal OpenMP::OpenMP_CXX)
 target_include_directories(perf_inverted_index PRIVATE ${CEREAL_INCLUDE_DIR})
 
+# Create the small end-to-end JLT index test
+add_executable(test_jlt_index src/bin/test_jlt_index.cpp)
+target_link_libraries(test_jlt_index PRIVATE seismic_core nlohmann_json::nlohmann_json cereal OpenMP::OpenMP_CXX)
+
+target_include_directories(test_jlt_index PRIVATE ${CEREAL_INCLUDE_DIR} )
+
+set_target_properties(test_jlt_index PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
 # Set output directory for binaries
 set_target_properties(build_inverted_index perf_inverted_index PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"

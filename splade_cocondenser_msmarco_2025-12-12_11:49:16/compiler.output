@@ -1,0 +1,12 @@
+[  7%] Built target seismic_core
+[  9%] Building CXX object CMakeFiles/build_inverted_index.dir/src/bin/build_inverted_index.cpp.o
+In file included from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_posting_list.h:18,
+                 from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_inverted_index.h:23,
+                 from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/build_inverted_index.cpp:31:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../summary_strategies.h: In static member function ‘static seismic::SparseVector seismic::MaxSummary::summary_init_packed(const seismic::SparseDatasetMut<float>&, const std::vector<long unsigned int>&, size_t)’:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../summary_strategies.h:37:50: error: ‘prev_offset’ was not declared in this scope
+   37 |             size_t doc_id = dataset.offset_to_id(prev_offset);
+      |                                                  ^~~~~~~~~~~
+gmake[2]: *** [CMakeFiles/build_inverted_index.dir/build.make:79: CMakeFiles/build_inverted_index.dir/src/bin/build_inverted_index.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:367: CMakeFiles/build_inverted_index.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

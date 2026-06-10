@@ -1,0 +1,31 @@
+Performance testing with the following parameters:
+  Index file: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_True_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_jlt
+  Query file: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin
+  Output path: ./splade_cocondenser_msmarco_2025-12-07_20:55:11/results_recall_90
+  N queries: 10000
+  K: 10
+  N runs: 1
+  Query cut: 3
+  Heap factor: 0.9
+  N KNN: 0
+  First sorted: false
+Loading index from /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_True_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_jlt.index.seismic...
+Index loaded successfully
+Number of documents: 8841823
+
+Loading queries from /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin...
+Number of Queries: 6980
+Number of Dimensions: 28313
+Avg number of components: 43.9454
+Searching for top-10 results
+Number of evaluated queries: 6980
+Number of documents: 8841823
+Avg number of non-zero components: 121.046
+Time 9401 microsecs per query
+9401
+Time 649405 microsecs per insert_document
+649405
+Time 8400 microsecs per delete_document
+84000553
+Writing results to ./splade_cocondenser_msmarco_2025-12-07_20:55:11/results_recall_90...
+Results written successfully

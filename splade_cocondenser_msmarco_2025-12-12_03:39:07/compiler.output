@@ -1,0 +1,15 @@
+[  7%] Built target seismic_core
+[  9%] Building CXX object CMakeFiles/build_inverted_index.dir/src/bin/build_inverted_index.cpp.o
+[ 11%] Linking CXX executable bin/build_inverted_index
+[ 11%] Built target build_inverted_index
+[ 13%] Building CXX object CMakeFiles/perf_inverted_index.dir/src/bin/perf_inverted_index.cpp.o
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/perf_inverted_index.cpp: In function ‘int main(int, char**)’:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/perf_inverted_index.cpp:292:43: error: expected ‘;’ before ‘}’ token
+  292 |             inverted_index.delete_doc(run)
+      |                                           ^
+      |                                           ;
+  293 |         }
+      |         ~                                  
+gmake[2]: *** [CMakeFiles/perf_inverted_index.dir/build.make:79: CMakeFiles/perf_inverted_index.dir/src/bin/perf_inverted_index.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:399: CMakeFiles/perf_inverted_index.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

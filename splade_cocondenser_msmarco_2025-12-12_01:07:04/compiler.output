@@ -1,0 +1,50 @@
+CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Found OpenMP
+-- Using the multi-header code from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/build/_deps/json-src/include/
+CMake Warning (dev) at build/_deps/cereal-src/CMakeLists.txt:111 (find_package):
+  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+CMake Deprecation Warning at build/_deps/pybind11-src/CMakeLists.txt:8 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- pybind11 v2.11.1 
+-- Configuring done (5.7s)
+-- Generating done (1.3s)
+-- Build files have been written to: /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/build
+[  7%] Built target seismic_core
+[ 11%] Built target build_inverted_index
+[ 15%] Built target perf_inverted_index
+[ 19%] Built target test_jlt_index
+[ 23%] Built target gtest
+[ 26%] Built target gtest_main
+[ 55%] Built target tests
+[ 59%] Built target sandbox
+[ 63%] Built target sandbox_json
+[ 67%] Built target sandbox_rtti
+[ 73%] Built target sandbox_vs_dll
+[ 76%] Built target sandbox_vs
+[ 80%] Built target performance
+[ 84%] Built target gmock
+[ 88%] Built target gmock_main
+[ 90%] Linking CXX shared module seismic_cpp.cpython-310-x86_64-linux-gnu.so
+lto-wrapper: warning: using serial compilation of 3 LTRANS jobs
+[100%] Built target seismic_cpp

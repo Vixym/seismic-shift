@@ -1,0 +1,138 @@
+[  7%] Built target seismic_core
+[  9%] Building CXX object CMakeFiles/build_inverted_index.dir/src/bin/build_inverted_index.cpp.o
+In file included from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_inverted_index.h:23,
+                 from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/build_inverted_index.cpp:31:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_posting_list.h: In instantiation of ‘static seismic::MyPostingList seismic::MyPostingList::build(const seismic::SparseDatasetMut<T>&, const std::vector<std::pair<T, long unsigned int> >&, const seismic::Configuration&, const SparseJLT&) [with T = float]’:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_inverted_index.h:274:52:   required from ‘static seismic::MyInvertedIndex<T> seismic::MyInvertedIndex<T>::build(const seismic::SparseDatasetMut<T>&, const seismic::Configuration&) [with T = float]’
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/build_inverted_index.cpp:250:41:   required from here
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_posting_list.h:118:29: error: no match for ‘operator=’ (operand types are ‘std::pair<std::vector<short unsigned int>, std::vector<float> >’ and ‘seismic::SparseVector’ {aka ‘std::vector<std::pair<short unsigned int, float> >’})
+  118 |                     summary = MaxSummary::summary_init(dataset, block, summarization.get_n_components());
+      |                     ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/11/bits/stl_algobase.h:64,
+                 from /usr/include/c++/11/bits/char_traits.h:39,
+                 from /usr/include/c++/11/ios:40,
+                 from /usr/include/c++/11/ostream:38,
+                 from /usr/include/c++/11/iostream:39,
+                 from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/build_inverted_index.cpp:1:
+/usr/include/c++/11/bits/stl_pair.h:418:9: note: candidate: ‘template<class _U1, class _U2> constexpr typename std::enable_if<std::__and_<std::is_assignable<_T1&, const _U1&>, std::is_assignable<_T2&, const _U2&> >::value, std::pair<_T1, _T2>&>::type std::pair<_T1, _T2>::operator=(const std::pair<_U1, _U2>&) [with _U1 = _U1; _U2 = _U2; _T1 = std::vector<short unsigned int>; _T2 = std::vector<float>]’
+  418 |         operator=(const pair<_U1, _U2>& __p)
+      |         ^~~~~~~~
+/usr/include/c++/11/bits/stl_pair.h:418:9: note:   template argument deduction/substitution failed:
+In file included from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_inverted_index.h:23,
+                 from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/build_inverted_index.cpp:31:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_posting_list.h:118:29: note:   ‘seismic::SparseVector’ {aka ‘std::vector<std::pair<short unsigned int, float> >’} is not derived from ‘const std::pair<_T1, _T2>’
+  118 |                     summary = MaxSummary::summary_init(dataset, block, summarization.get_n_components());
+      |                     ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/11/bits/stl_algobase.h:64,
+                 from /usr/include/c++/11/bits/char_traits.h:39,
+                 from /usr/include/c++/11/ios:40,
+                 from /usr/include/c++/11/ostream:38,
+                 from /usr/include/c++/11/iostream:39,
+                 from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/build_inverted_index.cpp:1:
+/usr/include/c++/11/bits/stl_pair.h:430:9: note: candidate: ‘template<class _U1, class _U2> constexpr typename std::enable_if<std::__and_<std::is_assignable<_T1&, _U1&&>, std::is_assignable<_T2&, _U2&&> >::value, std::pair<_T1, _T2>&>::type std::pair<_T1, _T2>::operator=(std::pair<_U1, _U2>&&) [with _U1 = _U1; _U2 = _U2; _T1 = std::vector<short unsigned int>; _T2 = std::vector<float>]’
+  430 |         operator=(pair<_U1, _U2>&& __p)
+      |         ^~~~~~~~
+/usr/include/c++/11/bits/stl_pair.h:430:9: note:   template argument deduction/substitution failed:
+In file included from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_inverted_index.h:23,
+                 from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/build_inverted_index.cpp:31:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_posting_list.h:118:29: note:   ‘seismic::SparseVector’ {aka ‘std::vector<std::pair<short unsigned int, float> >’} is not derived from ‘std::pair<_T1, _T2>’
+  118 |                     summary = MaxSummary::summary_init(dataset, block, summarization.get_n_components());
+      |                     ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/11/bits/stl_algobase.h:64,
+                 from /usr/include/c++/11/bits/char_traits.h:39,
+                 from /usr/include/c++/11/ios:40,
+                 from /usr/include/c++/11/ostream:38,
+                 from /usr/include/c++/11/iostream:39,
+                 from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/build_inverted_index.cpp:1:
+/usr/include/c++/11/bits/stl_pair.h:390:7: note: candidate: ‘constexpr std::pair<_T1, _T2>& std::pair<_T1, _T2>::operator=(typename std::conditional<std::__and_<std::is_copy_assignable<_T1>, std::is_copy_assignable<_T2> >::value, const std::pair<_T1, _T2>&, const std::__nonesuch&>::type) [with _T1 = std::vector<short unsigned int>; _T2 = std::vector<float>; typename std::conditional<std::__and_<std::is_copy_assignable<_T1>, std::is_copy_assignable<_T2> >::value, const std::pair<_T1, _T2>&, const std::__nonesuch&>::type = const std::pair<std::vector<short unsigned int>, std::vector<float> >&]’
+  390 |       operator=(typename conditional<
+      |       ^~~~~~~~
+/usr/include/c++/11/bits/stl_pair.h:393:55: note:   no known conversion for argument 1 from ‘seismic::SparseVector’ {aka ‘std::vector<std::pair<short unsigned int, float> >’} to ‘std::conditional<true, const std::pair<std::vector<short unsigned int>, std::vector<float> >&, const std::__nonesuch&>::type’ {aka ‘const std::pair<std::vector<short unsigned int>, std::vector<float> >&’}
+  390 |       operator=(typename conditional<
+      |                 ~~~~~~~~~~~~~~~~~~~~~                  
+  391 |                 __and_<is_copy_assignable<_T1>,
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        
+  392 |                        is_copy_assignable<_T2>>::value,
+      |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  393 |                 const pair&, const __nonesuch&>::type __p)
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+/usr/include/c++/11/bits/stl_pair.h:401:7: note: candidate: ‘constexpr std::pair<_T1, _T2>& std::pair<_T1, _T2>::operator=(typename std::conditional<std::__and_<std::is_move_assignable<_Tp>, std::is_move_assignable<_T2> >::value, std::pair<_T1, _T2>&&, std::__nonesuch&&>::type) [with _T1 = std::vector<short unsigned int>; _T2 = std::vector<float>; typename std::conditional<std::__and_<std::is_move_assignable<_Tp>, std::is_move_assignable<_T2> >::value, std::pair<_T1, _T2>&&, std::__nonesuch&&>::type = std::pair<std::vector<short unsigned int>, std::vector<float> >&&]’
+  401 |       operator=(typename conditional<
+      |       ^~~~~~~~
+/usr/include/c++/11/bits/stl_pair.h:404:45: note:   no known conversion for argument 1 from ‘seismic::SparseVector’ {aka ‘std::vector<std::pair<short unsigned int, float> >’} to ‘std::conditional<true, std::pair<std::vector<short unsigned int>, std::vector<float> >&&, std::__nonesuch&&>::type’ {aka ‘std::pair<std::vector<short unsigned int>, std::vector<float> >&&’}
+  401 |       operator=(typename conditional<
+      |                 ~~~~~~~~~~~~~~~~~~~~~        
+  402 |                 __and_<is_move_assignable<_T1>,
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  403 |                        is_move_assignable<_T2>>::value,
+      |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  404 |                 pair&&, __nonesuch&&>::type __p)
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+In file included from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_inverted_index.h:23,
+                 from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/build_inverted_index.cpp:31:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_posting_list.h:120:29: error: no match for ‘operator=’ (operand types are ‘std::pair<std::vector<short unsigned int>, std::vector<float> >’ and ‘seismic::SparseVector’ {aka ‘std::vector<std::pair<short unsigned int, float> >’})
+  120 |                     summary = CentroidSummary::summary_init(dataset, block, summarization.get_n_components());
+      |                     ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/11/bits/stl_algobase.h:64,
+                 from /usr/include/c++/11/bits/char_traits.h:39,
+                 from /usr/include/c++/11/ios:40,
+                 from /usr/include/c++/11/ostream:38,
+                 from /usr/include/c++/11/iostream:39,
+                 from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/build_inverted_index.cpp:1:
+/usr/include/c++/11/bits/stl_pair.h:418:9: note: candidate: ‘template<class _U1, class _U2> constexpr typename std::enable_if<std::__and_<std::is_assignable<_T1&, const _U1&>, std::is_assignable<_T2&, const _U2&> >::value, std::pair<_T1, _T2>&>::type std::pair<_T1, _T2>::operator=(const std::pair<_U1, _U2>&) [with _U1 = _U1; _U2 = _U2; _T1 = std::vector<short unsigned int>; _T2 = std::vector<float>]’
+  418 |         operator=(const pair<_U1, _U2>& __p)
+      |         ^~~~~~~~
+/usr/include/c++/11/bits/stl_pair.h:418:9: note:   template argument deduction/substitution failed:
+In file included from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_inverted_index.h:23,
+                 from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/build_inverted_index.cpp:31:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_posting_list.h:120:29: note:   ‘seismic::SparseVector’ {aka ‘std::vector<std::pair<short unsigned int, float> >’} is not derived from ‘const std::pair<_T1, _T2>’
+  120 |                     summary = CentroidSummary::summary_init(dataset, block, summarization.get_n_components());
+      |                     ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/11/bits/stl_algobase.h:64,
+                 from /usr/include/c++/11/bits/char_traits.h:39,
+                 from /usr/include/c++/11/ios:40,
+                 from /usr/include/c++/11/ostream:38,
+                 from /usr/include/c++/11/iostream:39,
+                 from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/build_inverted_index.cpp:1:
+/usr/include/c++/11/bits/stl_pair.h:430:9: note: candidate: ‘template<class _U1, class _U2> constexpr typename std::enable_if<std::__and_<std::is_assignable<_T1&, _U1&&>, std::is_assignable<_T2&, _U2&&> >::value, std::pair<_T1, _T2>&>::type std::pair<_T1, _T2>::operator=(std::pair<_U1, _U2>&&) [with _U1 = _U1; _U2 = _U2; _T1 = std::vector<short unsigned int>; _T2 = std::vector<float>]’
+  430 |         operator=(pair<_U1, _U2>&& __p)
+      |         ^~~~~~~~
+/usr/include/c++/11/bits/stl_pair.h:430:9: note:   template argument deduction/substitution failed:
+In file included from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_inverted_index.h:23,
+                 from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/build_inverted_index.cpp:31:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/../my_posting_list.h:120:29: note:   ‘seismic::SparseVector’ {aka ‘std::vector<std::pair<short unsigned int, float> >’} is not derived from ‘std::pair<_T1, _T2>’
+  120 |                     summary = CentroidSummary::summary_init(dataset, block, summarization.get_n_components());
+      |                     ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/11/bits/stl_algobase.h:64,
+                 from /usr/include/c++/11/bits/char_traits.h:39,
+                 from /usr/include/c++/11/ios:40,
+                 from /usr/include/c++/11/ostream:38,
+                 from /usr/include/c++/11/iostream:39,
+                 from /afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/build_inverted_index.cpp:1:
+/usr/include/c++/11/bits/stl_pair.h:390:7: note: candidate: ‘constexpr std::pair<_T1, _T2>& std::pair<_T1, _T2>::operator=(typename std::conditional<std::__and_<std::is_copy_assignable<_T1>, std::is_copy_assignable<_T2> >::value, const std::pair<_T1, _T2>&, const std::__nonesuch&>::type) [with _T1 = std::vector<short unsigned int>; _T2 = std::vector<float>; typename std::conditional<std::__and_<std::is_copy_assignable<_T1>, std::is_copy_assignable<_T2> >::value, const std::pair<_T1, _T2>&, const std::__nonesuch&>::type = const std::pair<std::vector<short unsigned int>, std::vector<float> >&]’
+  390 |       operator=(typename conditional<
+      |       ^~~~~~~~
+/usr/include/c++/11/bits/stl_pair.h:393:55: note:   no known conversion for argument 1 from ‘seismic::SparseVector’ {aka ‘std::vector<std::pair<short unsigned int, float> >’} to ‘std::conditional<true, const std::pair<std::vector<short unsigned int>, std::vector<float> >&, const std::__nonesuch&>::type’ {aka ‘const std::pair<std::vector<short unsigned int>, std::vector<float> >&’}
+  390 |       operator=(typename conditional<
+      |                 ~~~~~~~~~~~~~~~~~~~~~                  
+  391 |                 __and_<is_copy_assignable<_T1>,
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        
+  392 |                        is_copy_assignable<_T2>>::value,
+      |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  393 |                 const pair&, const __nonesuch&>::type __p)
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+/usr/include/c++/11/bits/stl_pair.h:401:7: note: candidate: ‘constexpr std::pair<_T1, _T2>& std::pair<_T1, _T2>::operator=(typename std::conditional<std::__and_<std::is_move_assignable<_Tp>, std::is_move_assignable<_T2> >::value, std::pair<_T1, _T2>&&, std::__nonesuch&&>::type) [with _T1 = std::vector<short unsigned int>; _T2 = std::vector<float>; typename std::conditional<std::__and_<std::is_move_assignable<_Tp>, std::is_move_assignable<_T2> >::value, std::pair<_T1, _T2>&&, std::__nonesuch&&>::type = std::pair<std::vector<short unsigned int>, std::vector<float> >&&]’
+  401 |       operator=(typename conditional<
+      |       ^~~~~~~~
+/usr/include/c++/11/bits/stl_pair.h:404:45: note:   no known conversion for argument 1 from ‘seismic::SparseVector’ {aka ‘std::vector<std::pair<short unsigned int, float> >’} to ‘std::conditional<true, std::pair<std::vector<short unsigned int>, std::vector<float> >&&, std::__nonesuch&&>::type’ {aka ‘std::pair<std::vector<short unsigned int>, std::vector<float> >&&’}
+  401 |       operator=(typename conditional<
+      |                 ~~~~~~~~~~~~~~~~~~~~~        
+  402 |                 __and_<is_move_assignable<_T1>,
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  403 |                        is_move_assignable<_T2>>::value,
+      |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  404 |                 pair&&, __nonesuch&&>::type __p)
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+gmake[2]: *** [CMakeFiles/build_inverted_index.dir/build.make:79: CMakeFiles/build_inverted_index.dir/src/bin/build_inverted_index.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:367: CMakeFiles/build_inverted_index.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

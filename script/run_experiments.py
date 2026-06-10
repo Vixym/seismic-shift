@@ -148,6 +148,15 @@ def build_index(configs, experiment_dir):
         # Add kmeans-pruning-factor if it exists
         if 'kmeans-pruning-factor' in configs['indexing_parameters']:
             command_and_params.append(f"--kmeans-pruning-factor {configs['indexing_parameters']['kmeans-pruning-factor']}")
+
+        if 'transform' in configs['indexing_parameters']:
+            command_and_params.append(f"--transform {configs['indexing_parameters']['transform']}")
+
+        if 'summarization' in configs['indexing_parameters']:
+            command_and_params.append(f"--summarization {configs['indexing_parameters']['summarization']}")
+
+        if 'dynamic-support' in configs['indexing_parameters']:
+            command_and_params.append(f"--dynamic-support {configs['indexing_parameters']['dynamic-support']}")
     else:
         # Original Rust command format
         command_and_params = [

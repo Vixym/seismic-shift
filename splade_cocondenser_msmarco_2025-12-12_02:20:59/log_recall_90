@@ -1,0 +1,4031 @@
+Performance testing with the following parameters:
+  Index file: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_true_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_jlt
+  Query file: /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin
+  Output path: ./splade_cocondenser_msmarco_2025-12-12_02:20:59/results_recall_90
+  N queries: 10000
+  K: 10
+  N runs: 1
+  Query cut: 3
+  Heap factor: 0.9
+  N KNN: 0
+  First sorted: false
+Loading index from /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/indexes/sigir_2024_splade_cocondenser_centroid-fraction_0.1_clustering-algorithm_random-kmeans_dynamic-support_true_kmeans-doc-cut_15_kmeans-pruning-factor_0.005_knn_0_n-postings_4000_summarization_max_summary-energy_0.4_transform_jlt.index.seismic...
+Index loaded successfully
+Number of documents: 8841823
+
+Loading queries from /storage/jasonehc/sparse_datasets/msmarco_v1_passage/cocondenser/data/queries.bin...
+Number of Queries: 6980
+Number of Dimensions: 28313
+Avg number of components: 43.9454
+Searching for top-10 results
+Number of evaluated queries: 6980
+Number of documents: 8841823
+Avg number of non-zero components: 121.046
+Time 394024 microsecs per query
+3895
+Adding document to 28 postings lists.
+Index: Time to insert doc 8841823: 667766
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841824: 44844
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841825: 43401
+Adding document to 52 postings lists.
+Index: Time to insert doc 8841826: 50152
+Adding document to 44 postings lists.
+Index: Time to insert doc 8841827: 39470
+Adding document to 29 postings lists.
+Index: Time to insert doc 8841828: 23191
+Adding document to 26 postings lists.
+Index: Time to insert doc 8841829: 23605
+Adding document to 56 postings lists.
+Index: Time to insert doc 8841830: 54715
+Adding document to 80 postings lists.
+Index: Time to insert doc 8841831: 88777
+Adding document to 20 postings lists.
+Index: Time to insert doc 8841832: 16777
+Adding document to 36 postings lists.
+Index: Time to insert doc 8841833: 35104
+Adding document to 68 postings lists.
+Index: Time to insert doc 8841834: 70705
+Adding document to 29 postings lists.
+Index: Time to insert doc 8841835: 27173
+Adding document to 30 postings lists.
+Index: Time to insert doc 8841836: 27715
+Adding document to 42 postings lists.
+Index: Time to insert doc 8841837: 40513
+Adding document to 54 postings lists.
+Index: Time to insert doc 8841838: 50144
+Adding document to 62 postings lists.
+Index: Time to insert doc 8841839: 58800
+Adding document to 40 postings lists.
+Index: Time to insert doc 8841840: 37509
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841841: 19818
+Adding document to 58 postings lists.
+Index: Time to insert doc 8841842: 57594
+Adding document to 30 postings lists.
+Index: Time to insert doc 8841843: 25334
+Adding document to 29 postings lists.
+Index: Time to insert doc 8841844: 25406
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841845: 21714
+Adding document to 57 postings lists.
+Index: Time to insert doc 8841846: 51219
+Adding document to 50 postings lists.
+Index: Time to insert doc 8841847: 45957
+Adding document to 51 postings lists.
+Index: Time to insert doc 8841848: 46518
+Adding document to 32 postings lists.
+Index: Time to insert doc 8841849: 25256
+Adding document to 24 postings lists.
+Index: Time to insert doc 8841850: 21466
+Adding document to 27 postings lists.
+Index: Time to insert doc 8841851: 20485
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841852: 42798
+Adding document to 27 postings lists.
+Index: Time to insert doc 8841853: 22370
+Adding document to 37 postings lists.
+Index: Time to insert doc 8841854: 31991
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841855: 21829
+Adding document to 73 postings lists.
+Index: Time to insert doc 8841856: 71592
+Adding document to 59 postings lists.
+Index: Time to insert doc 8841857: 57054
+Adding document to 28 postings lists.
+Index: Time to insert doc 8841858: 23390
+Adding document to 39 postings lists.
+Index: Time to insert doc 8841859: 35533
+Adding document to 34 postings lists.
+Index: Time to insert doc 8841860: 27492
+Adding document to 62 postings lists.
+Index: Time to insert doc 8841861: 70713
+Adding document to 31 postings lists.
+Index: Time to insert doc 8841862: 26950
+Adding document to 41 postings lists.
+Index: Time to insert doc 8841863: 37737
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841864: 40977
+Adding document to 23 postings lists.
+Index: Time to insert doc 8841865: 20448
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841866: 21538
+Adding document to 63 postings lists.
+Index: Time to insert doc 8841867: 62888
+Adding document to 28 postings lists.
+Index: Time to insert doc 8841868: 24907
+Adding document to 28 postings lists.
+Index: Time to insert doc 8841869: 22533
+Adding document to 31 postings lists.
+Index: Time to insert doc 8841870: 28830
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841871: 19997
+Adding document to 34 postings lists.
+Index: Time to insert doc 8841872: 29824
+Adding document to 62 postings lists.
+Index: Time to insert doc 8841873: 58984
+Adding document to 28 postings lists.
+Index: Time to insert doc 8841874: 24596
+Adding document to 34 postings lists.
+Index: Time to insert doc 8841875: 30518
+Adding document to 19 postings lists.
+Index: Time to insert doc 8841876: 14912
+Adding document to 41 postings lists.
+Index: Time to insert doc 8841877: 36099
+Adding document to 62 postings lists.
+Index: Time to insert doc 8841878: 61222
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841879: 40922
+Adding document to 29 postings lists.
+Index: Time to insert doc 8841880: 25131
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841881: 43606
+Adding document to 30 postings lists.
+Index: Time to insert doc 8841882: 26364
+Adding document to 54 postings lists.
+Index: Time to insert doc 8841883: 47286
+Adding document to 36 postings lists.
+Index: Time to insert doc 8841884: 32411
+Adding document to 44 postings lists.
+Index: Time to insert doc 8841885: 40347
+Adding document to 38 postings lists.
+Index: Time to insert doc 8841886: 36471
+Adding document to 38 postings lists.
+Index: Time to insert doc 8841887: 29835
+Adding document to 33 postings lists.
+Index: Time to insert doc 8841888: 25117
+Adding document to 28 postings lists.
+Index: Time to insert doc 8841889: 24525
+Adding document to 21 postings lists.
+Index: Time to insert doc 8841890: 18430
+Adding document to 32 postings lists.
+Index: Time to insert doc 8841891: 29351
+Adding document to 51 postings lists.
+Index: Time to insert doc 8841892: 50371
+Adding document to 37 postings lists.
+Index: Time to insert doc 8841893: 33401
+Adding document to 51 postings lists.
+Index: Time to insert doc 8841894: 48799
+Adding document to 58 postings lists.
+Index: Time to insert doc 8841895: 58698
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841896: 45081
+Adding document to 63 postings lists.
+Index: Time to insert doc 8841897: 79818
+Adding document to 26 postings lists.
+Index: Time to insert doc 8841898: 19669
+Adding document to 44 postings lists.
+Index: Time to insert doc 8841899: 39583
+Adding document to 27 postings lists.
+Index: Time to insert doc 8841900: 23203
+Adding document to 23 postings lists.
+Index: Time to insert doc 8841901: 20279
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841902: 41579
+Adding document to 49 postings lists.
+Index: Time to insert doc 8841903: 46605
+Adding document to 51 postings lists.
+Index: Time to insert doc 8841904: 48543
+Adding document to 16 postings lists.
+Index: Time to insert doc 8841905: 12496
+Adding document to 33 postings lists.
+Index: Time to insert doc 8841906: 29933
+Adding document to 70 postings lists.
+Index: Time to insert doc 8841907: 70031
+Adding document to 51 postings lists.
+Index: Time to insert doc 8841908: 48490
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841909: 39766
+Adding document to 47 postings lists.
+Index: Time to insert doc 8841910: 44684
+Adding document to 92 postings lists.
+Index: Time to insert doc 8841911: 95234
+Adding document to 44 postings lists.
+Index: Time to insert doc 8841912: 41397
+Adding document to 54 postings lists.
+Index: Time to insert doc 8841913: 50071
+Adding document to 62 postings lists.
+Index: Time to insert doc 8841914: 58050
+Adding document to 33 postings lists.
+Index: Time to insert doc 8841915: 29226
+Adding document to 52 postings lists.
+Index: Time to insert doc 8841916: 49650
+Adding document to 38 postings lists.
+Index: Time to insert doc 8841917: 34093
+Adding document to 57 postings lists.
+Index: Time to insert doc 8841918: 56366
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841919: 22136
+Adding document to 70 postings lists.
+Index: Time to insert doc 8841920: 70815
+Adding document to 40 postings lists.
+Index: Time to insert doc 8841921: 35743
+Adding document to 40 postings lists.
+Index: Time to insert doc 8841922: 34754
+Adding document to 95 postings lists.
+Index: Time to insert doc 8841923: 98689
+Adding document to 56 postings lists.
+Index: Time to insert doc 8841924: 54276
+Adding document to 83 postings lists.
+Index: Time to insert doc 8841925: 81464
+Adding document to 31 postings lists.
+Index: Time to insert doc 8841926: 26849
+Adding document to 30 postings lists.
+Index: Time to insert doc 8841927: 27004
+Adding document to 70 postings lists.
+Index: Time to insert doc 8841928: 68589
+Adding document to 40 postings lists.
+Index: Time to insert doc 8841929: 41580
+Adding document to 29 postings lists.
+Index: Time to insert doc 8841930: 23054
+Adding document to 50 postings lists.
+Index: Time to insert doc 8841931: 49459
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841932: 40009
+Adding document to 55 postings lists.
+Index: Time to insert doc 8841933: 52286
+Adding document to 39 postings lists.
+Index: Time to insert doc 8841934: 33908
+Adding document to 28 postings lists.
+Index: Time to insert doc 8841935: 25554
+Adding document to 54 postings lists.
+Index: Time to insert doc 8841936: 52556
+Adding document to 39 postings lists.
+Index: Time to insert doc 8841937: 34853
+Adding document to 75 postings lists.
+Index: Time to insert doc 8841938: 74383
+Adding document to 34 postings lists.
+Index: Time to insert doc 8841939: 31241
+Adding document to 32 postings lists.
+Index: Time to insert doc 8841940: 28371
+Adding document to 60 postings lists.
+Index: Time to insert doc 8841941: 58770
+Adding document to 40 postings lists.
+Index: Time to insert doc 8841942: 38939
+Adding document to 91 postings lists.
+Index: Time to insert doc 8841943: 93150
+Adding document to 52 postings lists.
+Index: Time to insert doc 8841944: 51184
+Adding document to 47 postings lists.
+Index: Time to insert doc 8841945: 42844
+Adding document to 34 postings lists.
+Index: Time to insert doc 8841946: 30618
+Adding document to 52 postings lists.
+Index: Time to insert doc 8841947: 48886
+Adding document to 86 postings lists.
+Index: Time to insert doc 8841948: 92967
+Adding document to 76 postings lists.
+Index: Time to insert doc 8841949: 76025
+Adding document to 63 postings lists.
+Index: Time to insert doc 8841950: 61490
+Adding document to 44 postings lists.
+Index: Time to insert doc 8841951: 41307
+Adding document to 31 postings lists.
+Index: Time to insert doc 8841952: 28737
+Adding document to 37 postings lists.
+Index: Time to insert doc 8841953: 35646
+Adding document to 17 postings lists.
+Index: Time to insert doc 8841954: 15074
+Adding document to 20 postings lists.
+Index: Time to insert doc 8841955: 16917
+Adding document to 65 postings lists.
+Index: Time to insert doc 8841956: 64785
+Adding document to 64 postings lists.
+Index: Time to insert doc 8841957: 64955
+Adding document to 26 postings lists.
+Index: Time to insert doc 8841958: 21442
+Adding document to 62 postings lists.
+Index: Time to insert doc 8841959: 63038
+Adding document to 14 postings lists.
+Index: Time to insert doc 8841960: 11401
+Adding document to 32 postings lists.
+Index: Time to insert doc 8841961: 29387
+Adding document to 44 postings lists.
+Index: Time to insert doc 8841962: 39634
+Adding document to 41 postings lists.
+Index: Time to insert doc 8841963: 35358
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841964: 44560
+Adding document to 17 postings lists.
+Index: Time to insert doc 8841965: 14768
+Adding document to 58 postings lists.
+Index: Time to insert doc 8841966: 57362
+Adding document to 55 postings lists.
+Index: Time to insert doc 8841967: 53925
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841968: 41449
+Adding document to 38 postings lists.
+Index: Time to insert doc 8841969: 34371
+Adding document to 38 postings lists.
+Index: Time to insert doc 8841970: 31446
+Adding document to 55 postings lists.
+Index: Time to insert doc 8841971: 51659
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841972: 22270
+Adding document to 46 postings lists.
+Index: Time to insert doc 8841973: 42788
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841974: 39648
+Adding document to 36 postings lists.
+Index: Time to insert doc 8841975: 32925
+Adding document to 38 postings lists.
+Index: Time to insert doc 8841976: 32728
+Adding document to 62 postings lists.
+Index: Time to insert doc 8841977: 62105
+Adding document to 67 postings lists.
+Index: Time to insert doc 8841978: 66017
+Adding document to 47 postings lists.
+Index: Time to insert doc 8841979: 43350
+Adding document to 32 postings lists.
+Index: Time to insert doc 8841980: 27192
+Adding document to 50 postings lists.
+Index: Time to insert doc 8841981: 45413
+Adding document to 66 postings lists.
+Index: Time to insert doc 8841982: 67766
+Adding document to 34 postings lists.
+Index: Time to insert doc 8841983: 30931
+Adding document to 32 postings lists.
+Index: Time to insert doc 8841984: 27105
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841985: 41286
+Adding document to 50 postings lists.
+Index: Time to insert doc 8841986: 46555
+Adding document to 38 postings lists.
+Index: Time to insert doc 8841987: 35797
+Adding document to 56 postings lists.
+Index: Time to insert doc 8841988: 53813
+Adding document to 25 postings lists.
+Index: Time to insert doc 8841989: 22929
+Adding document to 51 postings lists.
+Index: Time to insert doc 8841990: 50020
+Adding document to 41 postings lists.
+Index: Time to insert doc 8841991: 38617
+Adding document to 64 postings lists.
+Index: Time to insert doc 8841992: 61944
+Adding document to 45 postings lists.
+Index: Time to insert doc 8841993: 41353
+Adding document to 56 postings lists.
+Index: Time to insert doc 8841994: 51813
+Adding document to 21 postings lists.
+Index: Time to insert doc 8841995: 16607
+Adding document to 56 postings lists.
+Index: Time to insert doc 8841996: 55233
+Adding document to 57 postings lists.
+Index: Time to insert doc 8841997: 56639
+Adding document to 33 postings lists.
+Index: Time to insert doc 8841998: 29660
+Adding document to 67 postings lists.
+Index: Time to insert doc 8841999: 69161
+Adding document to 78 postings lists.
+Index: Time to insert doc 8842000: 79885
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842001: 74118
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842002: 23194
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842003: 28301
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842004: 39522
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842005: 55026
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842006: 55456
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842007: 24002
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842008: 39632
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842009: 56055
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842010: 64060
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842011: 47817
+Adding document to 71 postings lists.
+Index: Time to insert doc 8842012: 71239
+Adding document to 67 postings lists.
+Index: Time to insert doc 8842013: 66348
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842014: 23812
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842015: 44420
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842016: 21282
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842017: 29866
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842018: 27331
+Adding document to 81 postings lists.
+Index: Time to insert doc 8842019: 83265
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842020: 29799
+Adding document to 75 postings lists.
+Index: Time to insert doc 8842021: 77586
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842022: 18366
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842023: 58239
+Adding document to 81 postings lists.
+Index: Time to insert doc 8842024: 83703
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842025: 48472
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842026: 30213
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842027: 42695
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842028: 64749
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842029: 18058
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842030: 37919
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842031: 54916
+Adding document to 66 postings lists.
+Index: Time to insert doc 8842032: 63905
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842033: 65136
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842034: 51509
+Adding document to 70 postings lists.
+Index: Time to insert doc 8842035: 72592
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842036: 21380
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842037: 27099
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842038: 31967
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842039: 36402
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842040: 66297
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842041: 34689
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842042: 45079
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842043: 43119
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842044: 51103
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842045: 20652
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842046: 43723
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842047: 38354
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842048: 29187
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842049: 57712
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842050: 42557
+Adding document to 81 postings lists.
+Index: Time to insert doc 8842051: 81468
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842052: 42336
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842053: 32890
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842054: 44072
+Adding document to 18 postings lists.
+Index: Time to insert doc 8842055: 14138
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842056: 36147
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842057: 28137
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842058: 22000
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842059: 54033
+Adding document to 15 postings lists.
+Index: Time to insert doc 8842060: 11823
+Adding document to 79 postings lists.
+Index: Time to insert doc 8842061: 80929
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842062: 23671
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842063: 48272
+Adding document to 74 postings lists.
+Index: Time to insert doc 8842064: 76273
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842065: 47477
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842066: 38918
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842067: 31867
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842068: 59402
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842069: 20468
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842070: 49216
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842071: 71421
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842072: 40038
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842073: 55861
+Adding document to 77 postings lists.
+Index: Time to insert doc 8842074: 79041
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842075: 43360
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842076: 36004
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842077: 47013
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842078: 29420
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842079: 57185
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842080: 44381
+Adding document to 66 postings lists.
+Index: Time to insert doc 8842081: 64679
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842082: 40215
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842083: 37563
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842084: 62176
+Adding document to 83 postings lists.
+Index: Time to insert doc 8842085: 84079
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842086: 33486
+Adding document to 76 postings lists.
+Index: Time to insert doc 8842087: 77428
+Adding document to 67 postings lists.
+Index: Time to insert doc 8842088: 67414
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842089: 59911
+Adding document to 63 postings lists.
+Index: Time to insert doc 8842090: 62628
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842091: 23968
+Adding document to 83 postings lists.
+Index: Time to insert doc 8842092: 82836
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842093: 52536
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842094: 66878
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842095: 25990
+Adding document to 21 postings lists.
+Index: Time to insert doc 8842096: 17293
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842097: 59469
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842098: 45843
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842099: 55554
+Adding document to 76 postings lists.
+Index: Time to insert doc 8842100: 73680
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842101: 31461
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842102: 38775
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842103: 58906
+Adding document to 15 postings lists.
+Index: Time to insert doc 8842104: 11337
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842105: 46032
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842106: 48932
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842107: 43980
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842108: 16777
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842109: 53087
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842110: 43426
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842111: 50416
+Adding document to 66 postings lists.
+Index: Time to insert doc 8842112: 65757
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842113: 31687
+Adding document to 72 postings lists.
+Index: Time to insert doc 8842114: 71809
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842115: 31886
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842116: 44752
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842117: 33246
+Adding document to 75 postings lists.
+Index: Time to insert doc 8842118: 77433
+Adding document to 63 postings lists.
+Index: Time to insert doc 8842119: 69932
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842120: 27218
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842121: 34051
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842122: 27942
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842123: 58428
+Adding document to 75 postings lists.
+Index: Time to insert doc 8842124: 76917
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842125: 22462
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842126: 37575
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842127: 20332
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842128: 60146
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842129: 58757
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842130: 54183
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842131: 37883
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842132: 30102
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842133: 36477
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842134: 36771
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842135: 59228
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842136: 25619
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842137: 24412
+Adding document to 66 postings lists.
+Index: Time to insert doc 8842138: 66470
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842139: 69319
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842140: 40316
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842141: 48058
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842142: 23410
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842143: 21698
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842144: 31734
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842145: 24980
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842146: 30322
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842147: 31689
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842148: 37254
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842149: 23680
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842150: 42446
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842151: 46011
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842152: 45327
+Adding document to 69 postings lists.
+Index: Time to insert doc 8842153: 69921
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842154: 42506
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842155: 37211
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842156: 28831
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842157: 49185
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842158: 48981
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842159: 21307
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842160: 41936
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842161: 38919
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842162: 63188
+Adding document to 107 postings lists.
+Index: Time to insert doc 8842163: 111398
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842164: 25764
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842165: 54439
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842166: 56390
+Adding document to 21 postings lists.
+Index: Time to insert doc 8842167: 17089
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842168: 31098
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842169: 62760
+Adding document to 69 postings lists.
+Index: Time to insert doc 8842170: 70886
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842171: 19353
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842172: 22313
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842173: 38971
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842174: 40269
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842175: 22745
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842176: 24067
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842177: 22868
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842178: 20354
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842179: 40812
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842180: 19633
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842181: 43505
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842182: 54541
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842183: 70084
+Adding document to 88 postings lists.
+Index: Time to insert doc 8842184: 93510
+Adding document to 80 postings lists.
+Index: Time to insert doc 8842185: 82211
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842186: 62117
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842187: 23391
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842188: 27275
+Adding document to 67 postings lists.
+Index: Time to insert doc 8842189: 65426
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842190: 57993
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842191: 33794
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842192: 60487
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842193: 41126
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842194: 54770
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842195: 41630
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842196: 26232
+Adding document to 19 postings lists.
+Index: Time to insert doc 8842197: 17261
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842198: 39449
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842199: 28685
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842200: 35931
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842201: 20485
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842202: 37673
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842203: 36106
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842204: 52408
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842205: 37448
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842206: 46164
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842207: 37992
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842208: 26637
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842209: 34802
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842210: 52931
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842211: 35061
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842212: 22551
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842213: 27803
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842214: 29844
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842215: 37288
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842216: 51046
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842217: 52340
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842218: 21942
+Adding document to 67 postings lists.
+Index: Time to insert doc 8842219: 64278
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842220: 51390
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842221: 47001
+Adding document to 16 postings lists.
+Index: Time to insert doc 8842222: 13234
+Adding document to 71 postings lists.
+Index: Time to insert doc 8842223: 69479
+Adding document to 71 postings lists.
+Index: Time to insert doc 8842224: 74037
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842225: 19051
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842226: 38148
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842227: 54803
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842228: 41998
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842229: 54249
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842230: 38984
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842231: 42824
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842232: 53036
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842233: 58062
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842234: 21263
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842235: 32502
+Adding document to 72 postings lists.
+Index: Time to insert doc 8842236: 72389
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842237: 28034
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842238: 21269
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842239: 49475
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842240: 19841
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842241: 23059
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842242: 25860
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842243: 62976
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842244: 29080
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842245: 33882
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842246: 44149
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842247: 18161
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842248: 37108
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842249: 45570
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842250: 52979
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842251: 40538
+Adding document to 91 postings lists.
+Index: Time to insert doc 8842252: 96817
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842253: 54164
+Adding document to 19 postings lists.
+Index: Time to insert doc 8842254: 16187
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842255: 60141
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842256: 18543
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842257: 20847
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842258: 60996
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842259: 39480
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842260: 30886
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842261: 27303
+Adding document to 21 postings lists.
+Index: Time to insert doc 8842262: 16650
+Adding document to 69 postings lists.
+Index: Time to insert doc 8842263: 68504
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842264: 58139
+Adding document to 74 postings lists.
+Index: Time to insert doc 8842265: 80732
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842266: 34894
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842267: 41129
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842268: 52297
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842269: 34856
+Adding document to 13 postings lists.
+Index: Time to insert doc 8842270: 10374
+Adding document to 17 postings lists.
+Index: Time to insert doc 8842271: 12804
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842272: 51125
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842273: 16975
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842274: 42676
+Adding document to 15 postings lists.
+Index: Time to insert doc 8842275: 13107
+Adding document to 87 postings lists.
+Index: Time to insert doc 8842276: 88952
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842277: 38554
+Adding document to 17 postings lists.
+Index: Time to insert doc 8842278: 13633
+Adding document to 18 postings lists.
+Index: Time to insert doc 8842279: 14890
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842280: 48925
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842281: 19786
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842282: 58547
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842283: 16384
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842284: 49919
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842285: 53732
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842286: 61237
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842287: 34946
+Adding document to 16 postings lists.
+Index: Time to insert doc 8842288: 12817
+Adding document to 19 postings lists.
+Index: Time to insert doc 8842289: 15834
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842290: 23114
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842291: 17058
+Adding document to 86 postings lists.
+Index: Time to insert doc 8842292: 89651
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842293: 27209
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842294: 32015
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842295: 37058
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842296: 33344
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842297: 35314
+Adding document to 99 postings lists.
+Index: Time to insert doc 8842298: 101961
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842299: 28621
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842300: 20722
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842301: 44546
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842302: 38904
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842303: 28186
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842304: 51787
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842305: 54191
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842306: 29323
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842307: 28605
+Adding document to 67 postings lists.
+Index: Time to insert doc 8842308: 70087
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842309: 26919
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842310: 47600
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842311: 26826
+Adding document to 21 postings lists.
+Index: Time to insert doc 8842312: 17269
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842313: 34045
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842314: 36456
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842315: 56457
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842316: 47898
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842317: 46397
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842318: 49747
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842319: 31103
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842320: 19900
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842321: 28459
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842322: 41610
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842323: 56188
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842324: 25860
+Adding document to 70 postings lists.
+Index: Time to insert doc 8842325: 68970
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842326: 51314
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842327: 35457
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842328: 45388
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842329: 35233
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842330: 60773
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842331: 53401
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842332: 39802
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842333: 33022
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842334: 49871
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842335: 21175
+Adding document to 81 postings lists.
+Index: Time to insert doc 8842336: 79639
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842337: 36306
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842338: 65495
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842339: 28165
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842340: 22142
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842341: 44910
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842342: 59313
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842343: 72596
+Adding document to 75 postings lists.
+Index: Time to insert doc 8842344: 78746
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842345: 40957
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842346: 39198
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842347: 48278
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842348: 28897
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842349: 43552
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842350: 29655
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842351: 52109
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842352: 27867
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842353: 54580
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842354: 22466
+Adding document to 90 postings lists.
+Index: Time to insert doc 8842355: 94567
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842356: 36674
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842357: 28193
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842358: 15878
+Adding document to 79 postings lists.
+Index: Time to insert doc 8842359: 79630
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842360: 57328
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842361: 44473
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842362: 44853
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842363: 38514
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842364: 53782
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842365: 59952
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842366: 52412
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842367: 30133
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842368: 23321
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842369: 44587
+Adding document to 77 postings lists.
+Index: Time to insert doc 8842370: 80589
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842371: 63403
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842372: 48838
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842373: 42013
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842374: 22256
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842375: 68595
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842376: 60139
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842377: 27352
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842378: 39707
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842379: 29658
+Adding document to 69 postings lists.
+Index: Time to insert doc 8842380: 72255
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842381: 46642
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842382: 47889
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842383: 62411
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842384: 16238
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842385: 39637
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842386: 23501
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842387: 19705
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842388: 47575
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842389: 33572
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842390: 28315
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842391: 25712
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842392: 25875
+Adding document to 15 postings lists.
+Index: Time to insert doc 8842393: 11260
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842394: 58909
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842395: 51078
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842396: 24369
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842397: 43609
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842398: 57426
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842399: 19043
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842400: 15782
+Adding document to 21 postings lists.
+Index: Time to insert doc 8842401: 16985
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842402: 19551
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842403: 23185
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842404: 40153
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842405: 37825
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842406: 25954
+Adding document to 74 postings lists.
+Index: Time to insert doc 8842407: 74496
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842408: 22559
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842409: 20394
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842410: 26042
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842411: 39160
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842412: 47563
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842413: 43422
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842414: 27799
+Adding document to 82 postings lists.
+Index: Time to insert doc 8842415: 86757
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842416: 26742
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842417: 21412
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842418: 34058
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842419: 74838
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842420: 17620
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842421: 21763
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842422: 21102
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842423: 61205
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842424: 61403
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842425: 32962
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842426: 44472
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842427: 43651
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842428: 22074
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842429: 25702
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842430: 46212
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842431: 52944
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842432: 50988
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842433: 33975
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842434: 28882
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842435: 42158
+Adding document to 63 postings lists.
+Index: Time to insert doc 8842436: 63713
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842437: 22753
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842438: 17602
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842439: 22566
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842440: 52859
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842441: 49871
+Adding document to 18 postings lists.
+Index: Time to insert doc 8842442: 15348
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842443: 30022
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842444: 28034
+Adding document to 17 postings lists.
+Index: Time to insert doc 8842445: 14162
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842446: 33986
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842447: 44159
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842448: 30480
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842449: 49193
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842450: 32165
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842451: 54647
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842452: 40064
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842453: 20189
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842454: 40219
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842455: 30620
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842456: 54603
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842457: 27744
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842458: 36503
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842459: 39719
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842460: 57865
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842461: 40745
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842462: 48687
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842463: 24979
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842464: 30926
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842465: 59345
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842466: 44191
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842467: 34668
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842468: 33907
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842469: 46732
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842470: 20266
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842471: 18262
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842472: 57155
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842473: 33649
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842474: 58398
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842475: 29855
+Adding document to 21 postings lists.
+Index: Time to insert doc 8842476: 16667
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842477: 49827
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842478: 54777
+Adding document to 18 postings lists.
+Index: Time to insert doc 8842479: 14874
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842480: 56990
+Adding document to 21 postings lists.
+Index: Time to insert doc 8842481: 16896
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842482: 46689
+Adding document to 74 postings lists.
+Index: Time to insert doc 8842483: 86147
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842484: 42713
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842485: 30775
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842486: 33255
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842487: 17359
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842488: 58132
+Adding document to 63 postings lists.
+Index: Time to insert doc 8842489: 62439
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842490: 71362
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842491: 28603
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842492: 21142
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842493: 51621
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842494: 22204
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842495: 39702
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842496: 52702
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842497: 23309
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842498: 43667
+Adding document to 80 postings lists.
+Index: Time to insert doc 8842499: 84058
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842500: 42961
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842501: 35131
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842502: 23392
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842503: 47406
+Adding document to 83 postings lists.
+Index: Time to insert doc 8842504: 87387
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842505: 35710
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842506: 26345
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842507: 31416
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842508: 21563
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842509: 61977
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842510: 44825
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842511: 18866
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842512: 27940
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842513: 38638
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842514: 34392
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842515: 37653
+Adding document to 24 postings lists.
+Index: Time to insert doc 8842516: 20217
+Adding document to 18 postings lists.
+Index: Time to insert doc 8842517: 15609
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842518: 30286
+Adding document to 86 postings lists.
+Index: Time to insert doc 8842519: 90998
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842520: 44315
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842521: 27483
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842522: 15576
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842523: 44799
+Adding document to 67 postings lists.
+Index: Time to insert doc 8842524: 67179
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842525: 18496
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842526: 31415
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842527: 56008
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842528: 44553
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842529: 54236
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842530: 28843
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842531: 17279
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842532: 65323
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842533: 25052
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842534: 63885
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842535: 56800
+Adding document to 77 postings lists.
+Index: Time to insert doc 8842536: 78915
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842537: 36479
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842538: 46730
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842539: 41380
+Adding document to 63 postings lists.
+Index: Time to insert doc 8842540: 63691
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842541: 18953
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842542: 46262
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842543: 67681
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842544: 43474
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842545: 64658
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842546: 44755
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842547: 30471
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842548: 54348
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842549: 33266
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842550: 33432
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842551: 44888
+Adding document to 66 postings lists.
+Index: Time to insert doc 8842552: 68270
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842553: 53358
+Adding document to 66 postings lists.
+Index: Time to insert doc 8842554: 65525
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842555: 45786
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842556: 40814
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842557: 31264
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842558: 44183
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842559: 29727
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842560: 27838
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842561: 41376
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842562: 63863
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842563: 58786
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842564: 32481
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842565: 25027
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842566: 38916
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842567: 35211
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842568: 26368
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842569: 40755
+Adding document to 75 postings lists.
+Index: Time to insert doc 8842570: 76573
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842571: 43782
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842572: 65438
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842573: 41584
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842574: 42057
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842575: 30404
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842576: 34730
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842577: 19825
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842578: 35178
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842579: 51027
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842580: 51022
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842581: 32086
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842582: 38356
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842583: 32210
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842584: 25953
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842585: 19484
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842586: 33487
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842587: 27417
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842588: 38256
+Adding document to 83 postings lists.
+Index: Time to insert doc 8842589: 88370
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842590: 48079
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842591: 51622
+Adding document to 67 postings lists.
+Index: Time to insert doc 8842592: 67030
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842593: 29899
+Adding document to 80 postings lists.
+Index: Time to insert doc 8842594: 82798
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842595: 53135
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842596: 51733
+Adding document to 81 postings lists.
+Index: Time to insert doc 8842597: 84471
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842598: 69420
+Adding document to 73 postings lists.
+Index: Time to insert doc 8842599: 76426
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842600: 34095
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842601: 26299
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842602: 53462
+Adding document to 88 postings lists.
+Index: Time to insert doc 8842603: 92531
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842604: 54464
+Adding document to 79 postings lists.
+Index: Time to insert doc 8842605: 82298
+Adding document to 70 postings lists.
+Index: Time to insert doc 8842606: 70385
+Adding document to 17 postings lists.
+Index: Time to insert doc 8842607: 13036
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842608: 22986
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842609: 50826
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842610: 23099
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842611: 51793
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842612: 30232
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842613: 24150
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842614: 28142
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842615: 30822
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842616: 28440
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842617: 34538
+Adding document to 68 postings lists.
+Index: Time to insert doc 8842618: 69819
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842619: 51231
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842620: 22843
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842621: 61035
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842622: 33129
+Adding document to 77 postings lists.
+Index: Time to insert doc 8842623: 81600
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842624: 19154
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842625: 26475
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842626: 26321
+Adding document to 69 postings lists.
+Index: Time to insert doc 8842627: 72135
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842628: 34987
+Adding document to 93 postings lists.
+Index: Time to insert doc 8842629: 101237
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842630: 41705
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842631: 27098
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842632: 34038
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842633: 41512
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842634: 58524
+Adding document to 88 postings lists.
+Index: Time to insert doc 8842635: 91315
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842636: 40795
+Adding document to 74 postings lists.
+Index: Time to insert doc 8842637: 78426
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842638: 29627
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842639: 24569
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842640: 34165
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842641: 35198
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842642: 35071
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842643: 49354
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842644: 22125
+Adding document to 77 postings lists.
+Index: Time to insert doc 8842645: 81705
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842646: 42869
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842647: 40372
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842648: 21927
+Adding document to 75 postings lists.
+Index: Time to insert doc 8842649: 79022
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842650: 16070
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842651: 25268
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842652: 59663
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842653: 48762
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842654: 35426
+Adding document to 15 postings lists.
+Index: Time to insert doc 8842655: 12089
+Adding document to 53 postings lists.
+Index: Time to insert doc 8842656: 54172
+Adding document to 70 postings lists.
+Index: Time to insert doc 8842657: 78378
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842658: 47026
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842659: 34513
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842660: 27330
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842661: 41636
+Adding document to 74 postings lists.
+Index: Time to insert doc 8842662: 76509
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842663: 20351
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842664: 30436
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842665: 33177
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842666: 51740
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842667: 41889
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842668: 49925
+Adding document to 29 postings lists.
+Index: Time to insert doc 8842669: 24122
+Adding document to 23 postings lists.
+Index: Time to insert doc 8842670: 19430
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842671: 36498
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842672: 37341
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842673: 31703
+Adding document to 70 postings lists.
+Index: Time to insert doc 8842674: 71633
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842675: 40003
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842676: 36323
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842677: 61646
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842678: 36505
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842679: 42406
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842680: 22030
+Adding document to 79 postings lists.
+Index: Time to insert doc 8842681: 78529
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842682: 26804
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842683: 33835
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842684: 59796
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842685: 42491
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842686: 40437
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842687: 45721
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842688: 40591
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842689: 60391
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842690: 56852
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842691: 31259
+Adding document to 19 postings lists.
+Index: Time to insert doc 8842692: 18272
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842693: 20574
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842694: 57617
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842695: 53895
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842696: 53922
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842697: 28058
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842698: 31529
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842699: 35678
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842700: 40984
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842701: 42399
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842702: 42323
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842703: 29691
+Adding document to 36 postings lists.
+Index: Time to insert doc 8842704: 30297
+Adding document to 45 postings lists.
+Index: Time to insert doc 8842705: 39948
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842706: 50663
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842707: 64140
+Adding document to 74 postings lists.
+Index: Time to insert doc 8842708: 75691
+Adding document to 26 postings lists.
+Index: Time to insert doc 8842709: 20564
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842710: 29561
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842711: 59238
+Adding document to 56 postings lists.
+Index: Time to insert doc 8842712: 51554
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842713: 30037
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842714: 45289
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842715: 43241
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842716: 62200
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842717: 17990
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842718: 26886
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842719: 17719
+Adding document to 19 postings lists.
+Index: Time to insert doc 8842720: 15617
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842721: 54832
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842722: 32370
+Adding document to 49 postings lists.
+Index: Time to insert doc 8842723: 47804
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842724: 26797
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842725: 21101
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842726: 45812
+Adding document to 69 postings lists.
+Index: Time to insert doc 8842727: 70583
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842728: 37841
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842729: 42473
+Adding document to 22 postings lists.
+Index: Time to insert doc 8842730: 18423
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842731: 18062
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842732: 67189
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842733: 50422
+Adding document to 30 postings lists.
+Index: Time to insert doc 8842734: 26980
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842735: 43777
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842736: 29021
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842737: 28237
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842738: 21494
+Adding document to 75 postings lists.
+Index: Time to insert doc 8842739: 78572
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842740: 50848
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842741: 35823
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842742: 58246
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842743: 48233
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842744: 24403
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842745: 32103
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842746: 30057
+Adding document to 61 postings lists.
+Index: Time to insert doc 8842747: 61537
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842748: 34016
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842749: 58858
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842750: 35656
+Adding document to 52 postings lists.
+Index: Time to insert doc 8842751: 50282
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842752: 52240
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842753: 43082
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842754: 38720
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842755: 57807
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842756: 24546
+Adding document to 46 postings lists.
+Index: Time to insert doc 8842757: 44847
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842758: 32756
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842759: 45279
+Adding document to 59 postings lists.
+Index: Time to insert doc 8842760: 56279
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842761: 27542
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842762: 43205
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842763: 37895
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842764: 30152
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842765: 24653
+Adding document to 38 postings lists.
+Index: Time to insert doc 8842766: 35616
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842767: 38377
+Adding document to 20 postings lists.
+Index: Time to insert doc 8842768: 16842
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842769: 42197
+Adding document to 66 postings lists.
+Index: Time to insert doc 8842770: 67174
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842771: 62973
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842772: 53534
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842773: 46302
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842774: 31177
+Adding document to 55 postings lists.
+Index: Time to insert doc 8842775: 55162
+Adding document to 77 postings lists.
+Index: Time to insert doc 8842776: 84638
+Adding document to 62 postings lists.
+Index: Time to insert doc 8842777: 64208
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842778: 32454
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842779: 56642
+Adding document to 34 postings lists.
+Index: Time to insert doc 8842780: 27594
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842781: 55003
+Adding document to 43 postings lists.
+Index: Time to insert doc 8842782: 39425
+Adding document to 27 postings lists.
+Index: Time to insert doc 8842783: 20695
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842784: 53088
+Adding document to 64 postings lists.
+Index: Time to insert doc 8842785: 64112
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842786: 44922
+Adding document to 63 postings lists.
+Index: Time to insert doc 8842787: 62018
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842788: 31450
+Adding document to 50 postings lists.
+Index: Time to insert doc 8842789: 51946
+Adding document to 73 postings lists.
+Index: Time to insert doc 8842790: 74309
+Adding document to 51 postings lists.
+Index: Time to insert doc 8842791: 49522
+Adding document to 48 postings lists.
+Index: Time to insert doc 8842792: 44956
+Adding document to 60 postings lists.
+Index: Time to insert doc 8842793: 59576
+Adding document to 37 postings lists.
+Index: Time to insert doc 8842794: 34346
+Adding document to 42 postings lists.
+Index: Time to insert doc 8842795: 40425
+Adding document to 63 postings lists.
+Index: Time to insert doc 8842796: 69162
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842797: 54793
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842798: 37257
+Adding document to 33 postings lists.
+Index: Time to insert doc 8842799: 32133
+Adding document to 44 postings lists.
+Index: Time to insert doc 8842800: 43782
+Adding document to 47 postings lists.
+Index: Time to insert doc 8842801: 47472
+Adding document to 82 postings lists.
+Index: Time to insert doc 8842802: 88289
+Adding document to 71 postings lists.
+Index: Time to insert doc 8842803: 75630
+Adding document to 35 postings lists.
+Index: Time to insert doc 8842804: 33336
+Adding document to 28 postings lists.
+Index: Time to insert doc 8842805: 25596
+Adding document to 57 postings lists.
+Index: Time to insert doc 8842806: 56528
+Adding document to 54 postings lists.
+Index: Time to insert doc 8842807: 53487
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842808: 30828
+Adding document to 58 postings lists.
+Index: Time to insert doc 8842809: 58528
+Adding document to 65 postings lists.
+Index: Time to insert doc 8842810: 67903
+Adding document to 79 postings lists.
+Index: Time to insert doc 8842811: 84188
+Adding document to 84 postings lists.
+Index: Time to insert doc 8842812: 88388
+Adding document to 76 postings lists.
+Index: Time to insert doc 8842813: 81088
+Adding document to 40 postings lists.
+Index: Time to insert doc 8842814: 36205
+Adding document to 71 postings lists.
+Index: Time to insert doc 8842815: 69652
+Adding document to 39 postings lists.
+Index: Time to insert doc 8842816: 35163
+Adding document to 41 postings lists.
+Index: Time to insert doc 8842817: 46836
+Adding document to 70 postings lists.
+Index: Time to insert doc 8842818: 69098
+Adding document to 32 postings lists.
+Index: Time to insert doc 8842819: 30784
+Adding document to 71 postings lists.
+Index: Time to insert doc 8842820: 74886
+Adding document to 31 postings lists.
+Index: Time to insert doc 8842821: 28347
+Adding document to 25 postings lists.
+Index: Time to insert doc 8842822: 23865
+Time -48482 microsecs per insert_document
+-48482448
+Deleting doc 0 from 21 posting lists.
+Index: Time to delete doc 0: 23522
+Deleting doc 1 from 9 posting lists.
+Index: Time to delete doc 1: 9511
+Deleting doc 2 from 5 posting lists.
+Index: Time to delete doc 2: 5106
+Deleting doc 3 from 9 posting lists.
+Index: Time to delete doc 3: 9597
+Deleting doc 4 from 9 posting lists.
+Index: Time to delete doc 4: 8596
+Deleting doc 5 from 18 posting lists.
+Index: Time to delete doc 5: 18696
+Deleting doc 6 from 7 posting lists.
+Index: Time to delete doc 6: 6939
+Deleting doc 7 from 19 posting lists.
+Index: Time to delete doc 7: 21578
+Deleting doc 8 from 10 posting lists.
+Index: Time to delete doc 8: 9934
+Deleting doc 9 from 8 posting lists.
+Index: Time to delete doc 9: 8108
+Deleting doc 10 from 20 posting lists.
+Index: Time to delete doc 10: 22405
+Deleting doc 11 from 14 posting lists.
+Index: Time to delete doc 11: 14226
+Deleting doc 12 from 14 posting lists.
+Index: Time to delete doc 12: 15454
+Deleting doc 13 from 28 posting lists.
+Index: Time to delete doc 13: 29932
+Deleting doc 14 from 12 posting lists.
+Index: Time to delete doc 14: 12690
+Deleting doc 15 from 20 posting lists.
+Index: Time to delete doc 15: 22127
+Deleting doc 16 from 19 posting lists.
+Index: Time to delete doc 16: 20137
+Deleting doc 17 from 23 posting lists.
+Index: Time to delete doc 17: 25450
+Deleting doc 18 from 17 posting lists.
+Index: Time to delete doc 18: 18087
+Deleting doc 19 from 16 posting lists.
+Index: Time to delete doc 19: 18606
+Deleting doc 20 from 10 posting lists.
+Index: Time to delete doc 20: 10772
+Deleting doc 21 from 8 posting lists.
+Index: Time to delete doc 21: 8666
+Deleting doc 22 from 9 posting lists.
+Index: Time to delete doc 22: 9037
+Deleting doc 23 from 8 posting lists.
+Index: Time to delete doc 23: 8617
+Deleting doc 24 from 7 posting lists.
+Index: Time to delete doc 24: 7376
+Deleting doc 25 from 10 posting lists.
+Index: Time to delete doc 25: 10592
+Deleting doc 26 from 11 posting lists.
+Index: Time to delete doc 26: 11109
+Deleting doc 27 from 7 posting lists.
+Index: Time to delete doc 27: 7565
+Deleting doc 28 from 5 posting lists.
+Index: Time to delete doc 28: 5288
+Deleting doc 29 from 10 posting lists.
+Index: Time to delete doc 29: 9821
+Deleting doc 30 from 21 posting lists.
+Index: Time to delete doc 30: 22543
+Deleting doc 31 from 20 posting lists.
+Index: Time to delete doc 31: 20894
+Deleting doc 32 from 26 posting lists.
+Index: Time to delete doc 32: 27965
+Deleting doc 33 from 12 posting lists.
+Index: Time to delete doc 33: 13119
+Deleting doc 34 from 6 posting lists.
+Index: Time to delete doc 34: 6611
+Deleting doc 35 from 25 posting lists.
+Index: Time to delete doc 35: 27151
+Deleting doc 36 from 22 posting lists.
+Index: Time to delete doc 36: 24086
+Deleting doc 37 from 14 posting lists.
+Index: Time to delete doc 37: 14650
+Deleting doc 38 from 10 posting lists.
+Index: Time to delete doc 38: 10836
+Deleting doc 39 from 12 posting lists.
+Index: Time to delete doc 39: 12619
+Deleting doc 40 from 9 posting lists.
+Index: Time to delete doc 40: 7990
+Deleting doc 41 from 12 posting lists.
+Index: Time to delete doc 41: 11683
+Deleting doc 42 from 6 posting lists.
+Index: Time to delete doc 42: 5211
+Deleting doc 43 from 12 posting lists.
+Index: Time to delete doc 43: 12010
+Deleting doc 44 from 7 posting lists.
+Index: Time to delete doc 44: 6283
+Deleting doc 45 from 14 posting lists.
+Index: Time to delete doc 45: 13203
+Deleting doc 46 from 8 posting lists.
+Index: Time to delete doc 46: 8101
+Deleting doc 47 from 6 posting lists.
+Index: Time to delete doc 47: 5929
+Deleting doc 48 from 14 posting lists.
+Index: Time to delete doc 48: 15509
+Deleting doc 49 from 4 posting lists.
+Index: Time to delete doc 49: 4111
+Deleting doc 50 from 5 posting lists.
+Index: Time to delete doc 50: 5027
+Deleting doc 51 from 13 posting lists.
+Index: Time to delete doc 51: 14415
+Deleting doc 52 from 5 posting lists.
+Index: Time to delete doc 52: 5561
+Deleting doc 53 from 5 posting lists.
+Index: Time to delete doc 53: 5027
+Deleting doc 54 from 2 posting lists.
+Index: Time to delete doc 54: 2053
+Deleting doc 55 from 4 posting lists.
+Index: Time to delete doc 55: 3952
+Deleting doc 56 from 4 posting lists.
+Index: Time to delete doc 56: 4216
+Deleting doc 57 from 5 posting lists.
+Index: Time to delete doc 57: 5003
+Deleting doc 58 from 5 posting lists.
+Index: Time to delete doc 58: 4644
+Deleting doc 59 from 8 posting lists.
+Index: Time to delete doc 59: 8010
+Deleting doc 60 from 17 posting lists.
+Index: Time to delete doc 60: 18108
+Deleting doc 61 from 4 posting lists.
+Index: Time to delete doc 61: 3802
+Deleting doc 62 from 7 posting lists.
+Index: Time to delete doc 62: 7346
+Deleting doc 63 from 7 posting lists.
+Index: Time to delete doc 63: 6514
+Deleting doc 64 from 20 posting lists.
+Index: Time to delete doc 64: 20541
+Deleting doc 65 from 19 posting lists.
+Index: Time to delete doc 65: 19124
+Deleting doc 66 from 12 posting lists.
+Index: Time to delete doc 66: 12458
+Deleting doc 67 from 10 posting lists.
+Index: Time to delete doc 67: 10370
+Deleting doc 68 from 5 posting lists.
+Index: Time to delete doc 68: 4693
+Deleting doc 69 from 14 posting lists.
+Index: Time to delete doc 69: 14179
+Deleting doc 70 from 8 posting lists.
+Index: Time to delete doc 70: 7904
+Deleting doc 71 from 14 posting lists.
+Index: Time to delete doc 71: 15262
+Deleting doc 72 from 7 posting lists.
+Index: Time to delete doc 72: 14622
+Deleting doc 73 from 14 posting lists.
+Index: Time to delete doc 73: 13908
+Deleting doc 74 from 10 posting lists.
+Index: Time to delete doc 74: 10732
+Deleting doc 75 from 10 posting lists.
+Index: Time to delete doc 75: 10025
+Deleting doc 76 from 10 posting lists.
+Index: Time to delete doc 76: 10268
+Deleting doc 77 from 17 posting lists.
+Index: Time to delete doc 77: 17429
+Deleting doc 78 from 27 posting lists.
+Index: Time to delete doc 78: 29271
+Deleting doc 79 from 4 posting lists.
+Index: Time to delete doc 79: 3707
+Deleting doc 80 from 6 posting lists.
+Index: Time to delete doc 80: 5771
+Deleting doc 81 from 2 posting lists.
+Index: Time to delete doc 81: 1736
+Deleting doc 82 from 12 posting lists.
+Index: Time to delete doc 82: 13120
+Deleting doc 83 from 6 posting lists.
+Index: Time to delete doc 83: 5850
+Deleting doc 84 from 9 posting lists.
+Index: Time to delete doc 84: 8716
+Deleting doc 85 from 4 posting lists.
+Index: Time to delete doc 85: 3577
+Deleting doc 86 from 5 posting lists.
+Index: Time to delete doc 86: 4603
+Deleting doc 87 from 11 posting lists.
+Index: Time to delete doc 87: 10829
+Deleting doc 88 from 3 posting lists.
+Index: Time to delete doc 88: 2740
+Deleting doc 89 from 11 posting lists.
+Index: Time to delete doc 89: 11548
+Deleting doc 90 from 4 posting lists.
+Index: Time to delete doc 90: 3664
+Deleting doc 91 from 21 posting lists.
+Index: Time to delete doc 91: 22697
+Deleting doc 92 from 13 posting lists.
+Index: Time to delete doc 92: 11783
+Deleting doc 93 from 6 posting lists.
+Index: Time to delete doc 93: 5907
+Deleting doc 94 from 9 posting lists.
+Index: Time to delete doc 94: 8087
+Deleting doc 95 from 9 posting lists.
+Index: Time to delete doc 95: 8397
+Deleting doc 96 from 9 posting lists.
+Index: Time to delete doc 96: 8999
+Deleting doc 97 from 2 posting lists.
+Index: Time to delete doc 97: 2191
+Deleting doc 98 from 16 posting lists.
+Index: Time to delete doc 98: 17175
+Deleting doc 99 from 17 posting lists.
+Index: Time to delete doc 99: 16712
+Deleting doc 100 from 17 posting lists.
+Index: Time to delete doc 100: 17077
+Deleting doc 101 from 29 posting lists.
+Index: Time to delete doc 101: 30293
+Deleting doc 102 from 26 posting lists.
+Index: Time to delete doc 102: 25585
+Deleting doc 103 from 15 posting lists.
+Index: Time to delete doc 103: 14724
+Deleting doc 104 from 26 posting lists.
+Index: Time to delete doc 104: 25395
+Deleting doc 105 from 23 posting lists.
+Index: Time to delete doc 105: 24149
+Deleting doc 106 from 30 posting lists.
+Index: Time to delete doc 106: 29598
+Deleting doc 107 from 17 posting lists.
+Index: Time to delete doc 107: 15708
+Deleting doc 108 from 30 posting lists.
+Index: Time to delete doc 108: 30353
+Deleting doc 109 from 7 posting lists.
+Index: Time to delete doc 109: 6756
+Deleting doc 110 from 8 posting lists.
+Index: Time to delete doc 110: 7956
+Deleting doc 111 from 6 posting lists.
+Index: Time to delete doc 111: 5945
+Deleting doc 112 from 5 posting lists.
+Index: Time to delete doc 112: 5187
+Deleting doc 113 from 11 posting lists.
+Index: Time to delete doc 113: 10614
+Deleting doc 114 from 3 posting lists.
+Index: Time to delete doc 114: 2913
+Deleting doc 115 from 4 posting lists.
+Index: Time to delete doc 115: 3475
+Deleting doc 116 from 4 posting lists.
+Index: Time to delete doc 116: 3761
+Deleting doc 117 from 1 posting lists.
+Index: Time to delete doc 117: 764
+Deleting doc 118 from 5 posting lists.
+Index: Time to delete doc 118: 4334
+Deleting doc 119 from 17 posting lists.
+Index: Time to delete doc 119: 17578
+Deleting doc 120 from 15 posting lists.
+Index: Time to delete doc 120: 15643
+Deleting doc 121 from 10 posting lists.
+Index: Time to delete doc 121: 9145
+Deleting doc 122 from 21 posting lists.
+Index: Time to delete doc 122: 21541
+Deleting doc 123 from 9 posting lists.
+Index: Time to delete doc 123: 8855
+Deleting doc 124 from 20 posting lists.
+Index: Time to delete doc 124: 19737
+Deleting doc 125 from 11 posting lists.
+Index: Time to delete doc 125: 11017
+Deleting doc 126 from 19 posting lists.
+Index: Time to delete doc 126: 19385
+Deleting doc 127 from 11 posting lists.
+Index: Time to delete doc 127: 11377
+Deleting doc 128 from 26 posting lists.
+Index: Time to delete doc 128: 25335
+Deleting doc 129 from 12 posting lists.
+Index: Time to delete doc 129: 13427
+Deleting doc 130 from 6 posting lists.
+Index: Time to delete doc 130: 6080
+Deleting doc 131 from 8 posting lists.
+Index: Time to delete doc 131: 7916
+Deleting doc 132 from 10 posting lists.
+Index: Time to delete doc 132: 10347
+Deleting doc 133 from 6 posting lists.
+Index: Time to delete doc 133: 6636
+Deleting doc 134 from 10 posting lists.
+Index: Time to delete doc 134: 10378
+Deleting doc 135 from 12 posting lists.
+Index: Time to delete doc 135: 12806
+Deleting doc 136 from 13 posting lists.
+Index: Time to delete doc 136: 13151
+Deleting doc 137 from 10 posting lists.
+Index: Time to delete doc 137: 10659
+Deleting doc 138 from 12 posting lists.
+Index: Time to delete doc 138: 13815
+Deleting doc 139 from 9 posting lists.
+Index: Time to delete doc 139: 7147
+Deleting doc 140 from 6 posting lists.
+Index: Time to delete doc 140: 4751
+Deleting doc 141 from 6 posting lists.
+Index: Time to delete doc 141: 5702
+Deleting doc 142 from 9 posting lists.
+Index: Time to delete doc 142: 6882
+Deleting doc 143 from 4 posting lists.
+Index: Time to delete doc 143: 3106
+Deleting doc 144 from 7 posting lists.
+Index: Time to delete doc 144: 5877
+Deleting doc 145 from 4 posting lists.
+Index: Time to delete doc 145: 3173
+Deleting doc 146 from 17 posting lists.
+Index: Time to delete doc 146: 15857
+Deleting doc 147 from 5 posting lists.
+Index: Time to delete doc 147: 4168
+Deleting doc 148 from 4 posting lists.
+Index: Time to delete doc 148: 3016
+Deleting doc 149 from 12 posting lists.
+Index: Time to delete doc 149: 13401
+Deleting doc 150 from 12 posting lists.
+Index: Time to delete doc 150: 13207
+Deleting doc 151 from 15 posting lists.
+Index: Time to delete doc 151: 16072
+Deleting doc 152 from 20 posting lists.
+Index: Time to delete doc 152: 21637
+Deleting doc 153 from 12 posting lists.
+Index: Time to delete doc 153: 12097
+Deleting doc 154 from 16 posting lists.
+Index: Time to delete doc 154: 17181
+Deleting doc 155 from 16 posting lists.
+Index: Time to delete doc 155: 16498
+Deleting doc 156 from 12 posting lists.
+Index: Time to delete doc 156: 13249
+Deleting doc 157 from 17 posting lists.
+Index: Time to delete doc 157: 18273
+Deleting doc 158 from 16 posting lists.
+Index: Time to delete doc 158: 17030
+Deleting doc 159 from 5 posting lists.
+Index: Time to delete doc 159: 4402
+Deleting doc 160 from 14 posting lists.
+Index: Time to delete doc 160: 12888
+Deleting doc 161 from 10 posting lists.
+Index: Time to delete doc 161: 9060
+Deleting doc 162 from 6 posting lists.
+Index: Time to delete doc 162: 5112
+Deleting doc 163 from 12 posting lists.
+Index: Time to delete doc 163: 11389
+Deleting doc 164 from 6 posting lists.
+Index: Time to delete doc 164: 5558
+Deleting doc 165 from 25 posting lists.
+Index: Time to delete doc 165: 25856
+Deleting doc 166 from 9 posting lists.
+Index: Time to delete doc 166: 7819
+Deleting doc 167 from 3 posting lists.
+Index: Time to delete doc 167: 2555
+Deleting doc 168 from 3 posting lists.
+Index: Time to delete doc 168: 2428
+Deleting doc 169 from 14 posting lists.
+Index: Time to delete doc 169: 14769
+Deleting doc 170 from 18 posting lists.
+Index: Time to delete doc 170: 26175
+Deleting doc 171 from 12 posting lists.
+Index: Time to delete doc 171: 13824
+Deleting doc 172 from 8 posting lists.
+Index: Time to delete doc 172: 9054
+Deleting doc 173 from 13 posting lists.
+Index: Time to delete doc 173: 13271
+Deleting doc 174 from 10 posting lists.
+Index: Time to delete doc 174: 10833
+Deleting doc 175 from 12 posting lists.
+Index: Time to delete doc 175: 13554
+Deleting doc 176 from 11 posting lists.
+Index: Time to delete doc 176: 12112
+Deleting doc 177 from 19 posting lists.
+Index: Time to delete doc 177: 18617
+Deleting doc 178 from 14 posting lists.
+Index: Time to delete doc 178: 14881
+Deleting doc 179 from 20 posting lists.
+Index: Time to delete doc 179: 21821
+Deleting doc 180 from 17 posting lists.
+Index: Time to delete doc 180: 19106
+Deleting doc 181 from 16 posting lists.
+Index: Time to delete doc 181: 17704
+Deleting doc 182 from 13 posting lists.
+Index: Time to delete doc 182: 14492
+Deleting doc 183 from 12 posting lists.
+Index: Time to delete doc 183: 13855
+Deleting doc 184 from 13 posting lists.
+Index: Time to delete doc 184: 14876
+Deleting doc 185 from 15 posting lists.
+Index: Time to delete doc 185: 15506
+Deleting doc 186 from 7 posting lists.
+Index: Time to delete doc 186: 7289
+Deleting doc 187 from 17 posting lists.
+Index: Time to delete doc 187: 19761
+Deleting doc 188 from 12 posting lists.
+Index: Time to delete doc 188: 13368
+Deleting doc 189 from 14 posting lists.
+Index: Time to delete doc 189: 13731
+Deleting doc 190 from 5 posting lists.
+Index: Time to delete doc 190: 4920
+Deleting doc 191 from 8 posting lists.
+Index: Time to delete doc 191: 8062
+Deleting doc 192 from 15 posting lists.
+Index: Time to delete doc 192: 15106
+Deleting doc 193 from 3 posting lists.
+Index: Time to delete doc 193: 3123
+Deleting doc 194 from 5 posting lists.
+Index: Time to delete doc 194: 4931
+Deleting doc 195 from 7 posting lists.
+Index: Time to delete doc 195: 6554
+Deleting doc 196 from 12 posting lists.
+Index: Time to delete doc 196: 11744
+Deleting doc 197 from 6 posting lists.
+Index: Time to delete doc 197: 5487
+Deleting doc 198 from 11 posting lists.
+Index: Time to delete doc 198: 10723
+Deleting doc 199 from 9 posting lists.
+Index: Time to delete doc 199: 9712
+Deleting doc 200 from 12 posting lists.
+Index: Time to delete doc 200: 11761
+Deleting doc 201 from 6 posting lists.
+Index: Time to delete doc 201: 5824
+Deleting doc 202 from 11 posting lists.
+Index: Time to delete doc 202: 12098
+Deleting doc 203 from 13 posting lists.
+Index: Time to delete doc 203: 12265
+Deleting doc 204 from 14 posting lists.
+Index: Time to delete doc 204: 14991
+Deleting doc 205 from 10 posting lists.
+Index: Time to delete doc 205: 10365
+Deleting doc 206 from 6 posting lists.
+Index: Time to delete doc 206: 5346
+Deleting doc 207 from 5 posting lists.
+Index: Time to delete doc 207: 4790
+Deleting doc 208 from 11 posting lists.
+Index: Time to delete doc 208: 10758
+Deleting doc 209 from 3 posting lists.
+Index: Time to delete doc 209: 2596
+Deleting doc 210 from 7 posting lists.
+Index: Time to delete doc 210: 6875
+Deleting doc 211 from 8 posting lists.
+Index: Time to delete doc 211: 7453
+Deleting doc 212 from 1 posting lists.
+Index: Time to delete doc 212: 903
+Deleting doc 213 from 6 posting lists.
+Index: Time to delete doc 213: 5496
+Deleting doc 214 from 3 posting lists.
+Index: Time to delete doc 214: 2747
+Deleting doc 215 from 4 posting lists.
+Index: Time to delete doc 215: 3399
+Deleting doc 216 from 5 posting lists.
+Index: Time to delete doc 216: 4499
+Deleting doc 217 from 10 posting lists.
+Index: Time to delete doc 217: 9282
+Deleting doc 218 from 6 posting lists.
+Index: Time to delete doc 218: 5553
+Deleting doc 219 from 9 posting lists.
+Index: Time to delete doc 219: 9343
+Deleting doc 220 from 12 posting lists.
+Index: Time to delete doc 220: 12940
+Deleting doc 221 from 9 posting lists.
+Index: Time to delete doc 221: 9583
+Deleting doc 222 from 8 posting lists.
+Index: Time to delete doc 222: 7699
+Deleting doc 223 from 7 posting lists.
+Index: Time to delete doc 223: 7645
+Deleting doc 224 from 8 posting lists.
+Index: Time to delete doc 224: 8202
+Deleting doc 225 from 13 posting lists.
+Index: Time to delete doc 225: 12866
+Deleting doc 226 from 9 posting lists.
+Index: Time to delete doc 226: 9336
+Deleting doc 227 from 3 posting lists.
+Index: Time to delete doc 227: 3091
+Deleting doc 228 from 13 posting lists.
+Index: Time to delete doc 228: 13634
+Deleting doc 229 from 14 posting lists.
+Index: Time to delete doc 229: 15389
+Deleting doc 230 from 10 posting lists.
+Index: Time to delete doc 230: 9638
+Deleting doc 231 from 11 posting lists.
+Index: Time to delete doc 231: 10933
+Deleting doc 232 from 18 posting lists.
+Index: Time to delete doc 232: 18075
+Deleting doc 233 from 7 posting lists.
+Index: Time to delete doc 233: 7162
+Deleting doc 234 from 6 posting lists.
+Index: Time to delete doc 234: 5648
+Deleting doc 235 from 13 posting lists.
+Index: Time to delete doc 235: 13169
+Deleting doc 236 from 11 posting lists.
+Index: Time to delete doc 236: 11145
+Deleting doc 237 from 8 posting lists.
+Index: Time to delete doc 237: 7935
+Deleting doc 238 from 13 posting lists.
+Index: Time to delete doc 238: 12630
+Deleting doc 239 from 15 posting lists.
+Index: Time to delete doc 239: 14933
+Deleting doc 240 from 12 posting lists.
+Index: Time to delete doc 240: 13682
+Deleting doc 241 from 23 posting lists.
+Index: Time to delete doc 241: 23400
+Deleting doc 242 from 21 posting lists.
+Index: Time to delete doc 242: 24456
+Deleting doc 243 from 19 posting lists.
+Index: Time to delete doc 243: 19361
+Deleting doc 244 from 18 posting lists.
+Index: Time to delete doc 244: 20504
+Deleting doc 245 from 16 posting lists.
+Index: Time to delete doc 245: 16260
+Deleting doc 246 from 23 posting lists.
+Index: Time to delete doc 246: 24751
+Deleting doc 247 from 13 posting lists.
+Index: Time to delete doc 247: 13665
+Deleting doc 248 from 17 posting lists.
+Index: Time to delete doc 248: 17999
+Deleting doc 249 from 10 posting lists.
+Index: Time to delete doc 249: 11359
+Deleting doc 250 from 15 posting lists.
+Index: Time to delete doc 250: 15890
+Deleting doc 251 from 10 posting lists.
+Index: Time to delete doc 251: 9434
+Deleting doc 252 from 6 posting lists.
+Index: Time to delete doc 252: 5772
+Deleting doc 253 from 9 posting lists.
+Index: Time to delete doc 253: 9198
+Deleting doc 254 from 11 posting lists.
+Index: Time to delete doc 254: 10497
+Deleting doc 255 from 7 posting lists.
+Index: Time to delete doc 255: 6871
+Deleting doc 256 from 14 posting lists.
+Index: Time to delete doc 256: 15578
+Deleting doc 257 from 13 posting lists.
+Index: Time to delete doc 257: 12829
+Deleting doc 258 from 14 posting lists.
+Index: Time to delete doc 258: 14108
+Deleting doc 259 from 3 posting lists.
+Index: Time to delete doc 259: 2443
+Deleting doc 260 from 3 posting lists.
+Index: Time to delete doc 260: 2119
+Deleting doc 261 from 1 posting lists.
+Index: Time to delete doc 261: 858
+Deleting doc 262 from 4 posting lists.
+Index: Time to delete doc 262: 2479
+Deleting doc 263 from 7 posting lists.
+Index: Time to delete doc 263: 5969
+Deleting doc 264 from 4 posting lists.
+Index: Time to delete doc 264: 3039
+Deleting doc 265 from 3 posting lists.
+Index: Time to delete doc 265: 2201
+Deleting doc 266 from 3 posting lists.
+Index: Time to delete doc 266: 2228
+Deleting doc 267 from 5 posting lists.
+Index: Time to delete doc 267: 4044
+Deleting doc 268 from 4 posting lists.
+Index: Time to delete doc 268: 3037
+Deleting doc 269 from 14 posting lists.
+Index: Time to delete doc 269: 14188
+Deleting doc 270 from 16 posting lists.
+Index: Time to delete doc 270: 16609
+Deleting doc 271 from 16 posting lists.
+Index: Time to delete doc 271: 16764
+Deleting doc 272 from 16 posting lists.
+Index: Time to delete doc 272: 16878
+Deleting doc 273 from 16 posting lists.
+Index: Time to delete doc 273: 16247
+Deleting doc 274 from 9 posting lists.
+Index: Time to delete doc 274: 16749
+Deleting doc 275 from 10 posting lists.
+Index: Time to delete doc 275: 9166
+Deleting doc 276 from 9 posting lists.
+Index: Time to delete doc 276: 8817
+Deleting doc 277 from 10 posting lists.
+Index: Time to delete doc 277: 10494
+Deleting doc 278 from 12 posting lists.
+Index: Time to delete doc 278: 11555
+Deleting doc 279 from 4 posting lists.
+Index: Time to delete doc 279: 3766
+Deleting doc 280 from 5 posting lists.
+Index: Time to delete doc 280: 5243
+Deleting doc 281 from 13 posting lists.
+Index: Time to delete doc 281: 14503
+Deleting doc 282 from 9 posting lists.
+Index: Time to delete doc 282: 9166
+Deleting doc 283 from 4 posting lists.
+Index: Time to delete doc 283: 4265
+Deleting doc 284 from 10 posting lists.
+Index: Time to delete doc 284: 9880
+Deleting doc 285 from 5 posting lists.
+Index: Time to delete doc 285: 4604
+Deleting doc 286 from 6 posting lists.
+Index: Time to delete doc 286: 6778
+Deleting doc 287 from 8 posting lists.
+Index: Time to delete doc 287: 7981
+Deleting doc 288 from 7 posting lists.
+Index: Time to delete doc 288: 7297
+Deleting doc 289 from 12 posting lists.
+Index: Time to delete doc 289: 11523
+Deleting doc 290 from 12 posting lists.
+Index: Time to delete doc 290: 10615
+Deleting doc 291 from 6 posting lists.
+Index: Time to delete doc 291: 5878
+Deleting doc 292 from 28 posting lists.
+Index: Time to delete doc 292: 29846
+Deleting doc 293 from 6 posting lists.
+Index: Time to delete doc 293: 4980
+Deleting doc 294 from 23 posting lists.
+Index: Time to delete doc 294: 29649
+Deleting doc 295 from 8 posting lists.
+Index: Time to delete doc 295: 7889
+Deleting doc 296 from 17 posting lists.
+Index: Time to delete doc 296: 17431
+Deleting doc 297 from 11 posting lists.
+Index: Time to delete doc 297: 11627
+Deleting doc 298 from 6 posting lists.
+Index: Time to delete doc 298: 4997
+Deleting doc 299 from 5 posting lists.
+Index: Time to delete doc 299: 5056
+Deleting doc 300 from 4 posting lists.
+Index: Time to delete doc 300: 4330
+Deleting doc 301 from 4 posting lists.
+Index: Time to delete doc 301: 4049
+Deleting doc 302 from 18 posting lists.
+Index: Time to delete doc 302: 21438
+Deleting doc 303 from 14 posting lists.
+Index: Time to delete doc 303: 14401
+Deleting doc 304 from 5 posting lists.
+Index: Time to delete doc 304: 4978
+Deleting doc 305 from 7 posting lists.
+Index: Time to delete doc 305: 7578
+Deleting doc 306 from 6 posting lists.
+Index: Time to delete doc 306: 5960
+Deleting doc 307 from 5 posting lists.
+Index: Time to delete doc 307: 5001
+Deleting doc 308 from 7 posting lists.
+Index: Time to delete doc 308: 6915
+Deleting doc 309 from 9 posting lists.
+Index: Time to delete doc 309: 8885
+Deleting doc 310 from 12 posting lists.
+Index: Time to delete doc 310: 11827
+Deleting doc 311 from 6 posting lists.
+Index: Time to delete doc 311: 6205
+Deleting doc 312 from 2 posting lists.
+Index: Time to delete doc 312: 2066
+Deleting doc 313 from 5 posting lists.
+Index: Time to delete doc 313: 4789
+Deleting doc 314 from 13 posting lists.
+Index: Time to delete doc 314: 13440
+Deleting doc 315 from 4 posting lists.
+Index: Time to delete doc 315: 3720
+Deleting doc 316 from 8 posting lists.
+Index: Time to delete doc 316: 7590
+Deleting doc 317 from 6 posting lists.
+Index: Time to delete doc 317: 5492
+Deleting doc 318 from 15 posting lists.
+Index: Time to delete doc 318: 15489
+Deleting doc 319 from 15 posting lists.
+Index: Time to delete doc 319: 15159
+Deleting doc 320 from 8 posting lists.
+Index: Time to delete doc 320: 7384
+Deleting doc 321 from 7 posting lists.
+Index: Time to delete doc 321: 6081
+Deleting doc 322 from 14 posting lists.
+Index: Time to delete doc 322: 14400
+Deleting doc 323 from 23 posting lists.
+Index: Time to delete doc 323: 24478
+Deleting doc 324 from 18 posting lists.
+Index: Time to delete doc 324: 18318
+Deleting doc 325 from 14 posting lists.
+Index: Time to delete doc 325: 12635
+Deleting doc 326 from 19 posting lists.
+Index: Time to delete doc 326: 17895
+Deleting doc 327 from 15 posting lists.
+Index: Time to delete doc 327: 15405
+Deleting doc 328 from 20 posting lists.
+Index: Time to delete doc 328: 20625
+Deleting doc 329 from 14 posting lists.
+Index: Time to delete doc 329: 14977
+Deleting doc 330 from 15 posting lists.
+Index: Time to delete doc 330: 16911
+Deleting doc 331 from 11 posting lists.
+Index: Time to delete doc 331: 12165
+Deleting doc 332 from 8 posting lists.
+Index: Time to delete doc 332: 7920
+Deleting doc 333 from 17 posting lists.
+Index: Time to delete doc 333: 17802
+Deleting doc 334 from 9 posting lists.
+Index: Time to delete doc 334: 9751
+Deleting doc 335 from 10 posting lists.
+Index: Time to delete doc 335: 10247
+Deleting doc 336 from 8 posting lists.
+Index: Time to delete doc 336: 7963
+Deleting doc 337 from 10 posting lists.
+Index: Time to delete doc 337: 11056
+Deleting doc 338 from 7 posting lists.
+Index: Time to delete doc 338: 7013
+Deleting doc 339 from 5 posting lists.
+Index: Time to delete doc 339: 4697
+Deleting doc 340 from 4 posting lists.
+Index: Time to delete doc 340: 4017
+Deleting doc 341 from 23 posting lists.
+Index: Time to delete doc 341: 22243
+Deleting doc 342 from 5 posting lists.
+Index: Time to delete doc 342: 4590
+Deleting doc 343 from 6 posting lists.
+Index: Time to delete doc 343: 5898
+Deleting doc 344 from 4 posting lists.
+Index: Time to delete doc 344: 3933
+Deleting doc 345 from 12 posting lists.
+Index: Time to delete doc 345: 11829
+Deleting doc 346 from 5 posting lists.
+Index: Time to delete doc 346: 4699
+Deleting doc 347 from 12 posting lists.
+Index: Time to delete doc 347: 10497
+Deleting doc 348 from 10 posting lists.
+Index: Time to delete doc 348: 10132
+Deleting doc 349 from 5 posting lists.
+Index: Time to delete doc 349: 5078
+Deleting doc 350 from 5 posting lists.
+Index: Time to delete doc 350: 5058
+Deleting doc 351 from 9 posting lists.
+Index: Time to delete doc 351: 9335
+Deleting doc 352 from 5 posting lists.
+Index: Time to delete doc 352: 5387
+Deleting doc 353 from 12 posting lists.
+Index: Time to delete doc 353: 12725
+Deleting doc 354 from 7 posting lists.
+Index: Time to delete doc 354: 7349
+Deleting doc 355 from 7 posting lists.
+Index: Time to delete doc 355: 7897
+Deleting doc 356 from 8 posting lists.
+Index: Time to delete doc 356: 9185
+Deleting doc 357 from 6 posting lists.
+Index: Time to delete doc 357: 6254
+Deleting doc 358 from 12 posting lists.
+Index: Time to delete doc 358: 12225
+Deleting doc 359 from 7 posting lists.
+Index: Time to delete doc 359: 6687
+Deleting doc 360 from 21 posting lists.
+Index: Time to delete doc 360: 20539
+Deleting doc 361 from 6 posting lists.
+Index: Time to delete doc 361: 5646
+Deleting doc 362 from 5 posting lists.
+Index: Time to delete doc 362: 4384
+Deleting doc 363 from 8 posting lists.
+Index: Time to delete doc 363: 7329
+Deleting doc 364 from 12 posting lists.
+Index: Time to delete doc 364: 11223
+Deleting doc 365 from 5 posting lists.
+Index: Time to delete doc 365: 4639
+Deleting doc 366 from 6 posting lists.
+Index: Time to delete doc 366: 5489
+Deleting doc 367 from 15 posting lists.
+Index: Time to delete doc 367: 13620
+Deleting doc 368 from 6 posting lists.
+Index: Time to delete doc 368: 5740
+Deleting doc 369 from 9 posting lists.
+Index: Time to delete doc 369: 8434
+Deleting doc 370 from 8 posting lists.
+Index: Time to delete doc 370: 7760
+Deleting doc 371 from 11 posting lists.
+Index: Time to delete doc 371: 10750
+Deleting doc 372 from 7 posting lists.
+Index: Time to delete doc 372: 7269
+Deleting doc 373 from 10 posting lists.
+Index: Time to delete doc 373: 9743
+Deleting doc 374 from 14 posting lists.
+Index: Time to delete doc 374: 14007
+Deleting doc 375 from 10 posting lists.
+Index: Time to delete doc 375: 9845
+Deleting doc 376 from 17 posting lists.
+Index: Time to delete doc 376: 17120
+Deleting doc 377 from 10 posting lists.
+Index: Time to delete doc 377: 9813
+Deleting doc 378 from 10 posting lists.
+Index: Time to delete doc 378: 9827
+Deleting doc 379 from 17 posting lists.
+Index: Time to delete doc 379: 18003
+Deleting doc 380 from 14 posting lists.
+Index: Time to delete doc 380: 14353
+Deleting doc 381 from 32 posting lists.
+Index: Time to delete doc 381: 33149
+Deleting doc 382 from 8 posting lists.
+Index: Time to delete doc 382: 8232
+Deleting doc 383 from 24 posting lists.
+Index: Time to delete doc 383: 44645
+Deleting doc 384 from 18 posting lists.
+Index: Time to delete doc 384: 18238
+Deleting doc 385 from 16 posting lists.
+Index: Time to delete doc 385: 17162
+Deleting doc 386 from 23 posting lists.
+Index: Time to delete doc 386: 22244
+Deleting doc 387 from 13 posting lists.
+Index: Time to delete doc 387: 12883
+Deleting doc 388 from 23 posting lists.
+Index: Time to delete doc 388: 21235
+Deleting doc 389 from 14 posting lists.
+Index: Time to delete doc 389: 16382
+Deleting doc 390 from 7 posting lists.
+Index: Time to delete doc 390: 6869
+Deleting doc 391 from 22 posting lists.
+Index: Time to delete doc 391: 23329
+Deleting doc 392 from 26 posting lists.
+Index: Time to delete doc 392: 28180
+Deleting doc 393 from 22 posting lists.
+Index: Time to delete doc 393: 23335
+Deleting doc 394 from 18 posting lists.
+Index: Time to delete doc 394: 18307
+Deleting doc 395 from 30 posting lists.
+Index: Time to delete doc 395: 33122
+Deleting doc 396 from 16 posting lists.
+Index: Time to delete doc 396: 16867
+Deleting doc 397 from 16 posting lists.
+Index: Time to delete doc 397: 16833
+Deleting doc 398 from 19 posting lists.
+Index: Time to delete doc 398: 20356
+Deleting doc 399 from 2 posting lists.
+Index: Time to delete doc 399: 1883
+Deleting doc 400 from 4 posting lists.
+Index: Time to delete doc 400: 3751
+Deleting doc 401 from 5 posting lists.
+Index: Time to delete doc 401: 4048
+Deleting doc 402 from 6 posting lists.
+Index: Time to delete doc 402: 5920
+Deleting doc 403 from 3 posting lists.
+Index: Time to delete doc 403: 2933
+Deleting doc 404 from 3 posting lists.
+Index: Time to delete doc 404: 3071
+Deleting doc 405 from 5 posting lists.
+Index: Time to delete doc 405: 4199
+Deleting doc 406 from 5 posting lists.
+Index: Time to delete doc 406: 3895
+Deleting doc 407 from 2 posting lists.
+Index: Time to delete doc 407: 2210
+Deleting doc 408 from 1 posting lists.
+Index: Time to delete doc 408: 954
+Deleting doc 409 from 24 posting lists.
+Index: Time to delete doc 409: 25501
+Deleting doc 410 from 15 posting lists.
+Index: Time to delete doc 410: 15188
+Deleting doc 411 from 11 posting lists.
+Index: Time to delete doc 411: 11189
+Deleting doc 412 from 20 posting lists.
+Index: Time to delete doc 412: 20629
+Deleting doc 413 from 11 posting lists.
+Index: Time to delete doc 413: 10605
+Deleting doc 414 from 13 posting lists.
+Index: Time to delete doc 414: 12954
+Deleting doc 415 from 7 posting lists.
+Index: Time to delete doc 415: 7369
+Deleting doc 416 from 16 posting lists.
+Index: Time to delete doc 416: 16070
+Deleting doc 417 from 8 posting lists.
+Index: Time to delete doc 417: 8309
+Deleting doc 418 from 19 posting lists.
+Index: Time to delete doc 418: 21269
+Deleting doc 419 from 20 posting lists.
+Index: Time to delete doc 419: 21664
+Deleting doc 420 from 13 posting lists.
+Index: Time to delete doc 420: 12870
+Deleting doc 421 from 7 posting lists.
+Index: Time to delete doc 421: 7017
+Deleting doc 422 from 8 posting lists.
+Index: Time to delete doc 422: 7944
+Deleting doc 423 from 5 posting lists.
+Index: Time to delete doc 423: 4713
+Deleting doc 424 from 12 posting lists.
+Index: Time to delete doc 424: 12201
+Deleting doc 425 from 12 posting lists.
+Index: Time to delete doc 425: 12331
+Deleting doc 426 from 10 posting lists.
+Index: Time to delete doc 426: 10450
+Deleting doc 427 from 14 posting lists.
+Index: Time to delete doc 427: 14153
+Deleting doc 428 from 4 posting lists.
+Index: Time to delete doc 428: 3777
+Deleting doc 429 from 29 posting lists.
+Index: Time to delete doc 429: 31094
+Deleting doc 430 from 7 posting lists.
+Index: Time to delete doc 430: 6579
+Deleting doc 431 from 4 posting lists.
+Index: Time to delete doc 431: 3466
+Deleting doc 432 from 3 posting lists.
+Index: Time to delete doc 432: 2802
+Deleting doc 433 from 13 posting lists.
+Index: Time to delete doc 433: 12494
+Deleting doc 434 from 3 posting lists.
+Index: Time to delete doc 434: 2720
+Deleting doc 435 from 21 posting lists.
+Index: Time to delete doc 435: 21153
+Deleting doc 436 from 22 posting lists.
+Index: Time to delete doc 436: 21362
+Deleting doc 437 from 21 posting lists.
+Index: Time to delete doc 437: 21474
+Deleting doc 438 from 7 posting lists.
+Index: Time to delete doc 438: 6585
+Deleting doc 439 from 3 posting lists.
+Index: Time to delete doc 439: 2671
+Deleting doc 440 from 6 posting lists.
+Index: Time to delete doc 440: 5563
+Deleting doc 441 from 9 posting lists.
+Index: Time to delete doc 441: 8779
+Deleting doc 442 from 5 posting lists.
+Index: Time to delete doc 442: 4527
+Deleting doc 443 from 2 posting lists.
+Index: Time to delete doc 443: 2105
+Deleting doc 444 from 6 posting lists.
+Index: Time to delete doc 444: 6170
+Deleting doc 445 from 3 posting lists.
+Index: Time to delete doc 445: 2629
+Deleting doc 446 from 9 posting lists.
+Index: Time to delete doc 446: 8829
+Deleting doc 447 from 7 posting lists.
+Index: Time to delete doc 447: 6626
+Deleting doc 448 from 11 posting lists.
+Index: Time to delete doc 448: 10365
+Deleting doc 449 from 7 posting lists.
+Index: Time to delete doc 449: 6699
+Deleting doc 450 from 5 posting lists.
+Index: Time to delete doc 450: 4813
+Deleting doc 451 from 16 posting lists.
+Index: Time to delete doc 451: 16286
+Deleting doc 452 from 13 posting lists.
+Index: Time to delete doc 452: 11920
+Deleting doc 453 from 14 posting lists.
+Index: Time to delete doc 453: 14049
+Deleting doc 454 from 21 posting lists.
+Index: Time to delete doc 454: 19875
+Deleting doc 455 from 8 posting lists.
+Index: Time to delete doc 455: 8254
+Deleting doc 456 from 4 posting lists.
+Index: Time to delete doc 456: 3612
+Deleting doc 457 from 13 posting lists.
+Index: Time to delete doc 457: 13497
+Deleting doc 458 from 12 posting lists.
+Index: Time to delete doc 458: 12761
+Deleting doc 459 from 13 posting lists.
+Index: Time to delete doc 459: 11011
+Deleting doc 460 from 5 posting lists.
+Index: Time to delete doc 460: 4152
+Deleting doc 461 from 16 posting lists.
+Index: Time to delete doc 461: 16285
+Deleting doc 462 from 3 posting lists.
+Index: Time to delete doc 462: 2784
+Deleting doc 463 from 2 posting lists.
+Index: Time to delete doc 463: 1978
+Deleting doc 464 from 3 posting lists.
+Index: Time to delete doc 464: 2909
+Deleting doc 465 from 2 posting lists.
+Index: Time to delete doc 465: 1912
+Deleting doc 466 from 5 posting lists.
+Index: Time to delete doc 466: 4894
+Deleting doc 467 from 3 posting lists.
+Index: Time to delete doc 467: 2523
+Deleting doc 468 from 6 posting lists.
+Index: Time to delete doc 468: 5634
+Deleting doc 469 from 9 posting lists.
+Index: Time to delete doc 469: 8555
+Deleting doc 470 from 7 posting lists.
+Index: Time to delete doc 470: 6892
+Deleting doc 471 from 9 posting lists.
+Index: Time to delete doc 471: 8669
+Deleting doc 472 from 8 posting lists.
+Index: Time to delete doc 472: 7959
+Deleting doc 473 from 17 posting lists.
+Index: Time to delete doc 473: 18063
+Deleting doc 474 from 7 posting lists.
+Index: Time to delete doc 474: 7373
+Deleting doc 475 from 7 posting lists.
+Index: Time to delete doc 475: 6265
+Deleting doc 476 from 9 posting lists.
+Index: Time to delete doc 476: 9335
+Deleting doc 477 from 9 posting lists.
+Index: Time to delete doc 477: 8997
+Deleting doc 478 from 10 posting lists.
+Index: Time to delete doc 478: 9613
+Deleting doc 479 from 11 posting lists.
+Index: Time to delete doc 479: 10128
+Deleting doc 480 from 6 posting lists.
+Index: Time to delete doc 480: 5558
+Deleting doc 481 from 10 posting lists.
+Index: Time to delete doc 481: 9443
+Deleting doc 482 from 12 posting lists.
+Index: Time to delete doc 482: 11566
+Deleting doc 483 from 5 posting lists.
+Index: Time to delete doc 483: 4538
+Deleting doc 484 from 6 posting lists.
+Index: Time to delete doc 484: 5947
+Deleting doc 485 from 9 posting lists.
+Index: Time to delete doc 485: 9335
+Deleting doc 486 from 7 posting lists.
+Index: Time to delete doc 486: 6997
+Deleting doc 487 from 5 posting lists.
+Index: Time to delete doc 487: 4204
+Deleting doc 488 from 5 posting lists.
+Index: Time to delete doc 488: 4448
+Deleting doc 489 from 8 posting lists.
+Index: Time to delete doc 489: 8736
+Deleting doc 490 from 16 posting lists.
+Index: Time to delete doc 490: 16961
+Deleting doc 491 from 10 posting lists.
+Index: Time to delete doc 491: 10918
+Deleting doc 492 from 8 posting lists.
+Index: Time to delete doc 492: 7028
+Deleting doc 493 from 6 posting lists.
+Index: Time to delete doc 493: 6497
+Deleting doc 494 from 4 posting lists.
+Index: Time to delete doc 494: 3695
+Deleting doc 495 from 3 posting lists.
+Index: Time to delete doc 495: 2930
+Deleting doc 496 from 17 posting lists.
+Index: Time to delete doc 496: 17760
+Deleting doc 497 from 8 posting lists.
+Index: Time to delete doc 497: 8678
+Deleting doc 498 from 0 posting lists.
+Index: Time to delete doc 498: 1
+Deleting doc 499 from 3 posting lists.
+Index: Time to delete doc 499: 2713
+Deleting doc 500 from 4 posting lists.
+Index: Time to delete doc 500: 3804
+Deleting doc 501 from 4 posting lists.
+Index: Time to delete doc 501: 3424
+Deleting doc 502 from 5 posting lists.
+Index: Time to delete doc 502: 4903
+Deleting doc 503 from 3 posting lists.
+Index: Time to delete doc 503: 2935
+Deleting doc 504 from 9 posting lists.
+Index: Time to delete doc 504: 8533
+Deleting doc 505 from 2 posting lists.
+Index: Time to delete doc 505: 1993
+Deleting doc 506 from 13 posting lists.
+Index: Time to delete doc 506: 12838
+Deleting doc 507 from 8 posting lists.
+Index: Time to delete doc 507: 7567
+Deleting doc 508 from 6 posting lists.
+Index: Time to delete doc 508: 5830
+Deleting doc 509 from 14 posting lists.
+Index: Time to delete doc 509: 15938
+Deleting doc 510 from 13 posting lists.
+Index: Time to delete doc 510: 14427
+Deleting doc 511 from 14 posting lists.
+Index: Time to delete doc 511: 16697
+Deleting doc 512 from 15 posting lists.
+Index: Time to delete doc 512: 17161
+Deleting doc 513 from 10 posting lists.
+Index: Time to delete doc 513: 10885
+Deleting doc 514 from 10 posting lists.
+Index: Time to delete doc 514: 10350
+Deleting doc 515 from 7 posting lists.
+Index: Time to delete doc 515: 7845
+Deleting doc 516 from 15 posting lists.
+Index: Time to delete doc 516: 17008
+Deleting doc 517 from 9 posting lists.
+Index: Time to delete doc 517: 9520
+Deleting doc 518 from 14 posting lists.
+Index: Time to delete doc 518: 14395
+Deleting doc 519 from 3 posting lists.
+Index: Time to delete doc 519: 2636
+Deleting doc 520 from 4 posting lists.
+Index: Time to delete doc 520: 2919
+Deleting doc 521 from 5 posting lists.
+Index: Time to delete doc 521: 3647
+Deleting doc 522 from 6 posting lists.
+Index: Time to delete doc 522: 4584
+Deleting doc 523 from 4 posting lists.
+Index: Time to delete doc 523: 3502
+Deleting doc 524 from 2 posting lists.
+Index: Time to delete doc 524: 1716
+Deleting doc 525 from 4 posting lists.
+Index: Time to delete doc 525: 3701
+Deleting doc 526 from 9 posting lists.
+Index: Time to delete doc 526: 8543
+Deleting doc 527 from 3 posting lists.
+Index: Time to delete doc 527: 2251
+Deleting doc 528 from 5 posting lists.
+Index: Time to delete doc 528: 3468
+Deleting doc 529 from 11 posting lists.
+Index: Time to delete doc 529: 13076
+Deleting doc 530 from 13 posting lists.
+Index: Time to delete doc 530: 14065
+Deleting doc 531 from 10 posting lists.
+Index: Time to delete doc 531: 9888
+Deleting doc 532 from 9 posting lists.
+Index: Time to delete doc 532: 9818
+Deleting doc 533 from 6 posting lists.
+Index: Time to delete doc 533: 6506
+Deleting doc 534 from 18 posting lists.
+Index: Time to delete doc 534: 19130
+Deleting doc 535 from 19 posting lists.
+Index: Time to delete doc 535: 22638
+Deleting doc 536 from 12 posting lists.
+Index: Time to delete doc 536: 12743
+Deleting doc 537 from 11 posting lists.
+Index: Time to delete doc 537: 12875
+Deleting doc 538 from 11 posting lists.
+Index: Time to delete doc 538: 12115
+Deleting doc 539 from 6 posting lists.
+Index: Time to delete doc 539: 5507
+Deleting doc 540 from 11 posting lists.
+Index: Time to delete doc 540: 11036
+Deleting doc 541 from 0 posting lists.
+Index: Time to delete doc 541: 1
+Deleting doc 542 from 1 posting lists.
+Index: Time to delete doc 542: 1179
+Deleting doc 543 from 6 posting lists.
+Index: Time to delete doc 543: 6270
+Deleting doc 544 from 0 posting lists.
+Index: Time to delete doc 544: 1
+Deleting doc 545 from 3 posting lists.
+Index: Time to delete doc 545: 2778
+Deleting doc 546 from 8 posting lists.
+Index: Time to delete doc 546: 7052
+Deleting doc 547 from 11 posting lists.
+Index: Time to delete doc 547: 10888
+Deleting doc 548 from 7 posting lists.
+Index: Time to delete doc 548: 6863
+Deleting doc 549 from 18 posting lists.
+Index: Time to delete doc 549: 18410
+Deleting doc 550 from 16 posting lists.
+Index: Time to delete doc 550: 25055
+Deleting doc 551 from 16 posting lists.
+Index: Time to delete doc 551: 17250
+Deleting doc 552 from 9 posting lists.
+Index: Time to delete doc 552: 8975
+Deleting doc 553 from 17 posting lists.
+Index: Time to delete doc 553: 17140
+Deleting doc 554 from 16 posting lists.
+Index: Time to delete doc 554: 15738
+Deleting doc 555 from 10 posting lists.
+Index: Time to delete doc 555: 9791
+Deleting doc 556 from 13 posting lists.
+Index: Time to delete doc 556: 12489
+Deleting doc 557 from 9 posting lists.
+Index: Time to delete doc 557: 8779
+Deleting doc 558 from 9 posting lists.
+Index: Time to delete doc 558: 9063
+Deleting doc 559 from 12 posting lists.
+Index: Time to delete doc 559: 12817
+Deleting doc 560 from 8 posting lists.
+Index: Time to delete doc 560: 7947
+Deleting doc 561 from 9 posting lists.
+Index: Time to delete doc 561: 9499
+Deleting doc 562 from 11 posting lists.
+Index: Time to delete doc 562: 11542
+Deleting doc 563 from 13 posting lists.
+Index: Time to delete doc 563: 13188
+Deleting doc 564 from 7 posting lists.
+Index: Time to delete doc 564: 6911
+Deleting doc 565 from 10 posting lists.
+Index: Time to delete doc 565: 10527
+Deleting doc 566 from 12 posting lists.
+Index: Time to delete doc 566: 12663
+Deleting doc 567 from 8 posting lists.
+Index: Time to delete doc 567: 8361
+Deleting doc 568 from 15 posting lists.
+Index: Time to delete doc 568: 14044
+Deleting doc 569 from 16 posting lists.
+Index: Time to delete doc 569: 16926
+Deleting doc 570 from 6 posting lists.
+Index: Time to delete doc 570: 5281
+Deleting doc 571 from 6 posting lists.
+Index: Time to delete doc 571: 6143
+Deleting doc 572 from 12 posting lists.
+Index: Time to delete doc 572: 11638
+Deleting doc 573 from 6 posting lists.
+Index: Time to delete doc 573: 5468
+Deleting doc 574 from 4 posting lists.
+Index: Time to delete doc 574: 3399
+Deleting doc 575 from 6 posting lists.
+Index: Time to delete doc 575: 5257
+Deleting doc 576 from 5 posting lists.
+Index: Time to delete doc 576: 4590
+Deleting doc 577 from 5 posting lists.
+Index: Time to delete doc 577: 4200
+Deleting doc 578 from 6 posting lists.
+Index: Time to delete doc 578: 5464
+Deleting doc 579 from 25 posting lists.
+Index: Time to delete doc 579: 28135
+Deleting doc 580 from 7 posting lists.
+Index: Time to delete doc 580: 6960
+Deleting doc 581 from 8 posting lists.
+Index: Time to delete doc 581: 8446
+Deleting doc 582 from 10 posting lists.
+Index: Time to delete doc 582: 10567
+Deleting doc 583 from 9 posting lists.
+Index: Time to delete doc 583: 10087
+Deleting doc 584 from 16 posting lists.
+Index: Time to delete doc 584: 15653
+Deleting doc 585 from 18 posting lists.
+Index: Time to delete doc 585: 19493
+Deleting doc 586 from 19 posting lists.
+Index: Time to delete doc 586: 20032
+Deleting doc 587 from 12 posting lists.
+Index: Time to delete doc 587: 12996
+Deleting doc 588 from 19 posting lists.
+Index: Time to delete doc 588: 22148
+Deleting doc 589 from 9 posting lists.
+Index: Time to delete doc 589: 9108
+Deleting doc 590 from 9 posting lists.
+Index: Time to delete doc 590: 9153
+Deleting doc 591 from 12 posting lists.
+Index: Time to delete doc 591: 12581
+Deleting doc 592 from 8 posting lists.
+Index: Time to delete doc 592: 7353
+Deleting doc 593 from 6 posting lists.
+Index: Time to delete doc 593: 5554
+Deleting doc 594 from 13 posting lists.
+Index: Time to delete doc 594: 13114
+Deleting doc 595 from 6 posting lists.
+Index: Time to delete doc 595: 4909
+Deleting doc 596 from 12 posting lists.
+Index: Time to delete doc 596: 11808
+Deleting doc 597 from 13 posting lists.
+Index: Time to delete doc 597: 12337
+Deleting doc 598 from 7 posting lists.
+Index: Time to delete doc 598: 6013
+Deleting doc 599 from 17 posting lists.
+Index: Time to delete doc 599: 17222
+Deleting doc 600 from 20 posting lists.
+Index: Time to delete doc 600: 20324
+Deleting doc 601 from 26 posting lists.
+Index: Time to delete doc 601: 29257
+Deleting doc 602 from 28 posting lists.
+Index: Time to delete doc 602: 29188
+Deleting doc 603 from 20 posting lists.
+Index: Time to delete doc 603: 21960
+Deleting doc 604 from 27 posting lists.
+Index: Time to delete doc 604: 31046
+Deleting doc 605 from 10 posting lists.
+Index: Time to delete doc 605: 10163
+Deleting doc 606 from 18 posting lists.
+Index: Time to delete doc 606: 20806
+Deleting doc 607 from 12 posting lists.
+Index: Time to delete doc 607: 11643
+Deleting doc 608 from 16 posting lists.
+Index: Time to delete doc 608: 16046
+Deleting doc 609 from 4 posting lists.
+Index: Time to delete doc 609: 4150
+Deleting doc 610 from 5 posting lists.
+Index: Time to delete doc 610: 4356
+Deleting doc 611 from 1 posting lists.
+Index: Time to delete doc 611: 972
+Deleting doc 612 from 4 posting lists.
+Index: Time to delete doc 612: 3850
+Deleting doc 613 from 3 posting lists.
+Index: Time to delete doc 613: 2406
+Deleting doc 614 from 3 posting lists.
+Index: Time to delete doc 614: 2865
+Deleting doc 615 from 3 posting lists.
+Index: Time to delete doc 615: 2695
+Deleting doc 616 from 1 posting lists.
+Index: Time to delete doc 616: 953
+Deleting doc 617 from 5 posting lists.
+Index: Time to delete doc 617: 4603
+Deleting doc 618 from 5 posting lists.
+Index: Time to delete doc 618: 4147
+Deleting doc 619 from 21 posting lists.
+Index: Time to delete doc 619: 20400
+Deleting doc 620 from 23 posting lists.
+Index: Time to delete doc 620: 21233
+Deleting doc 621 from 21 posting lists.
+Index: Time to delete doc 621: 20720
+Deleting doc 622 from 12 posting lists.
+Index: Time to delete doc 622: 11373
+Deleting doc 623 from 18 posting lists.
+Index: Time to delete doc 623: 19122
+Deleting doc 624 from 7 posting lists.
+Index: Time to delete doc 624: 6627
+Deleting doc 625 from 10 posting lists.
+Index: Time to delete doc 625: 9920
+Deleting doc 626 from 7 posting lists.
+Index: Time to delete doc 626: 6315
+Deleting doc 627 from 19 posting lists.
+Index: Time to delete doc 627: 20794
+Deleting doc 628 from 18 posting lists.
+Index: Time to delete doc 628: 17401
+Deleting doc 629 from 4 posting lists.
+Index: Time to delete doc 629: 3318
+Deleting doc 630 from 6 posting lists.
+Index: Time to delete doc 630: 5521
+Deleting doc 631 from 2 posting lists.
+Index: Time to delete doc 631: 1732
+Deleting doc 632 from 5 posting lists.
+Index: Time to delete doc 632: 4523
+Deleting doc 633 from 19 posting lists.
+Index: Time to delete doc 633: 18540
+Deleting doc 634 from 14 posting lists.
+Index: Time to delete doc 634: 13748
+Deleting doc 635 from 8 posting lists.
+Index: Time to delete doc 635: 7470
+Deleting doc 636 from 12 posting lists.
+Index: Time to delete doc 636: 11993
+Deleting doc 637 from 11 posting lists.
+Index: Time to delete doc 637: 12802
+Deleting doc 638 from 6 posting lists.
+Index: Time to delete doc 638: 6012
+Deleting doc 639 from 8 posting lists.
+Index: Time to delete doc 639: 7420
+Deleting doc 640 from 7 posting lists.
+Index: Time to delete doc 640: 6781
+Deleting doc 641 from 5 posting lists.
+Index: Time to delete doc 641: 5299
+Deleting doc 642 from 6 posting lists.
+Index: Time to delete doc 642: 5918
+Deleting doc 643 from 10 posting lists.
+Index: Time to delete doc 643: 10387
+Deleting doc 644 from 10 posting lists.
+Index: Time to delete doc 644: 9250
+Deleting doc 645 from 7 posting lists.
+Index: Time to delete doc 645: 6737
+Deleting doc 646 from 9 posting lists.
+Index: Time to delete doc 646: 9765
+Deleting doc 647 from 5 posting lists.
+Index: Time to delete doc 647: 5254
+Deleting doc 648 from 6 posting lists.
+Index: Time to delete doc 648: 6470
+Deleting doc 649 from 7 posting lists.
+Index: Time to delete doc 649: 5977
+Deleting doc 650 from 9 posting lists.
+Index: Time to delete doc 650: 9005
+Deleting doc 651 from 8 posting lists.
+Index: Time to delete doc 651: 7169
+Deleting doc 652 from 4 posting lists.
+Index: Time to delete doc 652: 3231
+Deleting doc 653 from 10 posting lists.
+Index: Time to delete doc 653: 9163
+Deleting doc 654 from 16 posting lists.
+Index: Time to delete doc 654: 15752
+Deleting doc 655 from 7 posting lists.
+Index: Time to delete doc 655: 7249
+Deleting doc 656 from 9 posting lists.
+Index: Time to delete doc 656: 8685
+Deleting doc 657 from 6 posting lists.
+Index: Time to delete doc 657: 5522
+Deleting doc 658 from 6 posting lists.
+Index: Time to delete doc 658: 5350
+Deleting doc 659 from 22 posting lists.
+Index: Time to delete doc 659: 23651
+Deleting doc 660 from 34 posting lists.
+Index: Time to delete doc 660: 39968
+Deleting doc 661 from 21 posting lists.
+Index: Time to delete doc 661: 22988
+Deleting doc 662 from 25 posting lists.
+Index: Time to delete doc 662: 25924
+Deleting doc 663 from 16 posting lists.
+Index: Time to delete doc 663: 15729
+Deleting doc 664 from 17 posting lists.
+Index: Time to delete doc 664: 17366
+Deleting doc 665 from 17 posting lists.
+Index: Time to delete doc 665: 16995
+Deleting doc 666 from 12 posting lists.
+Index: Time to delete doc 666: 12091
+Deleting doc 667 from 14 posting lists.
+Index: Time to delete doc 667: 15025
+Deleting doc 668 from 21 posting lists.
+Index: Time to delete doc 668: 21373
+Deleting doc 669 from 2 posting lists.
+Index: Time to delete doc 669: 1880
+Deleting doc 670 from 7 posting lists.
+Index: Time to delete doc 670: 7091
+Deleting doc 671 from 10 posting lists.
+Index: Time to delete doc 671: 10015
+Deleting doc 672 from 4 posting lists.
+Index: Time to delete doc 672: 3796
+Deleting doc 673 from 5 posting lists.
+Index: Time to delete doc 673: 4985
+Deleting doc 674 from 12 posting lists.
+Index: Time to delete doc 674: 12283
+Deleting doc 675 from 5 posting lists.
+Index: Time to delete doc 675: 5249
+Deleting doc 676 from 8 posting lists.
+Index: Time to delete doc 676: 8064
+Deleting doc 677 from 2 posting lists.
+Index: Time to delete doc 677: 1772
+Deleting doc 678 from 9 posting lists.
+Index: Time to delete doc 678: 8254
+Deleting doc 679 from 8 posting lists.
+Index: Time to delete doc 679: 9025
+Deleting doc 680 from 10 posting lists.
+Index: Time to delete doc 680: 11205
+Deleting doc 681 from 15 posting lists.
+Index: Time to delete doc 681: 16471
+Deleting doc 682 from 15 posting lists.
+Index: Time to delete doc 682: 16965
+Deleting doc 683 from 11 posting lists.
+Index: Time to delete doc 683: 11411
+Deleting doc 684 from 17 posting lists.
+Index: Time to delete doc 684: 18509
+Deleting doc 685 from 10 posting lists.
+Index: Time to delete doc 685: 10038
+Deleting doc 686 from 13 posting lists.
+Index: Time to delete doc 686: 14165
+Deleting doc 687 from 18 posting lists.
+Index: Time to delete doc 687: 18600
+Deleting doc 688 from 5 posting lists.
+Index: Time to delete doc 688: 5746
+Deleting doc 689 from 6 posting lists.
+Index: Time to delete doc 689: 6329
+Deleting doc 690 from 5 posting lists.
+Index: Time to delete doc 690: 5105
+Deleting doc 691 from 7 posting lists.
+Index: Time to delete doc 691: 6690
+Deleting doc 692 from 5 posting lists.
+Index: Time to delete doc 692: 4668
+Deleting doc 693 from 3 posting lists.
+Index: Time to delete doc 693: 2932
+Deleting doc 694 from 2 posting lists.
+Index: Time to delete doc 694: 1862
+Deleting doc 695 from 3 posting lists.
+Index: Time to delete doc 695: 2660
+Deleting doc 696 from 5 posting lists.
+Index: Time to delete doc 696: 5160
+Deleting doc 697 from 6 posting lists.
+Index: Time to delete doc 697: 5598
+Deleting doc 698 from 9 posting lists.
+Index: Time to delete doc 698: 9690
+Deleting doc 699 from 20 posting lists.
+Index: Time to delete doc 699: 23372
+Deleting doc 700 from 5 posting lists.
+Index: Time to delete doc 700: 5484
+Deleting doc 701 from 10 posting lists.
+Index: Time to delete doc 701: 11290
+Deleting doc 702 from 6 posting lists.
+Index: Time to delete doc 702: 6732
+Deleting doc 703 from 14 posting lists.
+Index: Time to delete doc 703: 15925
+Deleting doc 704 from 13 posting lists.
+Index: Time to delete doc 704: 14786
+Deleting doc 705 from 7 posting lists.
+Index: Time to delete doc 705: 7248
+Deleting doc 706 from 9 posting lists.
+Index: Time to delete doc 706: 9884
+Deleting doc 707 from 5 posting lists.
+Index: Time to delete doc 707: 5438
+Deleting doc 708 from 5 posting lists.
+Index: Time to delete doc 708: 6153
+Deleting doc 709 from 13 posting lists.
+Index: Time to delete doc 709: 14974
+Deleting doc 710 from 14 posting lists.
+Index: Time to delete doc 710: 14936
+Deleting doc 711 from 12 posting lists.
+Index: Time to delete doc 711: 12513
+Deleting doc 712 from 14 posting lists.
+Index: Time to delete doc 712: 15210
+Deleting doc 713 from 16 posting lists.
+Index: Time to delete doc 713: 17375
+Deleting doc 714 from 14 posting lists.
+Index: Time to delete doc 714: 15571
+Deleting doc 715 from 11 posting lists.
+Index: Time to delete doc 715: 11481
+Deleting doc 716 from 7 posting lists.
+Index: Time to delete doc 716: 7062
+Deleting doc 717 from 9 posting lists.
+Index: Time to delete doc 717: 9533
+Deleting doc 718 from 10 posting lists.
+Index: Time to delete doc 718: 10806
+Deleting doc 719 from 16 posting lists.
+Index: Time to delete doc 719: 15928
+Deleting doc 720 from 7 posting lists.
+Index: Time to delete doc 720: 7121
+Deleting doc 721 from 6 posting lists.
+Index: Time to delete doc 721: 5354
+Deleting doc 722 from 22 posting lists.
+Index: Time to delete doc 722: 23378
+Deleting doc 723 from 12 posting lists.
+Index: Time to delete doc 723: 13139
+Deleting doc 724 from 7 posting lists.
+Index: Time to delete doc 724: 7122
+Deleting doc 725 from 5 posting lists.
+Index: Time to delete doc 725: 5029
+Deleting doc 726 from 6 posting lists.
+Index: Time to delete doc 726: 5841
+Deleting doc 727 from 10 posting lists.
+Index: Time to delete doc 727: 10974
+Deleting doc 728 from 6 posting lists.
+Index: Time to delete doc 728: 5338
+Deleting doc 729 from 7 posting lists.
+Index: Time to delete doc 729: 6932
+Deleting doc 730 from 7 posting lists.
+Index: Time to delete doc 730: 6783
+Deleting doc 731 from 9 posting lists.
+Index: Time to delete doc 731: 9510
+Deleting doc 732 from 10 posting lists.
+Index: Time to delete doc 732: 10143
+Deleting doc 733 from 7 posting lists.
+Index: Time to delete doc 733: 7071
+Deleting doc 734 from 11 posting lists.
+Index: Time to delete doc 734: 11336
+Deleting doc 735 from 14 posting lists.
+Index: Time to delete doc 735: 14512
+Deleting doc 736 from 6 posting lists.
+Index: Time to delete doc 736: 5772
+Deleting doc 737 from 8 posting lists.
+Index: Time to delete doc 737: 7785
+Deleting doc 738 from 12 posting lists.
+Index: Time to delete doc 738: 12066
+Deleting doc 739 from 30 posting lists.
+Index: Time to delete doc 739: 30018
+Deleting doc 740 from 41 posting lists.
+Index: Time to delete doc 740: 41849
+Deleting doc 741 from 31 posting lists.
+Index: Time to delete doc 741: 30621
+Deleting doc 742 from 39 posting lists.
+Index: Time to delete doc 742: 40982
+Deleting doc 743 from 27 posting lists.
+Index: Time to delete doc 743: 26260
+Deleting doc 744 from 35 posting lists.
+Index: Time to delete doc 744: 35240
+Deleting doc 745 from 22 posting lists.
+Index: Time to delete doc 745: 22230
+Deleting doc 746 from 35 posting lists.
+Index: Time to delete doc 746: 35800
+Deleting doc 747 from 27 posting lists.
+Index: Time to delete doc 747: 28835
+Deleting doc 748 from 34 posting lists.
+Index: Time to delete doc 748: 37834
+Deleting doc 749 from 4 posting lists.
+Index: Time to delete doc 749: 3280
+Deleting doc 750 from 0 posting lists.
+Index: Time to delete doc 750: 1
+Deleting doc 751 from 2 posting lists.
+Index: Time to delete doc 751: 1935
+Deleting doc 752 from 3 posting lists.
+Index: Time to delete doc 752: 3044
+Deleting doc 753 from 1 posting lists.
+Index: Time to delete doc 753: 978
+Deleting doc 754 from 7 posting lists.
+Index: Time to delete doc 754: 6158
+Deleting doc 755 from 2 posting lists.
+Index: Time to delete doc 755: 1895
+Deleting doc 756 from 5 posting lists.
+Index: Time to delete doc 756: 4991
+Deleting doc 757 from 1 posting lists.
+Index: Time to delete doc 757: 1018
+Deleting doc 758 from 3 posting lists.
+Index: Time to delete doc 758: 2973
+Deleting doc 759 from 3 posting lists.
+Index: Time to delete doc 759: 2791
+Deleting doc 760 from 4 posting lists.
+Index: Time to delete doc 760: 3737
+Deleting doc 761 from 2 posting lists.
+Index: Time to delete doc 761: 1963
+Deleting doc 762 from 6 posting lists.
+Index: Time to delete doc 762: 5392
+Deleting doc 763 from 3 posting lists.
+Index: Time to delete doc 763: 2850
+Deleting doc 764 from 3 posting lists.
+Index: Time to delete doc 764: 2731
+Deleting doc 765 from 2 posting lists.
+Index: Time to delete doc 765: 1802
+Deleting doc 766 from 5 posting lists.
+Index: Time to delete doc 766: 4320
+Deleting doc 767 from 6 posting lists.
+Index: Time to delete doc 767: 6089
+Deleting doc 768 from 2 posting lists.
+Index: Time to delete doc 768: 1812
+Deleting doc 769 from 4 posting lists.
+Index: Time to delete doc 769: 4111
+Deleting doc 770 from 7 posting lists.
+Index: Time to delete doc 770: 7242
+Deleting doc 771 from 7 posting lists.
+Index: Time to delete doc 771: 7261
+Deleting doc 772 from 8 posting lists.
+Index: Time to delete doc 772: 7939
+Deleting doc 773 from 7 posting lists.
+Index: Time to delete doc 773: 7325
+Deleting doc 774 from 16 posting lists.
+Index: Time to delete doc 774: 17006
+Deleting doc 775 from 9 posting lists.
+Index: Time to delete doc 775: 9030
+Deleting doc 776 from 5 posting lists.
+Index: Time to delete doc 776: 4877
+Deleting doc 777 from 6 posting lists.
+Index: Time to delete doc 777: 5684
+Deleting doc 778 from 3 posting lists.
+Index: Time to delete doc 778: 2727
+Deleting doc 779 from 6 posting lists.
+Index: Time to delete doc 779: 6799
+Deleting doc 780 from 3 posting lists.
+Index: Time to delete doc 780: 3074
+Deleting doc 781 from 9 posting lists.
+Index: Time to delete doc 781: 10170
+Deleting doc 782 from 12 posting lists.
+Index: Time to delete doc 782: 13334
+Deleting doc 783 from 9 posting lists.
+Index: Time to delete doc 783: 10460
+Deleting doc 784 from 9 posting lists.
+Index: Time to delete doc 784: 9997
+Deleting doc 785 from 5 posting lists.
+Index: Time to delete doc 785: 5327
+Deleting doc 786 from 2 posting lists.
+Index: Time to delete doc 786: 2083
+Deleting doc 787 from 5 posting lists.
+Index: Time to delete doc 787: 4689
+Deleting doc 788 from 7 posting lists.
+Index: Time to delete doc 788: 6489
+Deleting doc 789 from 3 posting lists.
+Index: Time to delete doc 789: 2566
+Deleting doc 790 from 4 posting lists.
+Index: Time to delete doc 790: 3602
+Deleting doc 791 from 7 posting lists.
+Index: Time to delete doc 791: 6072
+Deleting doc 792 from 7 posting lists.
+Index: Time to delete doc 792: 6545
+Deleting doc 793 from 8 posting lists.
+Index: Time to delete doc 793: 8413
+Deleting doc 794 from 6 posting lists.
+Index: Time to delete doc 794: 6435
+Deleting doc 795 from 4 posting lists.
+Index: Time to delete doc 795: 3965
+Deleting doc 796 from 15 posting lists.
+Index: Time to delete doc 796: 15093
+Deleting doc 797 from 7 posting lists.
+Index: Time to delete doc 797: 7445
+Deleting doc 798 from 8 posting lists.
+Index: Time to delete doc 798: 7244
+Deleting doc 799 from 22 posting lists.
+Index: Time to delete doc 799: 23950
+Deleting doc 800 from 14 posting lists.
+Index: Time to delete doc 800: 15602
+Deleting doc 801 from 11 posting lists.
+Index: Time to delete doc 801: 11447
+Deleting doc 802 from 17 posting lists.
+Index: Time to delete doc 802: 18630
+Deleting doc 803 from 9 posting lists.
+Index: Time to delete doc 803: 8957
+Deleting doc 804 from 9 posting lists.
+Index: Time to delete doc 804: 8832
+Deleting doc 805 from 18 posting lists.
+Index: Time to delete doc 805: 18963
+Deleting doc 806 from 13 posting lists.
+Index: Time to delete doc 806: 13551
+Deleting doc 807 from 8 posting lists.
+Index: Time to delete doc 807: 7838
+Deleting doc 808 from 14 posting lists.
+Index: Time to delete doc 808: 14934
+Deleting doc 809 from 2 posting lists.
+Index: Time to delete doc 809: 1979
+Deleting doc 810 from 11 posting lists.
+Index: Time to delete doc 810: 10671
+Deleting doc 811 from 2 posting lists.
+Index: Time to delete doc 811: 2100
+Deleting doc 812 from 7 posting lists.
+Index: Time to delete doc 812: 7108
+Deleting doc 813 from 6 posting lists.
+Index: Time to delete doc 813: 4818
+Deleting doc 814 from 2 posting lists.
+Index: Time to delete doc 814: 1772
+Deleting doc 815 from 3 posting lists.
+Index: Time to delete doc 815: 2618
+Deleting doc 816 from 7 posting lists.
+Index: Time to delete doc 816: 5729
+Deleting doc 817 from 15 posting lists.
+Index: Time to delete doc 817: 14605
+Deleting doc 818 from 4 posting lists.
+Index: Time to delete doc 818: 3457
+Deleting doc 819 from 8 posting lists.
+Index: Time to delete doc 819: 8466
+Deleting doc 820 from 10 posting lists.
+Index: Time to delete doc 820: 10918
+Deleting doc 821 from 5 posting lists.
+Index: Time to delete doc 821: 4743
+Deleting doc 822 from 9 posting lists.
+Index: Time to delete doc 822: 8542
+Deleting doc 823 from 4 posting lists.
+Index: Time to delete doc 823: 4027
+Deleting doc 824 from 15 posting lists.
+Index: Time to delete doc 824: 15804
+Deleting doc 825 from 8 posting lists.
+Index: Time to delete doc 825: 8690
+Deleting doc 826 from 6 posting lists.
+Index: Time to delete doc 826: 5898
+Deleting doc 827 from 7 posting lists.
+Index: Time to delete doc 827: 6935
+Deleting doc 828 from 0 posting lists.
+Index: Time to delete doc 828: 1
+Deleting doc 829 from 9 posting lists.
+Index: Time to delete doc 829: 9489
+Deleting doc 830 from 11 posting lists.
+Index: Time to delete doc 830: 10421
+Deleting doc 831 from 17 posting lists.
+Index: Time to delete doc 831: 16820
+Deleting doc 832 from 7 posting lists.
+Index: Time to delete doc 832: 6959
+Deleting doc 833 from 14 posting lists.
+Index: Time to delete doc 833: 14157
+Deleting doc 834 from 9 posting lists.
+Index: Time to delete doc 834: 8575
+Deleting doc 835 from 6 posting lists.
+Index: Time to delete doc 835: 5312
+Deleting doc 836 from 5 posting lists.
+Index: Time to delete doc 836: 4924
+Deleting doc 837 from 17 posting lists.
+Index: Time to delete doc 837: 17357
+Deleting doc 838 from 10 posting lists.
+Index: Time to delete doc 838: 10059
+Deleting doc 839 from 12 posting lists.
+Index: Time to delete doc 839: 10661
+Deleting doc 840 from 17 posting lists.
+Index: Time to delete doc 840: 18151
+Deleting doc 841 from 15 posting lists.
+Index: Time to delete doc 841: 14854
+Deleting doc 842 from 21 posting lists.
+Index: Time to delete doc 842: 22059
+Deleting doc 843 from 17 posting lists.
+Index: Time to delete doc 843: 17788
+Deleting doc 844 from 7 posting lists.
+Index: Time to delete doc 844: 6797
+Deleting doc 845 from 18 posting lists.
+Index: Time to delete doc 845: 18883
+Deleting doc 846 from 19 posting lists.
+Index: Time to delete doc 846: 27079
+Deleting doc 847 from 18 posting lists.
+Index: Time to delete doc 847: 18539
+Deleting doc 848 from 17 posting lists.
+Index: Time to delete doc 848: 17041
+Deleting doc 849 from 4 posting lists.
+Index: Time to delete doc 849: 4081
+Deleting doc 850 from 11 posting lists.
+Index: Time to delete doc 850: 11898
+Deleting doc 851 from 8 posting lists.
+Index: Time to delete doc 851: 8507
+Deleting doc 852 from 4 posting lists.
+Index: Time to delete doc 852: 3867
+Deleting doc 853 from 5 posting lists.
+Index: Time to delete doc 853: 4665
+Deleting doc 854 from 10 posting lists.
+Index: Time to delete doc 854: 9646
+Deleting doc 855 from 8 posting lists.
+Index: Time to delete doc 855: 8562
+Deleting doc 856 from 6 posting lists.
+Index: Time to delete doc 856: 6012
+Deleting doc 857 from 6 posting lists.
+Index: Time to delete doc 857: 6052
+Deleting doc 858 from 12 posting lists.
+Index: Time to delete doc 858: 12293
+Deleting doc 859 from 0 posting lists.
+Index: Time to delete doc 859: 1
+Deleting doc 860 from 3 posting lists.
+Index: Time to delete doc 860: 2504
+Deleting doc 861 from 1 posting lists.
+Index: Time to delete doc 861: 904
+Deleting doc 862 from 3 posting lists.
+Index: Time to delete doc 862: 2489
+Deleting doc 863 from 1 posting lists.
+Index: Time to delete doc 863: 815
+Deleting doc 864 from 3 posting lists.
+Index: Time to delete doc 864: 2840
+Deleting doc 865 from 7 posting lists.
+Index: Time to delete doc 865: 6895
+Deleting doc 866 from 4 posting lists.
+Index: Time to delete doc 866: 3514
+Deleting doc 867 from 13 posting lists.
+Index: Time to delete doc 867: 12758
+Deleting doc 868 from 4 posting lists.
+Index: Time to delete doc 868: 3889
+Deleting doc 869 from 7 posting lists.
+Index: Time to delete doc 869: 7326
+Deleting doc 870 from 8 posting lists.
+Index: Time to delete doc 870: 8178
+Deleting doc 871 from 4 posting lists.
+Index: Time to delete doc 871: 3839
+Deleting doc 872 from 14 posting lists.
+Index: Time to delete doc 872: 13393
+Deleting doc 873 from 10 posting lists.
+Index: Time to delete doc 873: 10432
+Deleting doc 874 from 8 posting lists.
+Index: Time to delete doc 874: 8268
+Deleting doc 875 from 11 posting lists.
+Index: Time to delete doc 875: 10791
+Deleting doc 876 from 4 posting lists.
+Index: Time to delete doc 876: 4131
+Deleting doc 877 from 3 posting lists.
+Index: Time to delete doc 877: 3264
+Deleting doc 878 from 9 posting lists.
+Index: Time to delete doc 878: 9085
+Deleting doc 879 from 8 posting lists.
+Index: Time to delete doc 879: 8584
+Deleting doc 880 from 4 posting lists.
+Index: Time to delete doc 880: 3688
+Deleting doc 881 from 3 posting lists.
+Index: Time to delete doc 881: 2499
+Deleting doc 882 from 3 posting lists.
+Index: Time to delete doc 882: 2742
+Deleting doc 883 from 1 posting lists.
+Index: Time to delete doc 883: 1142
+Deleting doc 884 from 6 posting lists.
+Index: Time to delete doc 884: 5026
+Deleting doc 885 from 14 posting lists.
+Index: Time to delete doc 885: 12370
+Deleting doc 886 from 5 posting lists.
+Index: Time to delete doc 886: 4783
+Deleting doc 887 from 9 posting lists.
+Index: Time to delete doc 887: 7937
+Deleting doc 888 from 10 posting lists.
+Index: Time to delete doc 888: 10470
+Deleting doc 889 from 3 posting lists.
+Index: Time to delete doc 889: 2758
+Deleting doc 890 from 5 posting lists.
+Index: Time to delete doc 890: 5075
+Deleting doc 891 from 6 posting lists.
+Index: Time to delete doc 891: 5525
+Deleting doc 892 from 8 posting lists.
+Index: Time to delete doc 892: 8420
+Deleting doc 893 from 2 posting lists.
+Index: Time to delete doc 893: 1885
+Deleting doc 894 from 7 posting lists.
+Index: Time to delete doc 894: 6546
+Deleting doc 895 from 7 posting lists.
+Index: Time to delete doc 895: 6992
+Deleting doc 896 from 7 posting lists.
+Index: Time to delete doc 896: 6720
+Deleting doc 897 from 10 posting lists.
+Index: Time to delete doc 897: 9796
+Deleting doc 898 from 12 posting lists.
+Index: Time to delete doc 898: 12016
+Deleting doc 899 from 9 posting lists.
+Index: Time to delete doc 899: 8118
+Deleting doc 900 from 2 posting lists.
+Index: Time to delete doc 900: 1886
+Deleting doc 901 from 5 posting lists.
+Index: Time to delete doc 901: 4457
+Deleting doc 902 from 2 posting lists.
+Index: Time to delete doc 902: 2034
+Deleting doc 903 from 7 posting lists.
+Index: Time to delete doc 903: 6504
+Deleting doc 904 from 6 posting lists.
+Index: Time to delete doc 904: 5089
+Deleting doc 905 from 3 posting lists.
+Index: Time to delete doc 905: 2716
+Deleting doc 906 from 2 posting lists.
+Index: Time to delete doc 906: 1682
+Deleting doc 907 from 3 posting lists.
+Index: Time to delete doc 907: 3101
+Deleting doc 908 from 13 posting lists.
+Index: Time to delete doc 908: 12280
+Deleting doc 909 from 11 posting lists.
+Index: Time to delete doc 909: 11183
+Deleting doc 910 from 7 posting lists.
+Index: Time to delete doc 910: 6985
+Deleting doc 911 from 21 posting lists.
+Index: Time to delete doc 911: 20248
+Deleting doc 912 from 6 posting lists.
+Index: Time to delete doc 912: 5409
+Deleting doc 913 from 12 posting lists.
+Index: Time to delete doc 913: 12568
+Deleting doc 914 from 16 posting lists.
+Index: Time to delete doc 914: 15091
+Deleting doc 915 from 21 posting lists.
+Index: Time to delete doc 915: 22816
+Deleting doc 916 from 7 posting lists.
+Index: Time to delete doc 916: 7050
+Deleting doc 917 from 13 posting lists.
+Index: Time to delete doc 917: 11701
+Deleting doc 918 from 17 posting lists.
+Index: Time to delete doc 918: 17102
+Deleting doc 919 from 10 posting lists.
+Index: Time to delete doc 919: 9109
+Deleting doc 920 from 15 posting lists.
+Index: Time to delete doc 920: 14835
+Deleting doc 921 from 9 posting lists.
+Index: Time to delete doc 921: 8323
+Deleting doc 922 from 6 posting lists.
+Index: Time to delete doc 922: 5760
+Deleting doc 923 from 14 posting lists.
+Index: Time to delete doc 923: 13190
+Deleting doc 924 from 13 posting lists.
+Index: Time to delete doc 924: 13136
+Deleting doc 925 from 5 posting lists.
+Index: Time to delete doc 925: 4815
+Deleting doc 926 from 7 posting lists.
+Index: Time to delete doc 926: 6408
+Deleting doc 927 from 9 posting lists.
+Index: Time to delete doc 927: 9393
+Deleting doc 928 from 16 posting lists.
+Index: Time to delete doc 928: 15450
+Deleting doc 929 from 12 posting lists.
+Index: Time to delete doc 929: 11694
+Deleting doc 930 from 12 posting lists.
+Index: Time to delete doc 930: 11870
+Deleting doc 931 from 18 posting lists.
+Index: Time to delete doc 931: 18812
+Deleting doc 932 from 16 posting lists.
+Index: Time to delete doc 932: 16487
+Deleting doc 933 from 11 posting lists.
+Index: Time to delete doc 933: 10333
+Deleting doc 934 from 11 posting lists.
+Index: Time to delete doc 934: 11319
+Deleting doc 935 from 10 posting lists.
+Index: Time to delete doc 935: 10244
+Deleting doc 936 from 16 posting lists.
+Index: Time to delete doc 936: 15924
+Deleting doc 937 from 11 posting lists.
+Index: Time to delete doc 937: 10475
+Deleting doc 938 from 1 posting lists.
+Index: Time to delete doc 938: 871
+Deleting doc 939 from 6 posting lists.
+Index: Time to delete doc 939: 5612
+Deleting doc 940 from 8 posting lists.
+Index: Time to delete doc 940: 7276
+Deleting doc 941 from 8 posting lists.
+Index: Time to delete doc 941: 7482
+Deleting doc 942 from 5 posting lists.
+Index: Time to delete doc 942: 5181
+Deleting doc 943 from 5 posting lists.
+Index: Time to delete doc 943: 4385
+Deleting doc 944 from 8 posting lists.
+Index: Time to delete doc 944: 7267
+Deleting doc 945 from 3 posting lists.
+Index: Time to delete doc 945: 3317
+Deleting doc 946 from 4 posting lists.
+Index: Time to delete doc 946: 3496
+Deleting doc 947 from 1 posting lists.
+Index: Time to delete doc 947: 891
+Deleting doc 948 from 15 posting lists.
+Index: Time to delete doc 948: 15940
+Deleting doc 949 from 13 posting lists.
+Index: Time to delete doc 949: 13795
+Deleting doc 950 from 10 posting lists.
+Index: Time to delete doc 950: 10456
+Deleting doc 951 from 17 posting lists.
+Index: Time to delete doc 951: 18590
+Deleting doc 952 from 12 posting lists.
+Index: Time to delete doc 952: 11762
+Deleting doc 953 from 12 posting lists.
+Index: Time to delete doc 953: 12477
+Deleting doc 954 from 12 posting lists.
+Index: Time to delete doc 954: 11465
+Deleting doc 955 from 25 posting lists.
+Index: Time to delete doc 955: 25337
+Deleting doc 956 from 24 posting lists.
+Index: Time to delete doc 956: 26261
+Deleting doc 957 from 17 posting lists.
+Index: Time to delete doc 957: 19747
+Deleting doc 958 from 9 posting lists.
+Index: Time to delete doc 958: 9161
+Deleting doc 959 from 13 posting lists.
+Index: Time to delete doc 959: 14644
+Deleting doc 960 from 11 posting lists.
+Index: Time to delete doc 960: 12979
+Deleting doc 961 from 7 posting lists.
+Index: Time to delete doc 961: 7516
+Deleting doc 962 from 13 posting lists.
+Index: Time to delete doc 962: 15150
+Deleting doc 963 from 10 posting lists.
+Index: Time to delete doc 963: 10728
+Deleting doc 964 from 15 posting lists.
+Index: Time to delete doc 964: 15073
+Deleting doc 965 from 11 posting lists.
+Index: Time to delete doc 965: 11099
+Deleting doc 966 from 13 posting lists.
+Index: Time to delete doc 966: 13183
+Deleting doc 967 from 2 posting lists.
+Index: Time to delete doc 967: 2114
+Deleting doc 968 from 13 posting lists.
+Index: Time to delete doc 968: 13677
+Deleting doc 969 from 11 posting lists.
+Index: Time to delete doc 969: 10722
+Deleting doc 970 from 10 posting lists.
+Index: Time to delete doc 970: 9094
+Deleting doc 971 from 12 posting lists.
+Index: Time to delete doc 971: 12074
+Deleting doc 972 from 7 posting lists.
+Index: Time to delete doc 972: 7928
+Deleting doc 973 from 6 posting lists.
+Index: Time to delete doc 973: 5322
+Deleting doc 974 from 6 posting lists.
+Index: Time to delete doc 974: 6279
+Deleting doc 975 from 3 posting lists.
+Index: Time to delete doc 975: 2956
+Deleting doc 976 from 2 posting lists.
+Index: Time to delete doc 976: 1969
+Deleting doc 977 from 12 posting lists.
+Index: Time to delete doc 977: 11625
+Deleting doc 978 from 4 posting lists.
+Index: Time to delete doc 978: 4025
+Deleting doc 979 from 10 posting lists.
+Index: Time to delete doc 979: 9901
+Deleting doc 980 from 20 posting lists.
+Index: Time to delete doc 980: 20851
+Deleting doc 981 from 11 posting lists.
+Index: Time to delete doc 981: 10283
+Deleting doc 982 from 8 posting lists.
+Index: Time to delete doc 982: 7508
+Deleting doc 983 from 12 posting lists.
+Index: Time to delete doc 983: 11819
+Deleting doc 984 from 16 posting lists.
+Index: Time to delete doc 984: 15813
+Deleting doc 985 from 11 posting lists.
+Index: Time to delete doc 985: 10533
+Deleting doc 986 from 16 posting lists.
+Index: Time to delete doc 986: 16206
+Deleting doc 987 from 5 posting lists.
+Index: Time to delete doc 987: 5779
+Deleting doc 988 from 16 posting lists.
+Index: Time to delete doc 988: 15390
+Deleting doc 989 from 10 posting lists.
+Index: Time to delete doc 989: 10657
+Deleting doc 990 from 6 posting lists.
+Index: Time to delete doc 990: 5759
+Deleting doc 991 from 4 posting lists.
+Index: Time to delete doc 991: 3981
+Deleting doc 992 from 8 posting lists.
+Index: Time to delete doc 992: 8362
+Deleting doc 993 from 2 posting lists.
+Index: Time to delete doc 993: 2251
+Deleting doc 994 from 5 posting lists.
+Index: Time to delete doc 994: 5269
+Deleting doc 995 from 11 posting lists.
+Index: Time to delete doc 995: 11091
+Deleting doc 996 from 9 posting lists.
+Index: Time to delete doc 996: 9845
+Deleting doc 997 from 8 posting lists.
+Index: Time to delete doc 997: 8082
+Deleting doc 998 from 6 posting lists.
+Index: Time to delete doc 998: 5259
+Deleting doc 999 from 16 posting lists.
+Index: Time to delete doc 999: 16094
+Time 10470 microsecs per delete_document
+10470268
+Writing results to ./splade_cocondenser_msmarco_2025-12-12_02:20:59/results_recall_90...
+Results written successfully

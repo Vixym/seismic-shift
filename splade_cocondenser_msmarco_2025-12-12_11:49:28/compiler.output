@@ -1,0 +1,17 @@
+[  7%] Built target seismic_core
+[  9%] Building CXX object CMakeFiles/build_inverted_index.dir/src/bin/build_inverted_index.cpp.o
+[ 11%] Linking CXX executable bin/build_inverted_index
+[ 11%] Built target build_inverted_index
+[ 13%] Building CXX object CMakeFiles/perf_inverted_index.dir/src/bin/perf_inverted_index.cpp.o
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/perf_inverted_index.cpp: In function ‘int main(int, char**)’:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/src/bin/perf_inverted_index.cpp:270:14: warning: variable ‘insert_start’ set but not used [-Wunused-but-set-variable]
+  270 |         auto insert_start = std::chrono::high_resolution_clock::now();
+      |              ^~~~~~~~~~~~
+[ 15%] Linking CXX executable bin/perf_inverted_index
+[ 15%] Built target perf_inverted_index
+[ 17%] Building CXX object CMakeFiles/test_jlt_index.dir/src/bin/test_jlt_index.cpp.o
+[ 19%] Linking CXX executable bin/test_jlt_index
+[ 19%] Built target test_jlt_index
+[ 23%] Built target gtest
+[ 26%] Built target gtest_main
+[ 28%] Building CXX object CMakeFiles/tests.dir/test/seismic_index_test.cpp.o

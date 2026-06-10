@@ -27,9 +27,13 @@
 // CEREAL_REGISTER_TYPE(seismic::PostingList);
 // CEREAL_REGISTER_TYPE(seismic::Knn);
 // CEREAL_REGISTER_TYPE(seismic::InvertedIndex);
-
+//
+#include "../my_inverted_index.h"
 
 using namespace seismic;
+
+using TIndex = MyInvertedIndex<float>;
+using TDataset = SparseDatasetMut<float>;
 
 // Simple argument parser
 struct Args {
@@ -44,6 +48,9 @@ struct Args {
     size_t kmeans_doc_cut = 15;
     float kmeans_pruning_factor = 0.005f;
     std::optional<std::string> knn_path = std::nullopt;
+    bool dynamic_support = false;
+    std::string summarization = "max";
+    std::string transform = "none";
 };
 
 void print_usage() {
@@ -59,7 +66,10 @@ void print_usage() {
               << "  --clustering-algorithm ALG    Clustering algorithm (default: random-kmeans)\n"
               << "  --kmeans-doc-cut N            K-means doc cut (default: 15)\n"
               << "  --kmeans-pruning-factor F     K-means pruning factor (default: 0.005)\n"
-              << "  --knn-path PATH               KNN path (optional)\n";
+              << "  --knn-path PATH               KNN path (optional)\n"
+              << "  --dynamic-support true/false  Enable support for dynamic operations\n"
+              << "  --summarization max/centroid  Summary metric\n"
+              << "  --transform none/jlt      Transformation to apply to summary\n";
 }
 
 Args parse_args(int argc, char* argv[]) {
@@ -90,6 +100,12 @@ Args parse_args(int argc, char* argv[]) {
             args.kmeans_pruning_factor = std::stof(argv[++i]);
         } else if (arg == "--knn-path" && i + 1 < argc) {
             args.knn_path = argv[++i];
+        } else if (arg == "--dynamic-support" && i + 1 < argc) {
+            args.dynamic_support = argv[++i];
+        } else if (arg == "--summarization" && i + 1 < argc ) {
+            args.summarization = argv[++i];
+        } else if (arg == "--transform" && i + 1 < argc) {
+            args.transform = argv[++i];
         } else if (arg == "--help") {
             print_usage();
             exit(0);
@@ -106,7 +122,7 @@ Args parse_args(int argc, char* argv[]) {
 }
 
 // Function to save the index to a file
-void save_index(const InvertedIndex<float>& index, const std::string& path) {
+void save_index(const TIndex& index, const std::string& path) {
     std::string full_path = path + ".index.seismic";
     std::cout << "Saving ... " << full_path << std::endl;
     
@@ -181,10 +197,10 @@ int main(int argc, char* argv[]) {
         
         // Load dataset
         std::cout << "\nLoading dataset from " << args.input_file << "..." << std::endl;
-        SparseDataset<float> dataset;
+        TDataset dataset;
         
         try {
-            dataset = SparseDataset<float>::read_bin_file(args.input_file);
+            dataset = TDataset::read_bin_file(args.input_file);
             std::cout << "Number of Vectors: " << dataset.len() << std::endl;
             std::cout << "Number of Dimensions: " << dataset.dim() << std::endl;
             std::cout << "Avg number of components: " 
@@ -202,8 +218,9 @@ int main(int argc, char* argv[]) {
         config.pruning_strategy(pruning);
         
         // Set blocking strategy
-        BlockingStrategy blocking = BlockingStrategy::random_kmeans(
-            args.centroid_fraction, args.min_cluster_size, clustering_algorithm);
+        BlockingStrategy blocking = BlockingStrategy::fixed_size(400);
+        //BlockingStrategy blocking = BlockingStrategy::random_kmeans(
+        //    args.centroid_fraction, args.min_cluster_size, clustering_algorithm);
         config.blocking_strategy(blocking);
         
         // Set summarization strategy
@@ -216,11 +233,22 @@ int main(int argc, char* argv[]) {
             KnnConfiguration knn_config(args.knn, args.knn_path);
             config.knn(knn_config);
         }
+
+        // Set dynamism
+        if (args.dynamic_support == true) {
+            config.set_dynamic_support(true);
+        }
+
+        // Set summary metric
+        config.set_summarization_metric(args.summarization);
+
+        // Set transform
+        config.set_transform_function(args.transform);
         
         std::cout << "\nBuilding the index..." << std::endl;
         
         // Build the inverted index
-        InvertedIndex<float> inverted_index = InvertedIndex<float>::build(dataset, config);
+        TIndex inverted_index = TIndex::build(dataset, config);
         
         // Calculate elapsed time before serialization
         auto before_serialize = std::chrono::high_resolution_clock::now();

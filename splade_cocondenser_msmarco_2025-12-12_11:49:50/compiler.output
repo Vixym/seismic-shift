@@ -1,0 +1,27 @@
+[  7%] Built target seismic_core
+[ 11%] Built target build_inverted_index
+[ 13%] Building CXX object CMakeFiles/perf_inverted_index.dir/src/bin/perf_inverted_index.cpp.o
+[ 15%] Linking CXX executable bin/perf_inverted_index
+[ 15%] Built target perf_inverted_index
+[ 19%] Built target test_jlt_index
+[ 23%] Built target gtest
+[ 26%] Built target gtest_main
+[ 28%] Building CXX object CMakeFiles/tests.dir/test/seismic_index_test.cpp.o
+[ 30%] Linking CXX executable tests
+[ 55%] Built target tests
+[ 59%] Built target sandbox
+[ 63%] Built target sandbox_json
+[ 67%] Built target sandbox_rtti
+[ 73%] Built target sandbox_vs_dll
+[ 76%] Built target sandbox_vs
+[ 80%] Built target performance
+[ 84%] Built target gmock
+[ 88%] Built target gmock_main
+[ 90%] Building CXX object pylib/CMakeFiles/seismic_cpp.dir/seismic_bindings.cpp.o
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/pylib/seismic_bindings.cpp: In static member function ‘static PySeismicIndex PySeismicIndex::build(const string&, size_t, float, size_t, float, size_t, std::optional<std::__cxx11::basic_string<char> >, std::optional<long unsigned int>, std::optional<std::unordered_map<std::__cxx11::basic_string<char>, long unsigned int> >, size_t)’:
+/afs/csail.mit.edu/u/j/jasonehc/seismic-shift/pylib/seismic_bindings.cpp:196:16: warning: unused parameter ‘num_threads’ [-Wunused-parameter]
+  196 |         size_t num_threads = 0)
+      |         ~~~~~~~^~~~~~~~~~~~~~~
+[ 92%] Linking CXX shared module seismic_cpp.cpython-310-x86_64-linux-gnu.so
+lto-wrapper: warning: using serial compilation of 3 LTRANS jobs
+[100%] Built target seismic_cpp

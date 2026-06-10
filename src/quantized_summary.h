@@ -246,6 +246,70 @@ public:
             std::move(quants)
         );
     }
+    void set_block_from_dense(size_t block_id, const std::vector<float>& max_vec) {
+        assert(block_id < n_summaries);
+        //if (d == 0 || max_vec.empty()) return;
+
+        // 1. Compute min and max over the provided dense vector
+        float min_val = std::numeric_limits<float>::infinity();
+        float max_val = -std::numeric_limits<float>::infinity();
+
+        const size_t dim = std::min(d, max_vec.size());
+        for (size_t i = 0; i < dim; ++i) {
+            float v = max_vec[i];
+            if (v < min_val) min_val = v;
+            if (v > max_val) max_val = v;
+        }
+
+        // Handle degenerate case: all values equal (or no finite values)
+        if (!std::isfinite(min_val) || !std::isfinite(max_val)) {
+            min_val = 0.0f;
+            max_val = 0.0f;
+        }
+
+        float quant = (max_val - min_val) / static_cast<float>(N_CLASSES);
+        if (quant == 0.0f) {
+            // All coordinates the same -> map everything to code 0
+            quant = 1.0f;
+        }
+
+        // 2. Store updated quantization parameters for this block
+        if (block_id >= minimums.size()) minimums.resize(block_id + 1, 0.0f);
+        if (block_id >= quants.size())   quants.resize(block_id + 1, 1.0f);
+
+        minimums[block_id] = min_val;
+        quants[block_id]   = quant;
+
+        // 3. For each component c, update the code for this block if it appears
+        for (size_t c = 0; c < dim; ++c) {
+            float v = max_vec[c];
+
+            // Skip if this coordinate is zero and you don't want to change anything;
+            // but we still need to update existing entries if they exist.
+            auto current_offset = offsets.select(c);
+            auto next_offset    = offsets.select(c + 1);
+
+            if (!current_offset || !next_offset || *next_offset <= *current_offset) {
+                //continue;
+            }
+
+            // Find entries for this block in [current_offset, next_offset)
+            for (size_t j = *current_offset; j < *next_offset; ++j) {
+                if (summaries_ids[j] != static_cast<uint16_t>(block_id)) {
+                    continue;
+                }
+
+                // Re-quantize this coordinate for this block
+                float rel = (v - min_val) / quant;
+                // Clamp to [0, N_CLASSES - 1]
+                float clamped = std::min(static_cast<float>(N_CLASSES - 1),
+                                        std::max(0.0f, rel));
+                uint8_t code = static_cast<uint8_t>(clamped);
+
+                values[j] = code;
+            }
+        }
+    }
 };
 
 } // namespace seismic
