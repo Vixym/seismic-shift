@@ -134,13 +134,22 @@ public:
     std::vector<std::pair<float, size_t>> topk() const override {
         // Create a copy of the heap
         auto result = heap_;
-        
+
         // Sort the result in decreasing order of distance
-        std::sort(result.begin(), result.end(), 
+        std::sort(result.begin(), result.end(),
                  [](const auto& a, const auto& b) { return a.first > b.first; });
-        
+
         return result;
     }
+
+    /**
+     * O(1) access to the current largest stored distance (the heap root), i.e. the
+     * pruning threshold. The full heap is a max-heap by HeapComparator so the root
+     * is always the worst of the current top-k. Hot query-path skip checks should
+     * use this instead of topk().front(), which copies and sorts the whole heap on
+     * every call. Caller must ensure the heap is non-empty (len() == k).
+     */
+    float front_distance() const { return heap_.front().first; }
 
     size_t len() const override { return heap_.size(); }
 

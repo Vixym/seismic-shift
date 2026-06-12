@@ -184,7 +184,11 @@ public:
         if (knn_ && n_knn > 0) {
             knn_->refine<float>(query, heap, visited, forward_index_, n_knn);
         }
-         
+
+        if (debug) {
+            std::cout << "Docs evaluated: " << visited.size() << std::endl;
+        }
+
         auto results = heap.topk();
         std::vector<std::pair<float, size_t>> final_results;
         final_results.reserve(results.size());
@@ -259,7 +263,11 @@ public:
             const auto& pruning = config.get_pruning();
             if (pruning.get_type() == PruningStrategy::Type::FixedSize) {
                 std::cout << "DEBUG Fixed-pruning" << std::endl;
-                //fixed_pruning(inverted_pairs, pruning.get_n_postings());
+                // Truncate each posting list to its top n_postings. This was previously
+                // commented out, leaving lists fully unpruned -- which both exploded the
+                // build cost (clustering ran on full lists) and made queries evaluate
+                // ~all docs per list. Re-enabling restores paper-faithful pruning.
+                fixed_pruning(inverted_pairs, pruning.get_n_postings());
             } else if (pruning.get_type() == PruningStrategy::Type::GlobalThreshold) {
                 std::cout << "DEBUG Global-pruning" << std::endl;
                 global_threshold_pruning(inverted_pairs, pruning.get_n_postings());

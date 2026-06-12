@@ -40,6 +40,7 @@ struct Args {
     std::string input_file;
     std::string output_file;
     size_t n_postings = 3500;
+    size_t block_size = 400;  // centroids/blocks per posting list (paper-faithful ~0.1*L at the cap)
     float summary_energy = 0.4f;
     float centroid_fraction = 0.1f;
     size_t min_cluster_size = 2;
@@ -59,6 +60,7 @@ void print_usage() {
               << "  --input-file FILE             Input file path\n"
               << "  --output-file FILE            Output file path\n"
               << "  --n-postings N                Number of postings (default: 3500)\n"
+              << "  --block-size N                Centroids/blocks per posting list (default: 400; use ~0.1*n-postings for paper-faithful blocking, smaller for faster builds)\n"
               << "  --summary-energy E            Summary energy (default: 0.4)\n"
               << "  --centroid-fraction F         Centroid fraction (default: 0.1)\n"
               << "  --min-cluster-size N          Minimum cluster size (default: 2)\n"
@@ -84,6 +86,8 @@ Args parse_args(int argc, char* argv[]) {
             args.output_file = argv[++i];
         } else if (arg == "--n-postings" && i + 1 < argc) {
             args.n_postings = std::stoul(argv[++i]);
+        } else if (arg == "--block-size" && i + 1 < argc) {
+            args.block_size = std::stoul(argv[++i]);
         } else if (arg == "--summary-energy" && i + 1 < argc) {
             args.summary_energy = std::stof(argv[++i]);
         } else if (arg == "--centroid-fraction" && i + 1 < argc) {
@@ -165,6 +169,7 @@ int main(int argc, char* argv[]) {
     std::cout << "  Input file: " << args.input_file << std::endl;
     std::cout << "  Output file: " << args.output_file << std::endl;
     std::cout << "  N postings: " << args.n_postings << std::endl;
+    std::cout << "  Block size (centroids/list): " << args.block_size << std::endl;
     std::cout << "  Summary energy: " << args.summary_energy << std::endl;
     std::cout << "  Centroid fraction: " << args.centroid_fraction << std::endl;
     std::cout << "  Min cluster size: " << args.min_cluster_size << std::endl;
@@ -218,7 +223,7 @@ int main(int argc, char* argv[]) {
         config.pruning_strategy(pruning);
         
         // Set blocking strategy
-        BlockingStrategy blocking = BlockingStrategy::fixed_size(400);
+        BlockingStrategy blocking = BlockingStrategy::fixed_size(args.block_size);
         //BlockingStrategy blocking = BlockingStrategy::random_kmeans(
         //    args.centroid_fraction, args.min_cluster_size, clustering_algorithm);
         config.blocking_strategy(blocking);

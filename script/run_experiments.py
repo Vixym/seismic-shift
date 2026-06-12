@@ -132,7 +132,11 @@ def build_index(configs, experiment_dir):
             f"--summary-energy {configs['indexing_parameters']['summary-energy']}",
             f"--centroid-fraction {configs['indexing_parameters']['centroid-fraction']}",
         ]
-        
+
+        # Add block-size (centroids per posting list) if it exists
+        if 'block-size' in configs['indexing_parameters']:
+            command_and_params.append(f"--block-size {configs['indexing_parameters']['block-size']}")
+
         # Add KNN parameter if it exists
         if 'knn' in configs['indexing_parameters']:
             command_and_params.append(f"--knn {configs['indexing_parameters']['knn']}")

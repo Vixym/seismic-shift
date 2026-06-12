@@ -470,6 +470,53 @@ summary (a max cannot be decremented) whereas `centroid` simply removes the doc'
 contribution from the running mean. (`resize()` compaction is summary-independent and
 takes ~19 s over the 1M index in both cases.)
 
+## Full-scale reproduction (8.8M MS MARCO SPLADE, static)
+
+With paper-faithful settings (`--n-postings 4000 --block-size 400 --summarization max
+--transform none`, no `--dynamic-support`) the C++ port reproduces the published Seismic
+recall, at sub-millisecond-to-low-millisecond latency. Build ~13 min; index ~12 GB.
+
+| Subsection | query-cut / heap-factor | Latency | RR@10 |
+| ---------- | ----------------------- | ------- | ----- |
+| recall_90  | 3 / 0.9                 | 855 µs  | 0.369 |
+| recall_91  | 4 / 0.9                 | 1.11 ms | 0.373 |
+| recall_93  | 5 / 0.9                 | 1.31 ms | 0.373 |
+| recall_94  | 8 / 0.9                 | 1.95 ms | 0.376 |
+| recall_95  | 5 / 0.8                 | 1.54 ms | 0.376 |
+| recall_97  | 6 / 0.7                 | 2.16 ms | 0.377 |
+
+(Exact-search groundtruth RR@10 = 0.383.) Run with
+`python3 script/run_experiments.py --exp experiments/sigir2024/splade_full_repro.toml`,
+or sweep an existing index with `script/sweep_pruned.sh`.
+
+NOTE: paper-faithful results require `--block-size ~400` (≈ `0.1 × n-postings`, the
+original Seismic granularity). Smaller values build faster but coarsen blocks and hurt
+query latency/recall.
+
+## Dynamic summary-metric tradeoff (centroid+jlt vs max, 8.8M)
+
+Comparing the two dynamic configurations on the full collection (both
+`--dynamic-support true --block-size 400`, 500 insert/delete ops). The headline: the
+choice is a **query-speed vs update-speed tradeoff that is essentially recall-neutral**.
+
+| Axis              | `max` / `none` | `centroid` / `jlt` | Winner            |
+| ----------------- | -------------- | ------------------ | ----------------- |
+| Recall (RR@10)    | 0.370–0.377    | 0.371–0.378        | tie               |
+| Query latency     | 0.85–2.1 ms    | 5.7–14.9 ms        | max (~6–7×)       |
+| Insert            | 18.5 ms        | 10.1 ms            | centroid (~1.8×)  |
+| Delete            | 16.1 ms        | 0.42 ms            | centroid (~38×)   |
+| resize()          | 20.7 s         | 20.4 s             | tie               |
+| Index size        | 13.4 GB        | 11.4 GB            | centroid          |
+
+`max` summaries are true upper bounds, enabling principled threshold pruning (skips
+aggressively, ~500 docs/query) — fast queries but expensive deletes (block summary must
+be recomputed). `centroid` summaries have no upper bound, so query pruning falls back to
+a count-based heuristic (evaluates ~75% of blocks) — slower queries, but deletes are an
+O(summary) incremental update. Recall ends up equivalent. Rule of thumb: `max` for
+read-heavy/mostly-static collections, `centroid+jlt` for delete/update-heavy workloads
+(smaller index, far cheaper deletes, equal recall). Reproduce with
+`script/sweep_dyn_compare.sh`.
+
 ## Testing out a toy example
 
 From the root directory, run:

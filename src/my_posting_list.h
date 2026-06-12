@@ -278,18 +278,21 @@ namespace seismic
             // Get distances between query and summaries vector of (idx, val) pairs
             std::vector<std::pair<uint16_t, float>> indexed_dots = get_distances(query_components, query_values, jlt, config, debug);
             
-            // Sort summaries by dot product w.r.t. to the query. Useful only in the first list.
-            if (sort_summaries) {
-                std::sort(indexed_dots.begin(), indexed_dots.end(),
-                        [](const auto& a, const auto& b) { return a.second > b.second; });
-            }
+            // Always process blocks best-first (by query·summary). This lets the top-k
+            // heap fill with high-scoring docs early, which raises the pruning threshold
+            // quickly so most remaining (lower-scoring) blocks can be skipped. Processing
+            // blocks in arbitrary order leaves the threshold low and ends up evaluating
+            // nearly every doc in the list (the cause of the latency regression).
+            (void)sort_summaries;
+            std::sort(indexed_dots.begin(), indexed_dots.end(),
+                    [](const auto& a, const auto& b) { return a.second > b.second; });
             const size_t block_threshold = indexed_dots.size() * .75;
             size_t num_blocks_processed = 0;
             for (const auto& [block_id, dot] : indexed_dots) {
                 num_blocks_processed += 1;
                 // Skip blocks that cannot contribute to the top-k
                 if (config.get_summarization_metric() == "max"){
-                    if (heap.len() == k && dot < -heap_factor * heap.topk().front().first) continue;
+                    if (heap.len() == k && dot < -heap_factor * heap.front_distance()) continue;
                 } else if (config.get_summarization_metric() == "centroid") {
                     if (heap.len() == k && num_blocks_processed >= block_threshold) continue;
                 }
@@ -384,7 +387,7 @@ namespace seismic
             }
             
             for (size_t i = 0; i < summaries_.size(); ++i) {
-                std::vector<std::pair<uint16_t, float>> summary = summaries_[i].second;
+                const std::vector<std::pair<uint16_t, float>>& summary = summaries_[i].second;
                 // Two-pointer merge to compute dot product between sparse vectors
                 size_t qi = 0;
                 size_t si = 0;
@@ -477,14 +480,13 @@ namespace seismic
         static std::vector<size_t> fixed_size_blocking(std::vector<size_t>& posting_list, size_t num_blocks, const SparseDatasetMut<float>& dataset) 
         {
             if (posting_list.empty()) return {0};
-            // Cap the number of centroids per posting list. Blocking cost is
-            // O(L * num_blocks * nnz); with the configured block_size (~400 =
-            // 0.1*L at the pruning cap) the largest lists dominate build time.
-            // Capping num_blocks makes that cost grow ~linearly in L instead of
-            // quadratically, at the cost of coarser blocks (a recall/latency
-            // tradeoff we measure separately). Tune via MAX_CENTROIDS_PER_LIST.
-            static constexpr size_t MAX_CENTROIDS_PER_LIST = 64;
-            num_blocks = std::min({num_blocks, posting_list.size(), MAX_CENTROIDS_PER_LIST});
+            // `num_blocks` (= --block-size) is the number of centroids/blocks for
+            // this posting list, bounded by the list length. Paper-faithful blocking
+            // uses ~0.1*L (=400 at the n_postings=4000 cap); a smaller value makes the
+            // build much faster but coarsens blocks, which hurts query latency/recall.
+            // Blocking cost is O(L * num_blocks * nnz), so this is the main build-time
+            // vs query-quality knob. Set it via build_inverted_index --block-size.
+            num_blocks = std::min(num_blocks, posting_list.size());
             std::vector<size_t> reordered_posting_list;
             reordered_posting_list.reserve(posting_list.size());       
             
