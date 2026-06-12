@@ -36,6 +36,7 @@ struct Args
     float heap_factor = 0.7f;
     size_t n_knn = 0;
     bool first_sorted = false;
+    float alpha = 0.0f;  // centroid+radius pruning strength (0 = legacy count-based skip)
 };
 
 void print_usage()
@@ -101,6 +102,10 @@ Args parse_args(int argc, char *argv[])
         else if (arg == "--first-sorted")
         {
             args.first_sorted = true;
+        }
+        else if (arg == "--alpha" && i + 1 < argc)
+        {
+            args.alpha = std::stof(argv[++i]);
         }
         else if (arg == "--help")
         {
@@ -247,6 +252,7 @@ int main(int argc, char *argv[])
                     args.heap_factor,
                     args.n_knn,
                     args.first_sorted,
+                    args.alpha,
                     query_id % 1000 == 1);
 
                 if (cur_results.size() < args.k)

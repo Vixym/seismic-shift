@@ -34,19 +34,27 @@ namespace seismic
         std::vector<size_t> block_offsets_;
         std::vector<std::pair<size_t, SparseVector>> summaries_; // Summaries are stored as (size, summary)
         std::vector<std::pair<size_t, size_t>> doc_block_pairs_;
-    
+        std::vector<float> block_radii_; // per-block residual radius R = max_d ||d - mu|| (for centroid+radius pruning)
+
     public:
         // Default constructor
         MyPostingList() = default;
-        
+
         // Constructor with parameters
-        MyPostingList(std::vector<uint64_t> packed_postings, std::vector<size_t> block_offsets, 
-                   std::vector<std::pair<size_t, SparseVector>> summaries, std::vector<std::pair<size_t, size_t>> doc_block_pairs)
+        MyPostingList(std::vector<uint64_t> packed_postings, std::vector<size_t> block_offsets,
+                   std::vector<std::pair<size_t, SparseVector>> summaries, std::vector<std::pair<size_t, size_t>> doc_block_pairs,
+                   std::vector<float> block_radii = {})
             : packed_postings_(std::move(packed_postings)),
               block_offsets_(std::move(block_offsets)),
               summaries_(std::move(summaries)),
-              doc_block_pairs_(std::move(doc_block_pairs)) {}
-        
+              doc_block_pairs_(std::move(doc_block_pairs)),
+              block_radii_(std::move(block_radii)) {}
+
+        // Read-only accessors (used by diagnostics).
+        const std::vector<uint64_t>& packed_postings() const { return packed_postings_; }
+        const std::vector<size_t>& block_offsets() const { return block_offsets_; }
+        size_t num_blocks() const { return block_offsets_.empty() ? 0 : block_offsets_.size() - 1; }
+
         // Build a posting list from a dataset and a list of postings
         template <typename T>
         static MyPostingList build(
@@ -86,6 +94,8 @@ namespace seismic
             // Create summaries for each block
             std::vector<std::pair<size_t, SparseVector>> summaries;
             summaries.reserve(block_offsets.size());
+            std::vector<float> block_radii;
+            block_radii.reserve(block_offsets.size());
 
             for (size_t i = 0; i < block_offsets.size() - 1; ++i) {
                 std::vector<size_t> block(
@@ -102,6 +112,17 @@ namespace seismic
                 } else if (summarization_metric == "centroid") {
                     summary = CentroidSummary::summary_init_energy_preserving(dataset, block, summarization.get_summary_energy());
                 }
+
+                // Per-block residual radius R = max_d ||d - mu||, computed in the
+                // summary's (pre-transform) space. Used for the centroid+radius
+                // pruning bound U = q.mu + alpha*||q||*R. Meaningful when transform
+                // == "none"; with JLT the doc/summary live in different spaces, so
+                // we store 0 (radius pruning disabled) for now.
+                float radius = 0.0f;
+                if (config.get_transform_function() != "jlt") {
+                    radius = compute_block_radius(dataset, block, summary);
+                }
+                block_radii.push_back(radius);
 
                 const auto& transform_function = config.get_transform_function();
                 if (transform_function == "jlt") {
@@ -128,8 +149,47 @@ namespace seismic
                 std::move(packed_postings),
                 std::move(block_offsets),
                 std::move(summaries),
-                std::move(doc_block_pairs)
+                std::move(doc_block_pairs),
+                std::move(block_radii)
             );
+        }
+
+        // Compute the block radius R = max_{d in block} ||d - mu||_2 (mu given as a
+        // sparse vector). Used at build time for the centroid+radius pruning bound.
+        template <typename T>
+        static float compute_block_radius(const SparseDatasetMut<T>& dataset,
+                                          const std::vector<size_t>& block,
+                                          const SparseVector& mu) {
+            std::unordered_map<uint16_t, float> mumap;
+            double munorm2 = 0.0;
+            for (const auto& [c, v] : mu) { mumap[c] = v; munorm2 += double(v) * v; }
+            double R2 = 0.0;
+            for (size_t doc_id : block) {
+                auto dv = dataset.get_view(doc_id);
+                double r2 = munorm2;
+                for (size_t j = 0; j < dv.len; ++j) {
+                    double d = dv.values[j];
+                    auto it = mumap.find(dv.components[j]);
+                    double m = (it != mumap.end()) ? it->second : 0.0;
+                    r2 += d * d - 2.0 * d * m;
+                }
+                if (r2 < 0) r2 = 0;
+                R2 = std::max(R2, r2);
+            }
+            return static_cast<float>(std::sqrt(R2));
+        }
+
+        // ||a - b||_2 for two sparse vectors sorted by component id.
+        static float sparse_residual_norm(const SparseVector& a, const SparseVector& b) {
+            size_t i = 0, j = 0; double s = 0.0;
+            while (i < a.size() && j < b.size()) {
+                if (a[i].first == b[j].first) { double d = double(a[i].second) - b[j].second; s += d * d; ++i; ++j; }
+                else if (a[i].first < b[j].first) { s += double(a[i].second) * a[i].second; ++i; }
+                else { s += double(b[j].second) * b[j].second; ++j; }
+            }
+            for (; i < a.size(); ++i) s += double(a[i].second) * a[i].second;
+            for (; j < b.size(); ++j) s += double(b[j].second) * b[j].second;
+            return static_cast<float>(std::sqrt(s));
         }
 
         template <typename T>
@@ -170,6 +230,17 @@ namespace seismic
                 new_summary = CentroidSummary::summary_delete(summary, doc_vec, num_docs_in_block);
             } else {
                 std::cout << "my_posting_list.h:delete_doc invalid summary metric" << std::endl;
+            }
+
+            // Maintain the block radius for the centroid+radius pruning bound, O(nnz),
+            // no block scan: the centroid shifts by delta = (mu - d)/(n-1), and by the
+            // triangle inequality every surviving residual grows by at most ||delta||,
+            // so R_new <= R_old + ||delta|| stays a valid upper bound. It only loosens
+            // (never wrongly skips), and resize() periodically recomputes a tight R.
+            if (summary_metric == "centroid" && transform_function != "jlt" &&
+                block_id < block_radii_.size() && num_docs_in_block > 1) {
+                float resid = sparse_residual_norm(doc_vec, summary); // ||d - mu_old||
+                block_radii_[block_id] += resid / float(num_docs_in_block - 1);
             }
 
             summaries_[block_id] = {num_docs_in_block-1, new_summary};
@@ -220,6 +291,19 @@ namespace seismic
                 std::cout << "my_posting_list.h:insert_doc invalid summary metric" << std::endl;
             }
 
+            // Maintain block radius (centroid+radius bound), O(nnz): inserting d shifts
+            // the centroid by delta_ins = (d - mu)/(n+1); existing residuals grow by at
+            // most ||delta_ins|| and the new doc has residual ||d - mu_new||, so
+            // R_new = max(R_old + ||delta_ins||, ||d - mu_new||).
+            if (summary_metric == "centroid" && transform_function != "jlt" &&
+                best_block < block_radii_.size()) {
+                size_t n = summaries_[best_block].first; // docs before this insert
+                float res_old = sparse_residual_norm(doc_vec, summaries_[best_block].second); // ||d - mu_old||
+                float res_new = sparse_residual_norm(doc_vec, new_summary);                   // ||d - mu_new||
+                float delta = res_old / float(n + 1);
+                block_radii_[best_block] = std::max(block_radii_[best_block] + delta, res_new);
+            }
+
             summaries_[best_block] = {summaries_[best_block].first+1, new_summary};
 
             // 4. Return block id of closest block
@@ -267,7 +351,9 @@ namespace seismic
             bool sort_summaries,
             const SparseJLT& jlt,
             const Configuration& config,
-            const bool debug = false) const 
+            float alpha = 0.0f,
+            float qnorm = 0.0f,
+            const bool debug = false) const
         {
             auto start = std::chrono::high_resolution_clock::now();
             if (debug) {
@@ -294,7 +380,17 @@ namespace seismic
                 if (config.get_summarization_metric() == "max"){
                     if (heap.len() == k && dot < -heap_factor * heap.front_distance()) continue;
                 } else if (config.get_summarization_metric() == "centroid") {
-                    if (heap.len() == k && num_blocks_processed >= block_threshold) continue;
+                    if (alpha > 0.0f && block_id < block_radii_.size()) {
+                        // Centroid + residual-radius bound: an upper bound on any doc's
+                        // score in the block is  U = q.mu + alpha*||q||*R  (alpha<1 makes
+                        // it an aggressive/approximate bound; see diagnostics). Reuse the
+                        // max-style threshold skip.
+                        float U = dot + alpha * qnorm * block_radii_[block_id];
+                        if (heap.len() == k && U < -heap_factor * heap.front_distance()) continue;
+                    } else {
+                        // Legacy count-based heuristic (no radius available).
+                        if (heap.len() == k && num_blocks_processed >= block_threshold) continue;
+                    }
                 }
 
                 // Get the block of postings
@@ -994,7 +1090,7 @@ namespace seismic
 
         template <class Archive>
         void serialize(Archive& archive) {
-            archive(packed_postings_, block_offsets_, summaries_);
+            archive(packed_postings_, block_offsets_, summaries_, block_radii_);
         }
 
         // Pack offset and length into a single uint64_t

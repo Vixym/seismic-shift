@@ -127,7 +127,8 @@ public:
         float heap_factor,
         size_t n_knn,
         bool first_sorted,
-        bool debug = false) const 
+        float alpha = 0.0f,
+        bool debug = false) const
     {
         // Create a dense query vector
         std::vector<float> query(dim(), 0.0f);
@@ -138,6 +139,11 @@ public:
             }
             query[query_components[i]] = query_values[i];
         }
+
+        // L2 norm of the query, for the centroid+radius pruning bound.
+        float qnorm = 0.0f;
+        for (float v : query_values) qnorm += v * v;
+        qnorm = std::sqrt(qnorm);
          
         utils::HeapFaiss heap(k);
         std::unordered_set<size_t> visited;
@@ -177,6 +183,8 @@ public:
                 i == 0 && first_sorted,
                 *jlt_,
                 config_,
+                alpha,
+                qnorm,
                 debug
             );
         }
@@ -450,6 +458,9 @@ public:
      
     // Getters
     const SparseDatasetMut<T>& dataset() const { return forward_index_; }
+
+    // Read-only access to posting lists (used by diagnostics).
+    const std::vector<MyPostingList>& posting_lists() const { return posting_lists_; }
  
     // TODO return to this after SparseDatasetIterator is implemented
     // const SparseDatasetIterator<T>& iterator() const { return forward_index_.iterator(); }

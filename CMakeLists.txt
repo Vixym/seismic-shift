@@ -75,6 +75,12 @@ target_link_libraries(test_dynamic PRIVATE seismic_core nlohmann_json::nlohmann_
 target_include_directories(test_dynamic PRIVATE ${CEREAL_INCLUDE_DIR})
 set_target_properties(test_dynamic PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
+# Centroid + residual-radius bound diagnostic
+add_executable(diag_radius src/bin/diag_radius.cpp)
+target_link_libraries(diag_radius PRIVATE seismic_core nlohmann_json::nlohmann_json cereal OpenMP::OpenMP_CXX)
+target_include_directories(diag_radius PRIVATE ${CEREAL_INCLUDE_DIR})
+set_target_properties(diag_radius PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
 # Set output directory for binaries
 set_target_properties(build_inverted_index perf_inverted_index PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"

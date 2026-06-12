@@ -517,6 +517,57 @@ read-heavy/mostly-static collections, `centroid+jlt` for delete/update-heavy wor
 (smaller index, far cheaper deletes, equal recall). Reproduce with
 `script/sweep_dyn_compare.sh`.
 
+## Centroid + radius: fast queries AND cheap deletes
+
+`centroid` summaries delete cheaply (incremental mean update) but query slowly: a
+centroid is not an upper bound on the block's scores, so the search can't prune
+principledly and falls back to a count-based heuristic (evaluates ~75% of blocks).
+`max` summaries are upper bounds (fast pruning) but delete slowly (the block summary
+must be recomputed). The **centroid + radius** scheme gets both.
+
+Store, per block, one extra scalar — the residual radius `R = max_d ||d - mu||`. Then
+for a non-negative sparse query `q`,
+```
+U = q·mu + alpha * ||q|| * R    (alpha in (0,1])
+```
+is an (approximate) upper bound on any doc's score in the block (Cauchy–Schwarz, with
+`alpha` discounting the worst-case slack — see `diag_radius`), which lets `centroid`
+reuse the same threshold-skip as `max`. `alpha` is set at query time via
+`perf_inverted_index --alpha A` (`alpha = 0` falls back to the count-based heuristic).
+
+`R` is maintained incrementally on update in `O(nnz)` — no block scan — using the fact
+that an insert/delete shifts the centroid by a bounded `delta` (triangle inequality):
+`delete: R += ||d-mu||/(n-1)`, `insert: R = max(R + ||d-mu||/(n+1), ||d - mu_new||)`.
+The update only ever over-estimates, so it is recall-safe (never wrongly skips; it just
+loosens until the next `resize()` recomputes a tight `R`).
+
+Build a centroid+radius index (radius is stored when `transform == none`) and sweep
+`alpha` with `script/sweep_alpha.sh`:
+```
+./build/bin/build_inverted_index --input-file [path]/documents.bin \
+  --output-file [path]/indexes/centroid_radius \
+  --n-postings 4000 --block-size 400 --summarization centroid --transform none
+./build/bin/perf_inverted_index --index-file [path]/indexes/centroid_radius -k 10 \
+  --query-file [path]/data/queries.bin --query-cut 3 --heap-factor 0.9 --alpha 0.2 \
+  --output-path /tmp/out
+```
+
+Full 8.8M results (recall_90, cut3/hf0.9). `alpha` trades query latency for recall;
+the sweet spot (`alpha ~ 0.15-0.2`) gives full recall at several-fold speedup:
+
+| alpha | Query latency | RR@10 |
+| ----- | ------------- | ----- |
+| 0 (count-based) | 7.67 ms | 0.3735 |
+| 0.1   | 0.87 ms | 0.3625 |
+| 0.15  | 1.59 ms | 0.3713 |
+| 0.2   | 2.90 ms | 0.3732 |
+| >=0.3 | ~7-8 ms (bound too loose; no pruning) | 0.3734 |
+
+Net, on the same index: **query 1.6-2.9 ms (near the `max` config's 0.86 ms), delete
+0.125 ms (vs `max`'s 16 ms), recall ~0.371-0.373 (full)** — fast queries, cheap deletes,
+and full recall together. Verify update cost/correctness with
+`test_dynamic --index-file [path]/indexes/centroid_radius --query-file [path]/data/queries.bin`.
+
 ## Testing out a toy example
 
 From the root directory, run:
