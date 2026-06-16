@@ -81,6 +81,12 @@ target_link_libraries(diag_radius PRIVATE seismic_core nlohmann_json::nlohmann_j
 target_include_directories(diag_radius PRIVATE ${CEREAL_INCLUDE_DIR})
 set_target_properties(diag_radius PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
+# Dynamic-workload (churn) benchmark
+add_executable(bench_churn src/bin/bench_churn.cpp)
+target_link_libraries(bench_churn PRIVATE seismic_core nlohmann_json::nlohmann_json cereal OpenMP::OpenMP_CXX)
+target_include_directories(bench_churn PRIVATE ${CEREAL_INCLUDE_DIR})
+set_target_properties(bench_churn PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
 # Set output directory for binaries
 set_target_properties(build_inverted_index perf_inverted_index PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"

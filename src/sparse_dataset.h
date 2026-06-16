@@ -10,6 +10,7 @@
 #include <string>
 #include <utility>
 #include <iterator>
+#include <unordered_set>
 
 #include "data_type.h"
 #include "space_usage.h"
@@ -360,6 +361,10 @@ private:
     std::vector<uint16_t> components;
     std::vector<T> values;
     std::vector<bool> alive;
+    // Offsets of tombstoned documents. Lets the max-summary recompute test liveness
+    // by offset in O(1) without an offset->id binary search. Transient runtime state
+    // (not serialized); repopulated by set_dead, cleared by a forward-index compaction.
+    std::unordered_set<size_t> dead_offsets_;
 
 public:
     // Default constructor
@@ -557,6 +562,7 @@ public:
         }
 
         this->alive[id] = false;
+        this->dead_offsets_.insert(offsets[id]);
     }
 
     bool is_alive(size_t id) const {
@@ -565,6 +571,12 @@ public:
         }
 
         return this->alive[id];
+    }
+
+    // O(1) liveness test keyed by a document's storage offset, avoiding the
+    // offset->id binary search in the max-summary recompute hot path.
+    bool is_alive_at_offset(size_t offset) const {
+        return dead_offsets_.find(offset) == dead_offsets_.end();
     }
 
     /**
@@ -715,6 +727,12 @@ public:
         size_t start = offsets[id];
         size_t end = offsets[id + 1];
         return VectorView{components.data() + start, values.data() + start, end - start};
+    }
+
+    // Zero-copy view of a document given its storage offset and length (no offset->id
+    // lookup, no allocation). Valid until the next push() that may reallocate storage.
+    VectorView get_view_with_offset(size_t offset, size_t len) const {
+        return VectorView{components.data() + offset, values.data() + offset, len};
     }
 
     /**

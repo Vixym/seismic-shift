@@ -542,7 +542,7 @@ namespace seismic
                 // TODO: revisit, prefetching disabled for now
                 
                 // Process the current vector if not already visited
-                if (visited.find(prev_offset) == visited.end()) {
+                if (visited.find(prev_offset) == visited.end() && forward_index.is_alive_at_offset(prev_offset)) {
                     auto [v_components, v_values] = forward_index.get_with_offset(prev_offset, prev_len);
                     
                     float distance;
@@ -561,8 +561,8 @@ namespace seismic
                 prev_len = len;
             }
             
-            // Process the last posting if not already visited
-            if (visited.find(prev_offset) == visited.end()) {
+            // Process the last posting if not already visited (and still alive)
+            if (visited.find(prev_offset) == visited.end() && forward_index.is_alive_at_offset(prev_offset)) {
                 auto [v_components, v_values] = forward_index.get_with_offset(prev_offset, prev_len);
                 
                 float distance = distances::dot_product_dense_sparse(query, v_components, v_values);

@@ -70,20 +70,19 @@ public:
         const float fraction)
     {
         std::unordered_map<uint16_t, float> hash;
-            
-        // For each document in the block
-        for (size_t packed_posting : block) {
-            // Skip doc is doc is dead
-            auto [offset, len] = unpack_offset_len(packed_posting);
-            size_t doc_id = dataset.offset_to_id(offset);
-            if (!dataset.is_alive(doc_id)) continue;
 
-            // For each component in the document, store the largest value seen so far
-            auto [components, values] = dataset.get(doc_id);
-            
-            for (size_t i = 0; i < components.size(); ++i) {
-                uint16_t component_id = components[i];
-                float value = values[i];
+        // For each document in the block. We have the offset+len directly from the
+        // packed posting, so skip the offset->id binary search (use an O(1) liveness
+        // test keyed by offset) and the allocating get() (use a zero-copy view). These
+        // were the dominant per-doc costs in the max-summary delete recompute.
+        for (size_t packed_posting : block) {
+            auto [offset, len] = unpack_offset_len(packed_posting);
+            if (!dataset.is_alive_at_offset(offset)) continue;
+
+            auto v = dataset.get_view_with_offset(offset, len);
+            for (size_t i = 0; i < v.len; ++i) {
+                uint16_t component_id = v.components[i];
+                float value = v.values[i];
                 auto it = hash.find(component_id);
                 if (it == hash.end() || it->second < value) {
                     hash[component_id] = value;
